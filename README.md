@@ -1,6 +1,6 @@
-# ML in Production Practice
+# AI engineering interactive course - work in progress - stay tuned!
 
-This repository contains practical exercises and reference implementations for the [ML in Production](https://edu.kyrylai.com/courses/ml-in-production) course.
+This repository contains practical exercises and reference implementations for the AI engineering interactive course. Work in progress - stay tuned!
 
 ![Course banner](./docs/into.jpg)
 
