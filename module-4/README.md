@@ -109,10 +109,9 @@ kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/dev?ref=
 ```
 
 
-Access UI and minio
+Access UI
 
 ```bash
-kubectl port-forward --address=0.0.0.0 svc/minio-service 9000:9000 -n kubeflow
 kubectl port-forward --address=0.0.0.0 svc/ml-pipeline-ui 3000:80 -n kubeflow
 ```
 

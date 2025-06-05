@@ -1,12 +1,8 @@
 # Practice
 
-In this module you'll experiment with storage options, implement a MinIO
-client, and benchmark data ingestion and inference performance.
+In this module you'll experiment with storage options and benchmark data ingestion and inference performance.
 
 ### Key tasks
-
-- Deploy MinIO locally with Docker and Kubernetes.
-- Build a CRUD Python client with tests.
 - Benchmark Pandas storage formats.
 - Measure inference speed using multiple workers.
 
@@ -17,7 +13,6 @@ client, and benchmark data ingestion and inference performance.
 ## Reading list:
 
 - [Data engineer roadmap](https://github.com/datastacktv/data-engineer-roadmap)
-- [Minio using Kubernetes](https://github.com/kubernetes/examples/tree/master/staging/storage/minio)
 - [What Goes Around Comes Around... And Around...](https://db.cs.cmu.edu/papers/2024/whatgoesaround-sigmodrec2024.pdf)
 - [Small Big Data: using NumPy and Pandas when your data doesn't fit ](https://www.youtube.com/watch?v=8pFnrr0NnwY)
 - [How to Choose the Right Python Concurrency API](https://superfastpython.com/python-concurrency-choose-api/)
@@ -36,8 +31,6 @@ client, and benchmark data ingestion and inference performance.
 
 ## Task:
 
-- PR1: Write README instructions detailing how to deploy MinIO with the following options: Local, Docker, Kubernetes (K8S)-based.
-- PR2: Develop a CRUD Python client for MinIO and accompany it with comprehensive tests.
 - PR3: Write code to benchmark various Pandas formats in terms of data saving/loading, focusing on load time and save time.
 - PR4: Create code to benchmark inference performance using single and multiple processes, and report the differences in time.
 - PR5 (optional): Develop code for converting your dataset into the StreamingDataset format.

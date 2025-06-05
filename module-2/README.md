@@ -4,7 +4,7 @@
 
 ## Overview
 
-This module covers data storage and processing. You'll deploy MinIO locally,
+This module covers data storage and processing.
 benchmark data formats and explore streaming datasets and vector databases.
 
 ## Practice
@@ -17,74 +17,6 @@ benchmark data formats and explore streaming datasets and vector databases.
 
 ---
 
-# Minio
-
-## Install libraries
-
-```bash
-uv sync
-```
-
-## Docker setup
-
-```bash
-docker run -it -p 9000:9000 -p 9001:9001 quay.io/minio/minio server /data --console-address ":9001"
-```
-
-## Kubernetes setup
-
-Create kind cluster
-
-```bash
-kind create cluster --name ml-in-production
-```
-
-Run k9s
-
-```bash
-k9s -A
-```
-
-Deploy
-
-```bash
-kubectl create -f minio_storage/minio-standalone-dev.yaml
-```
-
-Access UI and API
-
-```bash
-kubectl port-forward --address=0.0.0.0 pod/minio 9000:9000
-kubectl port-forward --address=0.0.0.0 pod/minio 9001:9001
-```
-
-see [this issue](https://github.com/minio/console/issues/2539) about UI access.
-
-## S3 access to Minio
-
-You can use Minio via AWS CLI
-
-```bash
-export AWS_ACCESS_KEY_ID=minioadmin
-export AWS_SECRET_ACCESS_KEY=minioadmin
-export AWS_ENDPOINT_URL=http://127.0.0.1:9000
-```
-
-AWS CLI
-
-```bash
-aws s3 ls
-aws s3api create-bucket --bucket test
-aws s3 cp --recursive . s3://test/
-```
-
-## Minio Client
-
-Run unit tests with minio client.
-
-```bash
-pytest -ss ./minio_storage/test_minio_client.py
-```
 
 # Pandas profiling
 
@@ -185,24 +117,13 @@ dvc add ./data/big-data.csv
 git add data/.gitignore data/big-data.csv.dvc
 git commit -m "Add raw data"
 ```
-
 Add remote
 
-You can use Minio via AWS CLI
-
 ```bash
-export AWS_ACCESS_KEY_ID=minioadmin
-export AWS_SECRET_ACCESS_KEY=minioadmin
-export AWS_ENDPOINT_URL=http://127.0.0.1:9000
+dvc remote add -d storage s3://ml-data
 ```
 
 
-```bash
-aws s3api create-bucket --bucket ml-data
-
-dvc remote add -d minio s3://ml-data
-dvc remote modify minio endpointurl $AWS_ENDPOINT_URL
-```
 
 Save code to git
 
