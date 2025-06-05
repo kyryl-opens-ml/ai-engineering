@@ -4,8 +4,8 @@
 
 ## Overview
 
-This module demonstrates pipeline orchestration using Airflow,
-Kubeflow and Dagster.
+This module demonstrates pipeline orchestration using Kubeflow and
+Dagster.
 
 ## Practice
 
@@ -30,69 +30,6 @@ Run k9s
 ```bash
 k9s -A
 ```
-
-# Airflow
-
-Install
-
-```bash
-AIRFLOW_VERSION=2.9.3
-PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
-CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
-pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
-pip install apache-airflow-providers-cncf-kubernetes==8.3.3
-```
-
-Run standalone airflow
-
-```bash
-export AIRFLOW_HOME=$PWD/airflow_pipelines
-export AIRFLOW__CORE__LOAD_EXAMPLES=False
-export WANDB_PROJECT=****************
-export WANDB_API_KEY=****************
-airflow standalone
-```
-
-Create storage
-
-```bash
-kubectl create -f ./airflow_pipelines/volumes.yaml
-```
-
-Open UI
-
-```bash
-open http://0.0.0.0:8080
-```
-
-Trigger training job.
-
-```bash
-airflow dags trigger training_dag
-```
-
-Trigger 5 training jobs.
-
-```bash
-for i in {1..5}; do airflow dags trigger training_dag; sleep 1; done
-```
-
-Trigger inference job.
-
-```bash
-airflow dags trigger inference_dag
-```
-
-Trigger 5 inference jobs.
-
-```bash
-for i in {1..5}; do airflow dags trigger inference_dag; sleep 1; done
-```
-
-### References:
-
-- [AI + ML examples of DAGs](https://registry.astronomer.io/dags?categoryName=AI+%2B+Machine+Learning&limit=24&sorts=updatedAt%3Adesc)
-- [Pass data between tasks](https://www.astronomer.io/docs/learn/airflow-passing-data-between-tasks)
 
 
 # Kubeflow pipelines

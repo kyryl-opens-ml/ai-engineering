@@ -12,7 +12,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 logger = logging.getLogger()
 
-MODEL_ID = "truskovskiyk/ml-in-production-practice/airflow-pipeline:latest"
+MODEL_ID = "truskovskiyk/ml-in-production-practice/kfp-pipeline:latest"
 MODEL_PATH = "/tmp/model"
 MODEL_LOCK = ".lock-file"
 
