@@ -40,7 +40,6 @@ client, and benchmark data ingestion and inference performance.
 - PR2: Develop a CRUD Python client for MinIO and accompany it with comprehensive tests.
 - PR3: Write code to benchmark various Pandas formats in terms of data saving/loading, focusing on load time and save time.
 - PR4: Create code to benchmark inference performance using single and multiple processes, and report the differences in time.
-- PR5 (optional): Develop code for converting your dataset into the StreamingDataset format.
 - PR6: Write code for transforming your dataset into a vector format, and utilize VectorDB for ingestion and querying.
 - Google Doc: Update your proposal by adding a section on data storage and processing.
 
