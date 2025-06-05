@@ -65,29 +65,6 @@ Open UI
 open http://0.0.0.0:8080
 ```
 
-Trigger training job.
-
-```bash
-airflow dags trigger training_dag
-```
-
-Trigger 5 training jobs.
-
-```bash
-for i in {1..5}; do airflow dags trigger training_dag; sleep 1; done
-```
-
-Trigger inference job.
-
-```bash
-airflow dags trigger inference_dag
-```
-
-Trigger 5 inference jobs.
-
-```bash
-for i in {1..5}; do airflow dags trigger inference_dag; sleep 1; done
-```
 
 ### References:
 
@@ -116,17 +93,6 @@ kubectl port-forward --address=0.0.0.0 svc/minio-service 9000:9000 -n kubeflow
 kubectl port-forward --address=0.0.0.0 svc/ml-pipeline-ui 3000:80 -n kubeflow
 ```
 
-Create training job.
-
-```bash
-python ./kubeflow_pipelines/kfp_training_pipeline.py http://0.0.0.0:3000
-```
-
-Create inference job.
-
-```bash
-python  kubeflow_pipelines/kfp_inference_pipeline.py http://0.0.0.0:3000
-```
 
 
 ### References
