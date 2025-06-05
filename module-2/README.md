@@ -5,7 +5,7 @@
 ## Overview
 
 This module covers data storage and processing. You'll deploy MinIO locally,
-benchmark data formats and explore streaming datasets and vector databases.
+benchmark data formats and explore vector databases.
 
 ## Practice
 
@@ -112,37 +112,6 @@ Results.
 | Inference 16 workers (ProcessPoolExecutor) | 4.03  |
 | Inference with Ray   | 2.19  |
 
-
-# Streaming dataset
-
-
-Create
-
-```bash
-python streaming-dataset/mock_data.py create-data --path-to-save random-data
-```
-
-Upload
-
-```bash
-aws s3api create-bucket --bucket datasets
-aws s3 cp --recursive random-data s3://datasets/random-data
-```
-
-Read
-
-```bash
-python streaming-dataset/mock_data.py get-dataloader --remote random-data
-```
-
-Alternatives:
-
-- <https://www.tensorflow.org/tutorials/load_data/tfrecord>
-- <https://github.com/aws/amazon-s3-plugin-for-pytorch>
-- <https://pytorch.org/blog/efficient-pytorch-io-library-for-large-datasets-many-files-many-gpus/>
-- <https://github.com/webdataset/webdataset>
-- <https://github.com/mosaicml/streaming>
-- <https://github.com/huggingface/datatrove>
 
 # Vector Databases
 
