@@ -1,19 +1,6 @@
-# Practice
+# ML platforms resources
 
-Compare managed ML platforms and implement a multi-model setup on
-SageMaker and Vertex AI.
-
-### Key tasks
-
-- Deploy multiple models on AWS SageMaker.
-- Deploy multiple models on GCP Vertex AI.
-- Summarize pros and cons of each platform.
-
-***
-
-# H15: ML platforms
-
-## Reading list: 
+The following articles provide an overview of popular managed ML platforms and related tooling.
 
 - [MLOps Platforms](https://github.com/thoughtworks/mlops-platforms)
 - [Machine Learning Tools Landscape v2 (+84 new tools)](https://huyenchip.com/2020/12/30/mlops-v2.html)
@@ -36,19 +23,3 @@ SageMaker and Vertex AI.
 - [Google Cloud Vertex AI Samples](https://github.com/GoogleCloudPlatform/vertex-ai-samples)
 - [Serving Predictions with NVIDIA Triton](https://cloud.google.com/vertex-ai/docs/predictions/using-nvidia-triton)
 - [Course: Machine Learning Engineer Learning Path](https://www.cloudskillsboost.google/paths/17)
-
-## Task:
-
-
-- PR1: Write code for multi model deployment on AWS SageMaker.
-- PR2: Write code for multi model deployment on GCP Vetex AI.
-- Google Doc: Add two alternative MLOps stack templates using AWS SageMaker and GCP Vertex AI as the primary implementation platforms. Provide an analysis of the pros and cons for using the current solution versus AWS SageMaker and GCP Vertex AI.
-
-
-## Criteria: 
-
-- 2 PRs merged 
-- Comparison of AWS SageMaker, GCP Vertex AI and current implementation in the google doc.
-
-
-# H16: Keep iterating!

@@ -21,7 +21,6 @@ This repository contains practical exercises and reference implementations for t
 ├── module-5/  # serving with FastAPI
 ├── module-6/  # large model optimisation and load testing
 ├── module-7/  # monitoring and observability
-├── module-8/  # additional production topics
 └── docs/      # images used in documentation
 ```
 
