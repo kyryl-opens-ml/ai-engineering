@@ -1,3 +1,2 @@
-kfp==2.8.0
 apache-airflow==2.10.0
 apache-airflow-providers-cncf-kubernetes==8.3.3

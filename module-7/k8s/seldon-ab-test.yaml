@@ -10,7 +10,7 @@ spec:
         containers:
         - image: kyrylprojector/app-seldon-monitoring:latest
           imagePullPolicy: Always
-          name: kfp-model
+          name: baseline-model
           env:
           - name: GUNICORN_THREADS
             value: '1'
@@ -33,7 +33,7 @@ spec:
       - name: model_id
         type: STRING
         value: truskovskiyk/course-04-2023-week-3/airflow-pipeline:latest
-      name: kfp-model
+      name: baseline-model
       type: MODEL
     name: default
     replicas: 1
