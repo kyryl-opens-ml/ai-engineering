@@ -37,7 +37,7 @@ spec:
         {
           "name": "model_id",
           "type": "STRING",
-          "value": "truskovskiyk/course-04-2023-week-3/airflow-pipeline:latest"
+          "value": "truskovskiyk/course-04-2023-week-3/dagster-pipeline:latest"
         }
       ]
     name: model

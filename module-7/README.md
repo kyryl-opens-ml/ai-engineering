@@ -49,7 +49,7 @@ Integrate monitoring tools and add drift detection to your pipelines.
 
 - PR1: Write code for integrating SigNoz monitoring into your application.
 - PR2: Write code for creating a Grafana dashboard for your application.
-- PR3: Write code for detecting drift in your pipeline (AirFlow or Dagster) within your input and output features.
+- PR3: Write code for detecting drift in your pipeline using Dagster within your input and output features.
 - Update the Google document with system monitoring and a plan for ML monitoring, covering aspects like ground truth availability, drift detection, etc.
 
 ## Criteria: 
