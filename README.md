@@ -7,7 +7,7 @@ This repository contains practical exercises and reference implementations for t
 ## Setup
 
 1. Clone the repo and create a Python **3.10+** virtual environment.
-2. Each module is a self-contained example with its own dependencies. Check the module's `README.md` or `PRACTICE.md` for installation instructions.
+2. Each module is a self-contained example with its own dependencies. Check the module's `README.md` for installation instructions.
 3. Format the code with `ruff format` and run `ruff check` to verify style.
 
 ## Project structure
