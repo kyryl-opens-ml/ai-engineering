@@ -4,18 +4,16 @@
 
 ## Overview
 
-This module covers data storage and processing. You'll deploy MinIO locally,
-benchmark data formats and explore vector databases.
+This module covers data storage and processing. You'll benchmark data formats
+and explore vector databases.
 
 ## Practice
 
-In this module you'll experiment with storage options, implement a MinIO
-client, and benchmark data ingestion and inference performance.
+In this module you'll experiment with storage options and benchmark data
+ingestion and inference performance.
 
 ### Key tasks
 
-- Deploy MinIO locally with Docker and Kubernetes.
-- Build a CRUD Python client with tests.
 - Benchmark Pandas storage formats.
 - Measure inference speed using multiple workers.
 
@@ -44,16 +42,14 @@ client, and benchmark data ingestion and inference performance.
 
 ## Task:
 
-- PR1: Write README instructions detailing how to deploy MinIO with the following options: Local, Docker, Kubernetes (K8S)-based.
-- PR2: Develop a CRUD Python client for MinIO and accompany it with comprehensive tests.
-- PR3: Write code to benchmark various Pandas formats in terms of data saving/loading, focusing on load time and save time.
-- PR4: Create code to benchmark inference performance using single and multiple processes, and report the differences in time.
-- PR6: Write code for transforming your dataset into a vector format, and utilize VectorDB for ingestion and querying.
+- PR1: Write code to benchmark various Pandas formats in terms of data saving/loading, focusing on load time and save time.
+- PR2: Create code to benchmark inference performance using single and multiple processes, and report the differences in time.
+- PR3: Write code for transforming your dataset into a vector format, and utilize VectorDB for ingestion and querying.
 - Google Doc: Update your proposal by adding a section on data storage and processing.
 
 ## Criteria:
 
-- 6 PRs are merged
+- 3 PRs are merged
 - Description of data section, storage and processing, in the google doc.
 
 
@@ -88,74 +84,6 @@ client, and benchmark data ingestion and inference performance.
 
 ---
 
-# Minio
-
-## Install libraries
-
-```bash
-uv sync
-```
-
-## Docker setup
-
-```bash
-docker run -it -p 9000:9000 -p 9001:9001 quay.io/minio/minio server /data --console-address ":9001"
-```
-
-## Kubernetes setup
-
-Create kind cluster
-
-```bash
-kind create cluster --name ml-in-production
-```
-
-Run k9s
-
-```bash
-k9s -A
-```
-
-Deploy
-
-```bash
-kubectl create -f minio_storage/minio-standalone-dev.yaml
-```
-
-Access UI and API
-
-```bash
-kubectl port-forward --address=0.0.0.0 pod/minio 9000:9000
-kubectl port-forward --address=0.0.0.0 pod/minio 9001:9001
-```
-
-see [this issue](https://github.com/minio/console/issues/2539) about UI access.
-
-## S3 access to Minio
-
-You can use Minio via AWS CLI
-
-```bash
-export AWS_ACCESS_KEY_ID=minioadmin
-export AWS_SECRET_ACCESS_KEY=minioadmin
-export AWS_ENDPOINT_URL=http://127.0.0.1:9000
-```
-
-AWS CLI
-
-```bash
-aws s3 ls
-aws s3api create-bucket --bucket test
-aws s3 cp --recursive . s3://test/
-```
-
-## Minio Client
-
-Run unit tests with minio client.
-
-```bash
-pytest -ss ./minio_storage/test_minio_client.py
-```
 
 # Pandas profiling
 
