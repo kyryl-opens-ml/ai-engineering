@@ -4,8 +4,8 @@
 
 ## Overview
 
-This module sets up observability for ML applications using SigNoz,
-Grafana and Seldon analytics.
+This module sets up observability for ML applications using SigNoz
+and Grafana analytics.
 
 ## Practice
 
@@ -188,77 +188,3 @@ helm uninstall monitoring
 - https://github.com/GokuMohandas/monitoring-ml
 
 
-## Seldon: Monitoring and explainability of models in production
-
-
-[Monitoring and explainability of models in production](https://arxiv.org/abs/2007.06299)
-[Desiderata for next generation of ML model serving](https://arxiv.org/abs/2210.14665)
-
-
-Setup seldon 
-
-https://github.com/SeldonIO/seldon-core/tree/v2/ansible
-
-
-Ansible install 
-
-```
-pip install ansible openshift docker passlib
-ansible-galaxy collection install git+https://github.com/SeldonIO/ansible-k8s-collection.git
-```
-
-
-Clone repo 
-
-```
-git clone https://github.com/SeldonIO/seldon-core --branch=v2
-
-ansible-playbook playbooks/kind-cluster.yaml
-ansible-playbook playbooks/setup-ecosystem.yaml
-ansible-playbook playbooks/setup-seldon.yaml
-```
-
-CLI client 
-
-```
-wget https://github.com/SeldonIO/seldon-core/releases/download/v2.7.0-rc1/seldon-linux-amd64
-mv seldon-linux-amd64 seldon
-chmod u+x seldon
-sudo mv ./seldon /usr/local/bin/seldon
-```
-
-Port-forward
-
-```
-kubectl port-forward --address 0.0.0.0 svc/seldon-mesh -n seldon-mesh 9000:80
-kubectl port-forward --address 0.0.0.0 svc/seldon-scheduler -n seldon-mesh 9004:9004
-```
-
-Simple test 
-
-```
-seldon model load -f seldon-examples/model-iris.yaml --scheduler-host 0.0.0.0:9004
-seldon model infer iris '{"inputs": [{"name": "predict", "shape": [1, 4], "datatype": "FP32", "data": [[1, 2, 3, 4]]}]}' --inference-host 0.0.0.0:9000
-
-seldon model load -f seldon-examples/tfsimple1.yaml --scheduler-host 0.0.0.0:9004
-seldon model infer tfsimple1 --inference-host 0.0.0.0:9000 '{"inputs":[{"name":"INPUT0","data":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"datatype":"INT32","shape":[1,16]},{"name":"INPUT1","data":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"datatype":"INT32","shape":[1,16]}]}'
-```
-
-Simple drift 
-
-https://docs.seldon.io/projects/seldon-core/en/v2/contents/examples/income.html
-
-```
-seldon model load -f seldon-examples/pipeline/income-preprocess.yaml --scheduler-host 0.0.0.0:9004
-seldon model load -f seldon-examples/pipeline/income.yaml --scheduler-host 0.0.0.0:9004
-seldon model load -f seldon-examples/pipeline/income-drift.yaml --scheduler-host 0.0.0.0:9004
-seldon model load -f seldon-examples/pipeline/income-outlier.yaml --scheduler-host 0.0.0.0:9004
-seldon pipeline load -f seldon-examples/pipeline/income-outlier.yaml --scheduler-host 0.0.0.0:9004
-seldon pipeline list
-```
-
-
-## Seldon & Kserve
-
-- https://docs.seldon.io/projects/seldon-core/en/latest/analytics/outlier_detection.html
-- https://docs.seldon.io/projects/seldon-core/en/latest/analytics/drift_detection.html
