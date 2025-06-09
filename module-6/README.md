@@ -48,9 +48,9 @@ techniques such as quantization.
 ## Task:
 
 
-- PR1: Write code for dynamic request batching for your model (you might use Triton, Seldon, or KServe for this).
-- PR2: Write code for an ensemble of several models (you might use Triton, Seldon, or KServe for this).
-- PR3: Write code for gRPC inference for your model server (you might use Triton, Seldon, or KServe for this).
+- PR1: Write code for dynamic request batching for your model (you might use Triton or KServe for this).
+- PR2: Write code for an ensemble of several models (you might use Triton or KServe for this).
+- PR3: Write code for gRPC inference for your model server (you might use Triton or KServe for this).
 - PR4: Write code for benchmarking your model server: report latency, RPS, etc.
 - PR5: Write code for benchmarking your model server via REST and gRPC.
 - PR6: Write code for benchmarking your model server by components: forward pass, data processing, network latency, etc.
