@@ -132,15 +132,11 @@ https://neptune.ai/blog/best-ml-experiment-tracking-tools
 - [GPT-4o](https://openai.com/index/hello-gpt-4o/)
 - [GPT-4 System Card](https://cdn.openai.com/papers/gpt-4-system-card.pdf)
 
-## Classic example: BERT-based training
-
-[classic-example](./classic-example)
-
-https://huggingface.co/models?sort=downloads
-
 ## Modern example: GenAI-based training
 
 [generative_example](./generative_example)
+
+https://huggingface.co/models?sort=downloads
 
 - https://huggingface.co/microsoft/Phi-3-mini-128k-instruct/tree/main
 - https://github.com/microsoft/Phi-3CookBook
