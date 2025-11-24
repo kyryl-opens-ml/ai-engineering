@@ -1,0 +1,17 @@
+[project]
+name = "dagster-parallel-web"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "braintrust>=0.3.9",
+    "dagster>=1.12.3",
+    "dagster-dg-cli>=1.12.3",
+    "dagster-webserver>=1.12.3",
+    "google-genai>=1.52.0",
+    "ipython>=9.7.0",
+    "pillow>=12.0.0",
+    "requests>=2.32.5",
+    "ruff>=0.14.6",
+]
