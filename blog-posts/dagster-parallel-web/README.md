@@ -4,7 +4,7 @@
 
 One of the most underrated use cases for LLMs is discovery. Even the most AI-skeptical people are excited about this!
 
-Data in private markets is opaque, scattered, and expensive (PitchBook licenses can cost $25k+). But the data is public—it’s just unstructured. LLMs change this.
+Data in private markets is opaque, scattered, and expensive (PitchBook licenses can cost $25k+). But the data is public - it’s just unstructured. LLMs change this.
 
 Information: Venture Capital funds usually have a 10-year lifecycle. If a fund was started between 2013 and 2017 (Vintage 2013-2017), it is now reaching the end of its life. Investors in these funds often want liquidity, making these specific funds prime targets for secondary buyers.
 
