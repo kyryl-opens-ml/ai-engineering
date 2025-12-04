@@ -51,10 +51,19 @@ https://linear.app/now/self-driving-saas
 7. Deploy and Maintain
 
 
+
+
+
+Keep only @ai-product-template context; everything else is irrelevant for this project.
+Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
+
+I want you to implement the next feature:
+
+Let's plan first!
 1. Test for frontend + CI/CD to run them
 2. Test for API + CI/CD to run them
 3. User support for each item + auth with Supabase
-4. Ruff style check + CI/CD to update it
+4. Ruff style check + CI/CD to run it
 5. TS style check + CI/CD to update it
 6. Feature 1: Show how the API is connected
 7. Feature 2: Some mock data
@@ -70,6 +79,9 @@ git commit -m "1. api"
 git commit -m "2. connect api and app"
 git commit -m "3. sidebar"
 git commit -m "4. add api"
+git commit -m "5. feature branches"
+
+git push origin ai-product-template
 
 
 Please add a minimal sidebar to my app, just as a placeholder for now.
