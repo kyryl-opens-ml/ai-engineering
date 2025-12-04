@@ -69,6 +69,7 @@ git commit -m "0. init app"
 git commit -m "1. api"
 git commit -m "2. connect api and app"
 git commit -m "3. sidebar"
+git commit -m "4. add api"
 
 
 Please add a minimal sidebar to my app, just as a placeholder for now.

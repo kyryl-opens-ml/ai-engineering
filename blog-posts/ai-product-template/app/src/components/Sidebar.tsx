@@ -1,13 +1,11 @@
-type Page = 'home' | 'feature-1' | 'feature-2' | 'feature-3' | 'settings' | 'billing';
+import { NavLink } from 'react-router-dom';
 
 interface SidebarProps {
-  activePage: Page;
-  onNavigate: (page: Page) => void;
   collapsed: boolean;
   onToggle: () => void;
 }
 
-export function Sidebar({ activePage, onNavigate, collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
@@ -19,65 +17,40 @@ export function Sidebar({ activePage, onNavigate, collapsed, onToggle }: Sidebar
       
       <nav className="sidebar-nav">
         <div className="nav-section">
-          <button 
-            className={`nav-item ${activePage === 'home' ? 'active' : ''}`}
-            onClick={() => onNavigate('home')}
-            title="Home"
-          >
+          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Home" end>
             <span className="nav-icon">⌂</span>
             {!collapsed && <span>Home</span>}
-          </button>
+          </NavLink>
         </div>
 
         <div className="nav-section">
           {!collapsed && <div className="nav-label">Features</div>}
-          <button 
-            className={`nav-item ${activePage === 'feature-1' ? 'active' : ''}`}
-            onClick={() => onNavigate('feature-1')}
-            title="Feature 1"
-          >
+          <NavLink to="/feature-1" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Feature 1">
             <span className="nav-icon">◈</span>
             {!collapsed && <span>Feature 1</span>}
-          </button>
-          <button 
-            className={`nav-item ${activePage === 'feature-2' ? 'active' : ''}`}
-            onClick={() => onNavigate('feature-2')}
-            title="Feature 2"
-          >
+          </NavLink>
+          <NavLink to="/feature-2" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Feature 2">
             <span className="nav-icon">◇</span>
             {!collapsed && <span>Feature 2</span>}
-          </button>
+          </NavLink>
         </div>
-
       </nav>
 
       <div className="sidebar-footer">
         <div className="nav-section">
           {!collapsed && <div className="nav-label">Admin</div>}
-          <button 
-            className={`nav-item ${activePage === 'settings' ? 'active' : ''}`}
-            onClick={() => onNavigate('settings')}
-            title="Settings"
-          >
+          <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Settings">
             <span className="nav-icon">⚙</span>
             {!collapsed && <span>Settings</span>}
-          </button>
-          <button 
-            className={`nav-item ${activePage === 'billing' ? 'active' : ''}`}
-            onClick={() => onNavigate('billing')}
-            title="Billing"
-          >
+          </NavLink>
+          <NavLink to="/billing" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Billing">
             <span className="nav-icon">⊡</span>
             {!collapsed && <span>Billing</span>}
-          </button>
-          <button 
-            className={`nav-item ${activePage === 'feature-3' ? 'active' : ''}`}
-            onClick={() => onNavigate('feature-3')}
-            title="API Status"
-          >
+          </NavLink>
+          <NavLink to="/api-status" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="API Status">
             <span className="nav-icon">↔</span>
             {!collapsed && <span>API Status</span>}
-          </button>
+          </NavLink>
         </div>
         <div className="user-info">
           <div className="user-avatar">K</div>
@@ -92,6 +65,3 @@ export function Sidebar({ activePage, onNavigate, collapsed, onToggle }: Sidebar
     </aside>
   );
 }
-
-export type { Page };
-
