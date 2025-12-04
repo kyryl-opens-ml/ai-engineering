@@ -18,9 +18,8 @@ class ItemCreate(BaseModel):
 
 
 class ItemRead(BaseModel):
+    model_config = {"from_attributes": True}
+
     id: int
     title: str
     description: str | None = None
-
-    class Config:
-        from_attributes = True

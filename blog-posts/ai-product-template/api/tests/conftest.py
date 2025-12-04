@@ -21,7 +21,6 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 @pytest.fixture(scope="function")
 def db_session():
-    print(f"DEBUG: Tables registered: {Base.metadata.tables.keys()}")
     Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
     try:
@@ -34,10 +33,7 @@ def db_session():
 @pytest.fixture(scope="function")
 def client(db_session):
     def override_get_db():
-        try:
-            yield db_session
-        finally:
-            pass
+        yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:
