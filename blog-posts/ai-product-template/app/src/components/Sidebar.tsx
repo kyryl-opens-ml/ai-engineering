@@ -29,9 +29,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <span className="nav-icon">◈</span>
             {!collapsed && <span>Feature 1</span>}
           </NavLink>
-          <NavLink to="/feature-2" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Feature 2">
+          <NavLink to="/feature-2" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Items">
             <span className="nav-icon">◇</span>
-            {!collapsed && <span>Feature 2</span>}
+            {!collapsed && <span>Items</span>}
           </NavLink>
         </div>
       </nav>

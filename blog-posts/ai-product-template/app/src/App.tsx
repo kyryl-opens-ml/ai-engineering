@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
-import { fetchHealth } from './api';
+import { fetchHealth, fetchItems } from './api';
 import './App.css';
 
 interface HealthData {
@@ -27,11 +27,36 @@ function Feature1() {
   );
 }
 
+interface Item {
+  id: number;
+  title: string;
+  description: string | null;
+}
+
 function Feature2() {
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchItems()
+      .then(setItems)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="page">
-      <h1>Feature 2</h1>
-      <p className="page-subtitle">Feature 2 content goes here</p>
+      <h1>Items</h1>
+      <p className="page-subtitle">Mock data from API</p>
+      <div className="items-list">
+        {loading && <p>Loading...</p>}
+        {items.map((item) => (
+          <div key={item.id} className="item-card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -266,3 +266,31 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.items-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+}
+
+.item-card {
+  padding: 16px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.item-card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.item-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
