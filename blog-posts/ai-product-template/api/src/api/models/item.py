@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String
+
 from api.db.base import Base
+
 
 class Item(Base):
     __tablename__ = "items"
@@ -9,9 +11,11 @@ class Item(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
 
+
 class ItemCreate(BaseModel):
     title: str
     description: str | None = None
+
 
 class ItemRead(BaseModel):
     id: int
@@ -20,4 +24,3 @@ class ItemRead(BaseModel):
 
     class Config:
         from_attributes = True
-

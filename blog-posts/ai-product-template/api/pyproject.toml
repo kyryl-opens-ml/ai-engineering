@@ -12,3 +12,10 @@ dependencies = [
     "pytest==9.0.1",
     "httpx==0.28.1",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

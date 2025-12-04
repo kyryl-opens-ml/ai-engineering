@@ -1,4 +1,4 @@
-.PHONY: run-dev run-test-api run-test-ui backend frontend
+.PHONY: run-dev run-test-api run-test-ui backend frontend lint lint-fix
 
 backend:
 	@echo "Starting backend on http://localhost:8000..."
@@ -20,3 +20,11 @@ run-test-api:
 
 run-test-ui:
 	cd app && npm run test
+
+lint:
+	ruff check api/
+	ruff format --check api/
+
+lint-fix:
+	ruff check --fix api/
+	ruff format api/

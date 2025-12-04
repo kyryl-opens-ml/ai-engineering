@@ -8,6 +8,7 @@ def test_create_item(client):
     assert data["title"] == "Integration Item"
     assert "id" in data
 
+
 def test_read_items(client):
     client.post(
         "/items/",
@@ -20,4 +21,3 @@ def test_read_items(client):
     # Check if our item is in the list
     found = any(item["title"] == "Item 1" for item in data)
     assert found
-

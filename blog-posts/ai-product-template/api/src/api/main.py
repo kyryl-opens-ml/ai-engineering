@@ -1,6 +1,8 @@
 import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from api.db.base import Base
 from api.db.session import engine
 from api.routes import items
@@ -20,11 +22,12 @@ app.add_middleware(
 
 app.include_router(items.router, prefix="/items", tags=["items"])
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the API"}
 
+
 @app.get("/health")
 def health():
     return {"status": "ok", "version": "0.1.0"}
-
