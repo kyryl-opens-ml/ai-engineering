@@ -1,4 +1,4 @@
-type Page = 'home' | 'feature-1' | 'feature-2' | 'settings' | 'billing';
+type Page = 'home' | 'feature-1' | 'feature-2' | 'feature-3' | 'settings' | 'billing';
 
 interface SidebarProps {
   activePage: Page;
@@ -69,6 +69,14 @@ export function Sidebar({ activePage, onNavigate, collapsed, onToggle }: Sidebar
           >
             <span className="nav-icon">⊡</span>
             {!collapsed && <span>Billing</span>}
+          </button>
+          <button 
+            className={`nav-item ${activePage === 'feature-3' ? 'active' : ''}`}
+            onClick={() => onNavigate('feature-3')}
+            title="API Status"
+          >
+            <span className="nav-icon">↔</span>
+            {!collapsed && <span>API Status</span>}
           </button>
         </div>
         <div className="user-info">

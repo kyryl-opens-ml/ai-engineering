@@ -40,6 +40,28 @@ https://developers.openai.com/codex/guides/build-ai-native-engineering-team/
 https://linear.app/now/self-driving-saas
 
 
+## 10 agents in parallel: 
+
+1. Plan
+2. Design
+3. Build
+4. Test
+5. Review
+6. Document
+7. Deploy and Maintain
+
+
+1. Test for frontend + CI/CD to run them
+2. Test for API + CI/CD to run them
+3. User support for each item + auth with Supabase
+4. Ruff style check + CI/CD to update it
+5. TS style check + CI/CD to update it
+6. Feature 1: Show how the API is connected
+7. Feature 2: Some mock data
+8. Docker-compose to run on-prem
+9. Agentic feature + tests for it from API + UI
+10. Settings page for user with placeholders
+
 
 ## History: 
 
