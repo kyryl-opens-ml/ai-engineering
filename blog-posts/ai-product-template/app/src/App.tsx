@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { AuthProvider, useAuth } from './auth';
 import { Sidebar } from './components/Sidebar';
+import { Login } from './components/Login';
 import { fetchHealth } from './api';
 import './App.css';
 
@@ -111,8 +113,17 @@ function Billing() {
   );
 }
 
-function App() {
+function AppContent() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
 
   return (
     <div className={`app-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
@@ -131,6 +142,14 @@ function App() {
         </Routes>
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

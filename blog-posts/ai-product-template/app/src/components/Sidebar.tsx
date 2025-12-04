@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../auth';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -6,6 +7,10 @@ interface SidebarProps {
 }
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const { user, signOut } = useAuth();
+  const email = user?.email || '';
+  const initial = email.charAt(0).toUpperCase() || '?';
+
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
@@ -53,11 +58,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </NavLink>
         </div>
         <div className="user-info">
-          <div className="user-avatar">K</div>
+          <div className="user-avatar">{initial}</div>
           {!collapsed && (
             <div className="user-details">
-              <div className="user-name">Kyryl</div>
-              <div className="user-email">kyryl@example.com</div>
+              <div className="user-email">{email}</div>
+              <button className="signout-btn" onClick={signOut}>Sign out</button>
             </div>
           )}
         </div>
