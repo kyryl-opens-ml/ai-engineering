@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
-import { fetchHealth } from './api';
+import { fetchHealth, fetchItems, createItem } from './api';
 import './App.css';
 
 interface HealthData {
   status: string;
   version: string;
+}
+
+interface Item {
+  id: number;
+  title: string;
+  description: string;
 }
 
 function Home() {
@@ -19,10 +25,81 @@ function Home() {
 }
 
 function Feature1() {
+  const [items, setItems] = useState<Item[]>([]);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadItems = async () => {
+    try {
+      const data = await fetchItems();
+      setItems(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load items');
+    }
+  };
+
+  useEffect(() => {
+    loadItems();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+    setLoading(true);
+    try {
+      await createItem(title, description);
+      setTitle('');
+      setDescription('');
+      await loadItems();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create item');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="page">
-      <h1>Feature 1</h1>
-      <p className="page-subtitle">Feature 1 content goes here</p>
+      <h1>Items</h1>
+      <p className="page-subtitle">Demo: Create and view items via API</p>
+
+      <form className="item-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="item-input"
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="item-input"
+        />
+        <button type="submit" className="refresh-btn" disabled={loading || !title.trim()}>
+          {loading ? 'Adding...' : 'Add Item'}
+        </button>
+      </form>
+
+      {error && <p className="error-text">{error}</p>}
+
+      <div className="items-list">
+        {items.length === 0 ? (
+          <p className="empty-text">No items yet. Add one above!</p>
+        ) : (
+          items.map((item) => (
+            <div key={item.id} className="item-card">
+              <div className="item-title">{item.title}</div>
+              <div className="item-desc">{item.description}</div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

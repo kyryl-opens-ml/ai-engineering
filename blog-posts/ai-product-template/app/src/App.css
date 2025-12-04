@@ -266,3 +266,57 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.item-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  max-width: 600px;
+}
+
+.item-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--sidebar-bg);
+}
+
+.item-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.items-list {
+  margin-top: 24px;
+  max-width: 600px;
+}
+
+.item-card {
+  padding: 12px 16px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.item-title {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.item-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.error-text {
+  color: #ef4444;
+  margin-top: 12px;
+}
+
+.empty-text {
+  color: var(--text-muted);
+}
