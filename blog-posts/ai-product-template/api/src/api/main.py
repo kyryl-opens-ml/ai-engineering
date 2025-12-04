@@ -20,11 +20,12 @@ app.add_middleware(
 
 app.include_router(items.router, prefix="/items", tags=["items"])
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the API"}
 
+
 @app.get("/health")
 def health():
     return {"status": "ok", "version": "0.1.0"}
-
