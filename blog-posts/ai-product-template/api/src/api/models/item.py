@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
 from api.db.base import Base
 
+
 class Item(Base):
     __tablename__ = "items"
 
@@ -9,15 +10,15 @@ class Item(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
 
+
 class ItemCreate(BaseModel):
     title: str
     description: str | None = None
 
+
 class ItemRead(BaseModel):
+    model_config = {"from_attributes": True}
+
     id: int
     title: str
     description: str | None = None
-
-    class Config:
-        from_attributes = True
-
