@@ -46,7 +46,26 @@ https://linear.app/now/self-driving-saas
 git commit -m "0. init app"
 git commit -m "1. api"
 git commit -m "2. connect api and app"
+git commit -m "3. sidebar"
 
+
+Please add a minimal sidebar to my app, just as a placeholder for now.
+
+See screenshots of sidebars I really like. I really like the following structure:
+
+Main page
+<HOME>
+
+Dedicated for each feature / agent / product / screen
+<Features>
+
+Admin section to manage users, payments, etc.
+<Admin>
+
+
+Remember to keep it minimal and simple.
+
+The admin section should be at the bottom of the sidebar, please.
 
 I use the Railway platform to deploy both the API and the app. It works like this: 
 - Detect what the app is
