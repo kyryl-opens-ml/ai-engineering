@@ -34,16 +34,6 @@ And most importanta - AI engineerign first! What do I mean by this?
 - Anyone can edit it: slack, agetns, non tech 
 
 
-## Basics
-
-- minimal ui - done
-- minimal api - done
-- connect api + ui
-- auth + user
-- sidebar
-- 
-
-
 ## Studies 
 
 https://developers.openai.com/codex/guides/build-ai-native-engineering-team/
@@ -54,9 +44,18 @@ https://linear.app/now/self-driving-saas
 ## History: 
 
 git commit -m "0. init app"
+git commit -m "1. api"
+git commit -m "2. connect api and app"
 
-Please write me a simple FastAPI Python package in the @api folder.
 
-Follow a structure like routes/models/db/etc.
+I use the Railway platform to deploy both the API and the app. It works like this: 
+- Detect what the app is
+- Build an internal Docker image 
+- Run
 
-But please keep it as simple as possible.
+For the app, I think it uses `npm build` or something similar. My point is that `VITE_API_URL` probably won't be read dynamically, because `npm build` creates static files.
+
+This might be a problem because I want to:
+
+- Have different environments
+- Have feature branches where, for each PR, I create a new environment: API + app, and `VITE_API_URL` should be set up dynamically
