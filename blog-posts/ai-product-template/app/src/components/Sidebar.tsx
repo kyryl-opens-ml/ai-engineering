@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 type Page = 'home' | 'feature-1' | 'feature-2' | 'settings' | 'billing';
 
 interface SidebarProps {
