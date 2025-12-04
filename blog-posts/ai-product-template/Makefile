@@ -1,4 +1,4 @@
-.PHONY: run-dev run-test-api run-test-ui backend frontend
+.PHONY: run-dev run-test-api run-test-ui backend frontend docker-up docker-down docker-build
 
 backend:
 	@echo "Starting backend on http://localhost:8000..."
@@ -20,3 +20,14 @@ run-test-api:
 
 run-test-ui:
 	cd app && npm run test
+
+docker-build:
+	docker compose build
+
+docker-up:
+	docker compose up -d
+	@echo "API: http://localhost:8000"
+	@echo "App: http://localhost:3000"
+
+docker-down:
+	docker compose down
