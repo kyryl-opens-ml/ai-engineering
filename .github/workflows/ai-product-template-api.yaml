@@ -12,6 +12,11 @@ defaults:
   run:
     working-directory: blog-posts/ai-product-template
 
+env:
+  DATABASE_URL: sqlite:///:memory:
+  SUPABASE_JWT_SECRET: test-secret-for-ci
+  CORS_ORIGINS: http://localhost:5173
+
 jobs:
   test:
     runs-on: ubuntu-latest
