@@ -1,4 +1,4 @@
-.PHONY: run-dev run-test-api run-test-ui backend frontend
+.PHONY: run-dev run-test-api run-test-ui backend frontend db-migrate db-upgrade db-downgrade db-current db-history lint-api format-api lint-app format-app lint format
 
 backend:
 	@echo "Starting backend on http://localhost:8000..."
@@ -20,3 +20,35 @@ run-test-api:
 
 run-test-ui:
 	cd app && npm run test
+
+db-migrate:
+	@read -p "Migration message: " msg; \
+	cd api && PYTHONPATH=src uv run alembic revision --autogenerate -m "$$msg"
+
+db-upgrade:
+	cd api && PYTHONPATH=src uv run alembic upgrade head
+
+db-downgrade:
+	cd api && PYTHONPATH=src uv run alembic downgrade -1
+
+db-current:
+	cd api && PYTHONPATH=src uv run alembic current
+
+db-history:
+	cd api && PYTHONPATH=src uv run alembic history
+
+lint-api:
+	cd api && uv run ruff check src tests
+
+format-api:
+	cd api && uv run ruff format src tests && uv run ruff check --fix src tests
+
+lint-app:
+	cd app && npm run lint
+
+format-app:
+	cd app && npm run lint -- --fix
+
+lint: lint-api lint-app
+
+format: format-api format-app

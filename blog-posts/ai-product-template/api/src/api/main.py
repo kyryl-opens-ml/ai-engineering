@@ -1,23 +1,20 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.db.base import Base
-from api.db.session import engine
-from api.routes import items
-
-Base.metadata.create_all(bind=engine)
+from api.routes import items, workspaces
+from api.config import get_settings
 
 app = FastAPI(title="Simple API")
 
-allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=settings.cors_origins.split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+app.include_router(workspaces.router, prefix="/workspaces", tags=["workspaces"])
 app.include_router(items.router, prefix="/items", tags=["items"])
 
 

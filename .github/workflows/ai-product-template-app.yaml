@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: blog-posts/ai-product-template/app
+    working-directory: blog-posts/ai-product-template
 
 jobs:
   test:
@@ -24,6 +24,6 @@ jobs:
           cache: 'npm'
           cache-dependency-path: blog-posts/ai-product-template/app/package-lock.json
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test
+      - run: cd app && npm ci
+      - run: make lint-app
+      - run: make run-test-ui
