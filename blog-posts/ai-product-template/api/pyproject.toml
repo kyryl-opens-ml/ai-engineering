@@ -11,4 +11,10 @@ dependencies = [
     "pydantic==2.12.5",
     "pytest==9.0.1",
     "httpx==0.28.1",
+    "python-jose[cryptography]==3.4.0",
+    "psycopg2-binary==2.9.10",
+    "pgcli>=4.3.0",
+    "pydantic-settings>=2.0.0",
+    "alembic>=1.13.0",
+    "ruff>=0.8.0",
 ]

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
-import { fetchHealth } from './api';
+import { Login } from './pages/Login';
+import { useAuth } from './hooks/useAuth';
+import { useWorkspace } from './hooks/useWorkspace';
+import { fetchHealth, fetchWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember } from './api';
 import './App.css';
 
 interface HealthData {
@@ -9,11 +12,21 @@ interface HealthData {
   version: string;
 }
 
+interface Member {
+  id: string;
+  user_id: string;
+  role: string;
+  email: string | null;
+}
+
 function Home() {
+  const { currentWorkspace } = useWorkspace();
   return (
     <div className="page">
       <h1>Dashboard</h1>
-      <p className="page-subtitle">Overview of your application</p>
+      <p className="page-subtitle">
+        {currentWorkspace ? `Workspace: ${currentWorkspace.name}` : 'Select a workspace'}
+      </p>
     </div>
   );
 }
@@ -93,11 +106,108 @@ function ApiStatus() {
   );
 }
 
+function Workspaces() {
+  const { workspaces, currentWorkspace, createWorkspace } = useWorkspace();
+  const [newName, setNewName] = useState('');
+  const [members, setMembers] = useState<Member[]>([]);
+  const [newEmail, setNewEmail] = useState('');
+
+  useEffect(() => {
+    if (currentWorkspace) {
+      fetchWorkspaceMembers(currentWorkspace.id).then(setMembers).catch(() => setMembers([]));
+    }
+  }, [currentWorkspace]);
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName.trim()) return;
+    await createWorkspace(newName);
+    setNewName('');
+  };
+
+  const handleAddMember = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentWorkspace || !newEmail.trim()) return;
+    try {
+      await addWorkspaceMember(currentWorkspace.id, newEmail);
+      setNewEmail('');
+      const updated = await fetchWorkspaceMembers(currentWorkspace.id);
+      setMembers(updated);
+    } catch {
+      alert('Failed to add member');
+    }
+  };
+
+  const handleRemove = async (memberId: string) => {
+    if (!currentWorkspace) return;
+    await removeWorkspaceMember(currentWorkspace.id, memberId);
+    const updated = await fetchWorkspaceMembers(currentWorkspace.id);
+    setMembers(updated);
+  };
+
+  return (
+    <div className="page">
+      <h1>Workspaces</h1>
+      <p className="page-subtitle">Manage your workspaces</p>
+
+      <div className="section">
+        <h2>Your Workspaces</h2>
+        <ul className="workspace-list">
+          {workspaces.map((ws) => (
+            <li key={ws.id} className={ws.id === currentWorkspace?.id ? 'active' : ''}>
+              {ws.name} <span className="role-badge">{ws.role}</span>
+            </li>
+          ))}
+        </ul>
+        <form onSubmit={handleCreate} className="inline-form">
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder="New workspace name"
+          />
+          <button type="submit">Create</button>
+        </form>
+      </div>
+
+      {currentWorkspace && currentWorkspace.role === 'owner' && (
+        <div className="section">
+          <h2>Members of {currentWorkspace.name}</h2>
+          <ul className="member-list">
+            {members.map((m) => (
+              <li key={m.id || m.user_id}>
+                {m.email || 'Unknown'} <span className="role-badge">{m.role}</span>
+                {m.role !== 'owner' && (
+                  <button onClick={() => handleRemove(m.id)} className="remove-btn">Remove</button>
+                )}
+              </li>
+            ))}
+          </ul>
+          <form onSubmit={handleAddMember} className="inline-form">
+            <input
+              type="email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="Member email"
+            />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Settings() {
+  const { user, signOut } = useAuth();
   return (
     <div className="page">
       <h1>Settings</h1>
       <p className="page-subtitle">Manage your account settings</p>
+      <div className="section">
+        <p>Signed in as: {user?.email}</p>
+        <button onClick={signOut} className="submit-btn">Sign Out</button>
+      </div>
     </div>
   );
 }
@@ -112,11 +222,20 @@ function Billing() {
 }
 
 function App() {
+  const { user, loading } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
 
   return (
     <div className={`app-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-      <Sidebar 
+      <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
@@ -125,6 +244,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/feature-1" element={<Feature1 />} />
           <Route path="/feature-2" element={<Feature2 />} />
+          <Route path="/workspaces" element={<Workspaces />} />
           <Route path="/api-status" element={<ApiStatus />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/billing" element={<Billing />} />

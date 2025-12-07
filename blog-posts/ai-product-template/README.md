@@ -22,8 +22,10 @@ Supabase for DB
 Railway for Platform
 Modal for ML 
 Dagster for Jobs
+Sentry for monitoring
 
 And most importanta - AI engineerign first! What do I mean by this? 
+
 
 
 ## AI engineerign first
@@ -40,26 +42,68 @@ https://developers.openai.com/codex/guides/build-ai-native-engineering-team/
 https://linear.app/now/self-driving-saas
 
 
-## 10 agents in parallel: 
-
-1. Plan
-2. Design
-3. Build
-4. Test
-5. Review
-6. Document
-7. Deploy and Maintain
+## TODO: 
 
 
-1. Test for frontend + CI/CD to run them
-2. Test for API + CI/CD to run them
-3. User support for each item + auth with Supabase
-4. Ruff style check + CI/CD to update it
-5. TS style check + CI/CD to update it
+1. Auth feature:
+Keep only @ai-product-template context; everything else is irrelevant for this project.
+Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
+
+I want you to implement the next feature:
+
+User authentication and management
+
+First:
+
+- Authenticate users with Supabase.
+- There are 3 objects: user, workspace, items.
+  - User: self-explanatory.
+  - Workspace: something a user owns; a user can create several.
+  - Item: something a user owns that belongs to one workspace.
+- A user can add other users to a workspace so they can see the workspace and its items.
+
+
+
+- test manually 
+- test api 
+- test ui
+- test end2end in github actions with supabase 
+
+
+2. Agent feature:
+
+3. Story
+
+4. Stack
+
+5. Verify
+
+6. Reality check.
+
+
+7. Grammar & movement & review 
+
+
+
+Keep only @ai-product-template context; everything else is irrelevant for this project.
+Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
+
+I want you to implement the next feature:
+
+Let's plan first!
+
+
+1. Auth features: 
+
+1. Test for frontend + CI/CD to run them: DONE
+2. Test for API + CI/CD to run them: DONE
+
+3. Add auth with Supabase - make sure each user has it's own resourses 
 6. Feature 1: Show how the API is connected
 7. Feature 2: Some mock data
 8. Docker-compose to run on-prem
 9. Agentic feature + tests for it from API + UI
+Agentic feature - let's use 
 10. Settings page for user with placeholders
 
 
@@ -70,6 +114,9 @@ git commit -m "1. api"
 git commit -m "2. connect api and app"
 git commit -m "3. sidebar"
 git commit -m "4. add api"
+git commit -m "5. feature branches"
+
+git push origin ai-product-template
 
 
 Please add a minimal sidebar to my app, just as a placeholder for now.
