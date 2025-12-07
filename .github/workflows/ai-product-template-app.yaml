@@ -1,0 +1,29 @@
+name: AI Product Template - App Tests
+
+on:
+  push:
+    paths:
+      - 'blog-posts/ai-product-template/app/**'
+  pull_request:
+    paths:
+      - 'blog-posts/ai-product-template/app/**'
+
+defaults:
+  run:
+    working-directory: blog-posts/ai-product-template/app
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: blog-posts/ai-product-template/app/package-lock.json
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test

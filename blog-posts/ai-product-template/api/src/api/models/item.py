@@ -5,6 +5,7 @@ from api.db.base import Base
 from api.db.types import UUID
 
 
+
 class Item(Base):
     __tablename__ = "items"
 
