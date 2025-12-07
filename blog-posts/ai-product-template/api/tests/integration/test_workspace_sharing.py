@@ -163,3 +163,4 @@ def test_workspace_sharing_scenario(db, user1, user2):
 
     # Cleanup
     app.dependency_overrides.clear()
+
