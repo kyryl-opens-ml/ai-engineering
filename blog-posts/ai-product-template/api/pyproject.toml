@@ -19,6 +19,8 @@ dependencies = [
     "ruff>=0.8.0",
     "ipython>=9.8.0",
     "pandas>=2.3.3",
+    "google-genai>=1.0.0",
+    "python-multipart>=0.0.9",
 ]
 
 [tool.uv]

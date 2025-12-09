@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Login } from './pages/Login';
 import { useAuth } from './hooks/useAuth';
 import { useWorkspace } from './hooks/useWorkspace';
-import { fetchHealth, fetchWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember } from './api';
+import { fetchHealth, fetchWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember, visualizePdf } from './api';
 import './App.css';
 
 interface HealthData {
@@ -31,20 +31,91 @@ function Home() {
   );
 }
 
-function Feature1() {
+function Agent() {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [d3Code, setD3Code] = useState<string | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return;
+    setLoading(true);
+    setError(null);
+    setD3Code(null);
+    try {
+      const result = await visualizePdf(file);
+      setD3Code(result.d3_code);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to process PDF');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (d3Code && iframeRef.current) {
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { margin: 0; padding: 20px; font-family: system-ui, sans-serif; }
+    #container { width: 100%; min-height: 400px; }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    const container = document.getElementById('container');
+    try {
+      ${d3Code}
+    } catch (e) {
+      container.innerHTML = '<p style="color: red;">Error: ' + e.message + '</p>';
+    }
+  </script>
+</body>
+</html>`;
+      iframeRef.current.srcdoc = html;
+    }
+  }, [d3Code]);
+
   return (
     <div className="page">
-      <h1>Feature 1</h1>
-      <p className="page-subtitle">Feature 1 content goes here</p>
+      <h1>Agentic feature</h1>
+      <p className="page-subtitle">Upload a PDF to generate a D3.js visualization</p>
+      <form onSubmit={handleSubmit} className="upload-form">
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          className="file-input"
+        />
+        <button type="submit" disabled={!file || loading} className="submit-btn">
+          {loading ? 'Processing...' : 'Generate Visualization'}
+        </button>
+      </form>
+      {error && <p className="form-error">{error}</p>}
+      {d3Code && (
+        <div className="visualization-container">
+          <iframe
+            ref={iframeRef}
+            title="D3 Visualization"
+            sandbox="allow-scripts"
+            className="d3-iframe"
+          />
+        </div>
+      )}
     </div>
   );
 }
 
-function Feature2() {
+function Deterministic() {
   return (
     <div className="page">
-      <h1>Feature 2</h1>
-      <p className="page-subtitle">Feature 2 content goes here</p>
+      <h1>Deterministic feature</h1>
+      <p className="page-subtitle">Deterministic feature content goes here</p>
     </div>
   );
 }
@@ -242,8 +313,8 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/feature-1" element={<Feature1 />} />
-          <Route path="/feature-2" element={<Feature2 />} />
+          <Route path="/agent" element={<Agent />} />
+          <Route path="/deterministic" element={<Deterministic />} />
           <Route path="/workspaces" element={<Workspaces />} />
           <Route path="/api-status" element={<ApiStatus />} />
           <Route path="/settings" element={<Settings />} />

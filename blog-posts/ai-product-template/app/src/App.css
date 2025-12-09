@@ -526,3 +526,51 @@
   background: #ef4444;
   color: white;
 }
+
+/* Agent Upload */
+.upload-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+.file-input {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.file-input::file-selector-button {
+  padding: 8px 16px;
+  margin-right: 12px;
+  background: var(--hover-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.file-input::file-selector-button:hover {
+  background: var(--active-bg);
+}
+
+.visualization-container {
+  margin-top: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.d3-iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+}

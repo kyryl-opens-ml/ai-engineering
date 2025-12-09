@@ -60,13 +60,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
         <div className="nav-section">
           {!collapsed && <div className="nav-label">Features</div>}
-          <NavLink to="/feature-1" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Feature 1">
+          <NavLink to="/agent" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Agentic feature">
             <span className="nav-icon">◈</span>
-            {!collapsed && <span>Feature 1</span>}
+            {!collapsed && <span>Agentic feature</span>}
           </NavLink>
-          <NavLink to="/feature-2" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Feature 2">
+          <NavLink to="/deterministic" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Deterministic feature">
             <span className="nav-icon">◇</span>
-            {!collapsed && <span>Feature 2</span>}
+            {!collapsed && <span>Deterministic feature</span>}
           </NavLink>
         </div>
       </nav>

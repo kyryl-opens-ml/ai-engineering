@@ -40,15 +40,16 @@ Extensible: Especially extensible in a parallel way.
 
 The stack I chose for this is inspired by several recent implementations I like. A nice bonus to make it really self-serve is that each tool has its own MCP server exposed to agents.
 
-- Frontend: TS + Vite for UI: https://github.com/vitejs/vite 
-- Backend: Python + FastAPI for API: https://github.com/fastapi
-- LLM: Gemini g3 (text, vision, live API, RAG)
-- Auth: Supabase  https://github.com/supabase/supabase
-- DB: Postgres https://github.com/postgres/postgres
-- Platform: Railway https://railway.app/
-- ML: Modal https://modal.com/
-- Orchestration: Dagster https://github.com/dagster-io/dagster
-- Monitoring: Sentry https://github.com/getsentry/sentry
+- Frontend: TypeScript + Vite for the UI: https://github.com/vitejs/vite  (MCP: https://github.com/webfansplz/vite-plugin-vue-mcp)
+- Backend: Python + FastAPI for the API: https://github.com/fastapi (MCP: https://github.com/tadata-org/fastapi_mcp)
+- LLM: Gemini G3 (text, vision, live API, RAG)
+- Auth: Supabase  https://github.com/supabase/supabase (MCP: https://supabase.com/docs/guides/getting-started/mcp)
+- Database: Postgres https://github.com/postgres/postgres (MCP: https://github.com/crystaldba/postgres-mcp)
+- Platform: Railway https://railway.app/ (MCP: https://docs.railway.com/reference/mcp-server)
+- ML: Modal https://modal.com/ (MCP: https://modal.com/docs/examples/mcp_server_stateless)
+- Orchestration: Dagster https://github.com/dagster-io/dagster (MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster)
+- Error Monitoring: Sentry https://github.com/getsentry/sentry (MCP: https://github.com/getsentry/sentry-mcp)
+- LLM Monitoring: Braintrust
 
 And most important—AI engineering first! What do I mean by this?
 
@@ -72,7 +73,8 @@ Both are important, and both are must-haves.
 
 ## Outcome: 
 
-I am running a reality check of this template and contributing back my findings, opinions, and learnings. So far, this is one of the best ways (for me) to ship 10x faster while staying in control! 
+I am running a reality check of this template and contributing back my findings, opinions, and learnings. 
+So far, this is one of the best ways (for me) to ship 10x faster while staying in control! 
  
 
 
@@ -90,23 +92,47 @@ https://kyrylai.com/2025/07/28/vibe-coding-ml-team-case-study/
 
 
 1. Agent feature:
-
-I want to have 2 features in my app instead Feature1 and Feature2
-
-one determinitica feature1 - like classic CRUD
-
-
 2. Determinitica feature
+
+Keep only @ai-product-template context; everything else is irrelevant for this project.
+Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
+
+I want you to implement the next feature:
+
+- "Agent feature" instead Feature 1
+- "Determinitica feature" instead Feature 2
+
+Let's start with the Agent feature first:
+
+- Allow users to upload a PDF in the UI.
+- The UI sends the PDF to the backend.
+- We process it using Document Understanding from Gemini (use the GEMINI_API_KEY environment variable).
+- Gemini should generate D3.js code to visualize this PDF as a story.
+- The UI displays this D3.js code in a sandbox, as the output could be anything.
+
+Good! could you reanme it please
+
+Agent – Agentic feature
+Deterministic – Deterministic feature
+
+in UI only please 
+
+POC: 
+
+- add Agent Feature intregraton test, there are shulbe be 3 tests: 
+-- upload pdf and got good respose
+-- upload pdf and evaludaiton of JS code is executable 
+-- upload pdf and ask LLM as a Judge to evaluate if it solves the actualy problemt 
+-- have pdf and resposne pre-generated -> upload same pdf again and compare resutls to oneeach other. 
+
+
 3. Review with LLMs
 4. Review with Ivanna 
 
 
 ## Prompt space
 
-Keep only @ai-product-template context; everything else is irrelevant for this project.
-Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
 
-I want you to implement the next feature:
 
 Let's plan first!
 
@@ -134,5 +160,7 @@ git commit -m "3. sidebar"
 git commit -m "4. add api"
 git commit -m "5. feature branches"
 git commit -m "6. auth"
+git commit -m "7. base text"
+
 
 git push origin ai-product-template
