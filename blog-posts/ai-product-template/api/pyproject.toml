@@ -17,6 +17,8 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "alembic>=1.13.0",
     "ruff>=0.8.0",
+    "ipython>=9.8.0",
+    "pandas>=2.3.3",
 ]
 
 [tool.uv]
