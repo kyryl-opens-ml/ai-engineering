@@ -574,3 +574,131 @@
   height: 600px;
   border: none;
 }
+
+/* Items CRUD */
+.item-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.item-form input {
+  flex: 1;
+  min-width: 150px;
+  padding: 8px 12px;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+.item-form button {
+  padding: 8px 16px;
+  background: var(--text-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-title {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.item-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.item-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.item-edit {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-edit input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+.edit-btn {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.save-btn {
+  padding: 4px 10px;
+  background: #22c55e;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-style: italic;
+}

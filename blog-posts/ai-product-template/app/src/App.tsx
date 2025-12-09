@@ -4,7 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { Login } from './pages/Login';
 import { useAuth } from './hooks/useAuth';
 import { useWorkspace } from './hooks/useWorkspace';
-import { fetchHealth, fetchWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember, visualizePdf } from './api';
+import { fetchHealth, fetchWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember, visualizePdf, fetchItems, createItem, updateItem, deleteItem } from './api';
 import './App.css';
 
 interface HealthData {
@@ -111,11 +111,155 @@ function Agent() {
   );
 }
 
+interface Item {
+  id: string;
+  workspace_id: string;
+  title: string;
+  description: string | null;
+}
+
 function Deterministic() {
+  const { currentWorkspace } = useWorkspace();
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+
+  const loadItems = async (workspaceId: string) => {
+    setLoading(true);
+    try {
+      const data = await fetchItems(workspaceId);
+      setItems(data);
+    } catch {
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentWorkspace) {
+      loadItems(currentWorkspace.id);
+    }
+  }, [currentWorkspace]);
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentWorkspace || !title.trim()) return;
+    await createItem(currentWorkspace.id, title, description);
+    setTitle('');
+    setDescription('');
+    loadItems(currentWorkspace.id);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!currentWorkspace) return;
+    await deleteItem(id);
+    loadItems(currentWorkspace.id);
+  };
+
+  const startEdit = (item: Item) => {
+    setEditingId(item.id);
+    setEditTitle(item.title);
+    setEditDescription(item.description || '');
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditTitle('');
+    setEditDescription('');
+  };
+
+  const handleUpdate = async (id: string) => {
+    if (!currentWorkspace || !editTitle.trim()) return;
+    await updateItem(id, editTitle, editDescription);
+    cancelEdit();
+    loadItems(currentWorkspace.id);
+  };
+
+  if (!currentWorkspace) {
+    return (
+      <div className="page">
+        <h1>Deterministic feature</h1>
+        <p className="page-subtitle">Select a workspace to manage items</p>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
       <h1>Deterministic feature</h1>
-      <p className="page-subtitle">Deterministic feature content goes here</p>
+      <p className="page-subtitle">CRUD operations for items in {currentWorkspace.name}</p>
+
+      <div className="section">
+        <h2>Create Item</h2>
+        <form onSubmit={handleCreate} className="item-form">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            required
+          />
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description (optional)"
+          />
+          <button type="submit">Add Item</button>
+        </form>
+      </div>
+
+      <div className="section">
+        <h2>Items ({items.length})</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : items.length === 0 ? (
+          <p className="empty-state">No items yet. Create one above.</p>
+        ) : (
+          <ul className="item-list">
+            {items.map((item) => (
+              <li key={item.id} className="item-row">
+                {editingId === item.id ? (
+                  <div className="item-edit">
+                    <input
+                      type="text"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      placeholder="Title"
+                    />
+                    <input
+                      type="text"
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      placeholder="Description"
+                    />
+                    <div className="item-actions">
+                      <button onClick={() => handleUpdate(item.id)} className="save-btn">Save</button>
+                      <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="item-content">
+                      <span className="item-title">{item.title}</span>
+                      {item.description && <span className="item-desc">{item.description}</span>}
+                    </div>
+                    <div className="item-actions">
+                      <button onClick={() => startEdit(item)} className="edit-btn">Edit</button>
+                      <button onClick={() => handleDelete(item.id)} className="remove-btn">Delete</button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

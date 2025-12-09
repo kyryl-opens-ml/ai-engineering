@@ -71,6 +71,17 @@ It's here: give it a try! As a starting point, I have 2 features:
 Both are important, and both are must-haves. 
 
 
+<Screenshot of agetic feature>
+
+3 tests: works, valid foramt, valie informatl, valida based on data
+no saving for now 
+DSPy, etc etc 
+
+<Screenshot of determinictic feature>
+
+CRUD for items, you have see it before, and testing it's very stragforeard
+https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/
+
 ## Outcome: 
 
 I am running a reality check of this template and contributing back my findings, opinions, and learnings. 
@@ -126,6 +137,12 @@ POC:
 -- have pdf and resposne pre-generated -> upload same pdf again and compare resutls to oneeach other. 
 
 
+Deterministic feature
+
+
+This one is basic CRUD opetation on top of iterm! Just add UI to 
+
+Create, read, update, and delete items for each user, with an option to share with other users.
 3. Review with LLMs
 4. Review with Ivanna 
 
@@ -161,6 +178,7 @@ git commit -m "4. add api"
 git commit -m "5. feature branches"
 git commit -m "6. auth"
 git commit -m "7. base text"
+git commit -m "8. agent feature"
 
 
 git push origin ai-product-template
