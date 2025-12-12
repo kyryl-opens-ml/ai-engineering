@@ -16,6 +16,7 @@ env:
   DATABASE_URL: "sqlite:///:memory:"
   SUPABASE_JWT_SECRET: test-secret-for-ci
   CORS_ORIGINS: http://localhost:5173
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
 jobs:
   test:

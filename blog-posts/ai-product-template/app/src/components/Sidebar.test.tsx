@@ -15,15 +15,15 @@ describe('Sidebar', () => {
   it('renders navigation links', () => {
     renderSidebar()
     expect(screen.getByText('Home')).toBeInTheDocument()
-    expect(screen.getByText('Feature 1')).toBeInTheDocument()
-    expect(screen.getByText('Feature 2')).toBeInTheDocument()
+    expect(screen.getByText('Agentic feature')).toBeInTheDocument()
+    expect(screen.getByText('Deterministic feature')).toBeInTheDocument()
     expect(screen.getByText('Settings')).toBeInTheDocument()
   })
 
   it('hides text when collapsed', () => {
     renderSidebar(true)
     expect(screen.queryByText('Home')).not.toBeInTheDocument()
-    expect(screen.queryByText('Feature 1')).not.toBeInTheDocument()
+    expect(screen.queryByText('Agentic feature')).not.toBeInTheDocument()
   })
 
   it('calls onToggle when toggle button clicked', () => {
@@ -31,5 +31,17 @@ describe('Sidebar', () => {
     renderSidebar(false, onToggle)
     fireEvent.click(screen.getByText('←'))
     expect(onToggle).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders workspace dropdown', () => {
+    renderSidebar()
+    expect(screen.getByText('Test Workspace')).toBeInTheDocument()
+  })
+
+  it('renders admin section links', () => {
+    renderSidebar()
+    expect(screen.getByText('Workspaces')).toBeInTheDocument()
+    expect(screen.getByText('Billing')).toBeInTheDocument()
+    expect(screen.getByText('API Status')).toBeInTheDocument()
   })
 })

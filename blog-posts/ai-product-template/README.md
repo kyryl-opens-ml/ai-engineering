@@ -63,23 +63,22 @@ And most important—AI engineering first! What do I mean by this?
 
 ## Code 
 
-It's here: give it a try! As a starting point, I have 2 features:
+It's here—give it a try! As a starting point, I have two features:
 
-- Agentic one – user uploads a CSV and the app generates the best visualization for it. This provides a "wow" effect to test.
-- Deterministic one – simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
+- Agentic feature – the user uploads a CSV and the app generates the best visualization for it. This provides a "wow" effect to test.
+- Deterministic feature – simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
 
 Both are important, and both are must-haves. 
 
+<Screenshot of agentic feature>
 
-<Screenshot of agetic feature>
+3 tests: works, valid format, valid information, valid based on data.
+No saving for now.
+DSPy, etc.
 
-3 tests: works, valid foramt, valie informatl, valida based on data
-no saving for now 
-DSPy, etc etc 
+<Screenshot of deterministic feature>
 
-<Screenshot of determinictic feature>
-
-CRUD for items, you have see it before, and testing it's very stragforeard
+CRUD for items—you've seen it before, and testing it is very straightforward:
 https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/
 
 ## Outcome: 
@@ -179,6 +178,7 @@ git commit -m "5. feature branches"
 git commit -m "6. auth"
 git commit -m "7. base text"
 git commit -m "8. agent feature"
+git commit -m "8. determinicic feature"
 
 
 git push origin ai-product-template
