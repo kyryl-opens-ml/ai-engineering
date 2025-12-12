@@ -84,6 +84,25 @@ def read_item(
     return db_item
 
 
+@router.put("/{item_id}", response_model=ItemRead)
+def update_item(
+    item_id: uuid.UUID,
+    item: ItemCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    db_item = db.query(Item).filter(Item.id == item_id).first()
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if not check_workspace_access(db, db_item.workspace_id, current_user.id):
+        raise HTTPException(status_code=403, detail="Access denied")
+    db_item.title = item.title
+    db_item.description = item.description
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
 @router.delete("/{item_id}")
 def delete_item(
     item_id: uuid.UUID,

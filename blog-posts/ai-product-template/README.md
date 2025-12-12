@@ -1,94 +1,154 @@
+# AI Engineering Product Template
+
 ## Goal: 
 
-I want to build products fast! 
-I want to use multiple agents to do this for me! 
-I would prioritese simplicity and testing insatead pre-build features. 
-I run 10s or maybe 100s of agents in cloud in parallel without them stepping on each oterhe foot! 
+There are several things I want to do:
 
-Long story short - I want to accelerate 
-https://www.amazon.ca/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339
+- Build products fast
+- Experiment more
+- Use multiple agents to work for me in parallel
+- Use multiple agents to work for me in parallel for hours/days/weeks
+- Run 10/100/1000 coding agents in parallel without them stepping on each other's toes
+- Have self-driving software
+- Go beyond "vibe-coded" POCs
+- Actually run this in production
+
+That sounds wonderful and marketing promises me this, but empirical reality, however, says this is not possible yet (at least for me). Very quickly, your product can become a "hot mess."
+
+So there are several other principles I adopt to make this possible:
+
+I would:
+
+- Prioritize simplicity (always)
+- Test, test, and test again
+- Focus on security
+- Implement guardrails
+- Perform rigorous verification for any change
+- Maintain a good overview of agents
+
+Long story short: I want to accelerate by doing this via a set of verifiers.
+How could I do this? Template.
+
+## Template:
+
+My current best answer—a custom template—is very slim, simple, testable, and extensible.
+
+Slim: Agents can now write any features, so you don't need much prebuilt stuff.
+Simple: Even a full framework can make things complicated.
+Testable: This is critical to prevent a hot mess.
+Extensible: Especially extensible in a parallel way.
+
+The stack I chose for this is inspired by several recent implementations I like. A nice bonus to make it really self-serve is that each tool has its own MCP server exposed to agents.
+
+- Frontend: TypeScript + Vite for the UI: https://github.com/vitejs/vite  (MCP: https://github.com/webfansplz/vite-plugin-vue-mcp)
+- Backend: Python + FastAPI for the API: https://github.com/fastapi (MCP: https://github.com/tadata-org/fastapi_mcp)
+- LLM: Gemini G3 (text, vision, live API, RAG)
+- Auth: Supabase  https://github.com/supabase/supabase (MCP: https://supabase.com/docs/guides/getting-started/mcp)
+- Database: Postgres https://github.com/postgres/postgres (MCP: https://github.com/crystaldba/postgres-mcp)
+- Platform: Railway https://railway.app/ (MCP: https://docs.railway.com/reference/mcp-server)
+- ML: Modal https://modal.com/ (MCP: https://modal.com/docs/examples/mcp_server_stateless)
+- Orchestration: Dagster https://github.com/dagster-io/dagster (MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster)
+- Error Monitoring: Sentry https://github.com/getsentry/sentry (MCP: https://github.com/getsentry/sentry-mcp)
+- LLM Monitoring: Braintrust
+
+And most important—AI engineering first! What do I mean by this?
+
+## AI engineering first
+
+- Feature branches
+- Bulletproof testing
+- 10 agents can run in parallel and produce meaningful test results
+- Each agent has its own cloud environment and can be verified independently
+- Anyone can contribute to it: via Slack, web, API, custom UI, editors
+
+## Code 
+
+It's here—give it a try! As a starting point, I have two features:
+
+- Agentic feature – the user uploads a CSV and the app generates the best visualization for it. This provides a "wow" effect to test.
+- Deterministic feature – simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
+
+Both are important, and both are must-haves. 
+
+<Screenshot of agentic feature>
+
+3 tests: works, valid format, valid information, valid based on data.
+No saving for now.
+DSPy, etc.
+
+<Screenshot of deterministic feature>
+
+CRUD for items—you've seen it before, and testing it is very straightforward:
+https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/
+
+## Outcome: 
+
+I am running a reality check of this template and contributing back my findings, opinions, and learnings. 
+So far, this is one of the best ways (for me) to ship 10x faster while staying in control! 
+ 
 
 
-How could I do this? 
 
+## Reference: 
 
-## Stack:
-
-
-TS + Vite for UI 
-Python + FastAPI for API 
-Supabase for Auth
-Supabase for DB
-Railway for Platform
-Modal for ML 
-Dagster for Jobs
-Sentry for monitoring
-
-And most importanta - AI engineerign first! What do I mean by this? 
-
-
-
-## AI engineerign first
-
-- Feature branches 
-- Bullet proff testing
-- Subgoal: run 10 agents in parallel 
-- Anyone can edit it: slack, agetns, non tech 
-
-
-## Studies 
 
 https://developers.openai.com/codex/guides/build-ai-native-engineering-team/
 https://linear.app/now/self-driving-saas
+https://kyrylai.com/2025/08/04/cursor-railway-vibe-coding-pr-environments/
+https://kyrylai.com/2025/07/28/vibe-coding-ml-team-case-study/
 
 
 ## TODO: 
 
 
-1. Auth feature:
-Keep only @ai-product-template context; everything else is irrelevant for this project.
-Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
-
-I want you to implement the next feature:
-
-User authentication and management
-
-First:
-
-- Authenticate users with Supabase.
-- There are 3 objects: user, workspace, items.
-  - User: self-explanatory.
-  - Workspace: something a user owns; a user can create several.
-  - Item: something a user owns that belongs to one workspace.
-- A user can add other users to a workspace so they can see the workspace and its items.
-
-
-
-- test manually 
-- test api 
-- test ui
-- test end2end in github actions with supabase 
-
-
-2. Agent feature:
-
-3. Story
-
-4. Stack
-
-5. Verify
-
-6. Reality check.
-
-
-7. Grammar & movement & review 
-
-
+1. Agent feature:
+2. Determinitica feature
 
 Keep only @ai-product-template context; everything else is irrelevant for this project.
 Keep code simple and minimal, prioritizing maintainability and elegant solutions. The less code we have, the better we can support it.
 
 I want you to implement the next feature:
+
+- "Agent feature" instead Feature 1
+- "Determinitica feature" instead Feature 2
+
+Let's start with the Agent feature first:
+
+- Allow users to upload a PDF in the UI.
+- The UI sends the PDF to the backend.
+- We process it using Document Understanding from Gemini (use the GEMINI_API_KEY environment variable).
+- Gemini should generate D3.js code to visualize this PDF as a story.
+- The UI displays this D3.js code in a sandbox, as the output could be anything.
+
+Good! could you reanme it please
+
+Agent – Agentic feature
+Deterministic – Deterministic feature
+
+in UI only please 
+
+POC: 
+
+- add Agent Feature intregraton test, there are shulbe be 3 tests: 
+-- upload pdf and got good respose
+-- upload pdf and evaludaiton of JS code is executable 
+-- upload pdf and ask LLM as a Judge to evaluate if it solves the actualy problemt 
+-- have pdf and resposne pre-generated -> upload same pdf again and compare resutls to oneeach other. 
+
+
+Deterministic feature
+
+
+This one is basic CRUD opetation on top of iterm! Just add UI to 
+
+Create, read, update, and delete items for each user, with an option to share with other users.
+3. Review with LLMs
+4. Review with Ivanna 
+
+
+## Prompt space
+
+
 
 Let's plan first!
 
@@ -115,36 +175,10 @@ git commit -m "2. connect api and app"
 git commit -m "3. sidebar"
 git commit -m "4. add api"
 git commit -m "5. feature branches"
+git commit -m "6. auth"
+git commit -m "7. base text"
+git commit -m "8. agent feature"
+git commit -m "8. determinicic feature"
+
 
 git push origin ai-product-template
-
-
-Please add a minimal sidebar to my app, just as a placeholder for now.
-
-See screenshots of sidebars I really like. I really like the following structure:
-
-Main page
-<HOME>
-
-Dedicated for each feature / agent / product / screen
-<Features>
-
-Admin section to manage users, payments, etc.
-<Admin>
-
-
-Remember to keep it minimal and simple.
-
-The admin section should be at the bottom of the sidebar, please.
-
-I use the Railway platform to deploy both the API and the app. It works like this: 
-- Detect what the app is
-- Build an internal Docker image 
-- Run
-
-For the app, I think it uses `npm build` or something similar. My point is that `VITE_API_URL` probably won't be read dynamically, because `npm build` creates static files.
-
-This might be a problem because I want to:
-
-- Have different environments
-- Have feature branches where, for each PR, I create a new environment: API + app, and `VITE_API_URL` should be set up dynamically

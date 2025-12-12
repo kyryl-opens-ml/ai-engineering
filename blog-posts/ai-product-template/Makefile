@@ -8,7 +8,7 @@ frontend:
 	@echo "Starting frontend on http://localhost:5173..."
 	cd app && npm run dev
 
-run-dev:
+dev:
 	@echo "Starting both backend and frontend..."
 	@echo "Backend: http://localhost:8000"
 	@echo "Frontend: http://localhost:5173"

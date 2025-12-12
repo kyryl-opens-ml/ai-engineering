@@ -79,3 +79,39 @@ export async function createItem(workspaceId: string, title: string, description
   if (!response.ok) throw new Error('Failed to create item');
   return response.json();
 }
+
+export async function updateItem(itemId: string, title: string, description: string) {
+  const response = await fetch(`${API_URL}/items/${itemId}`, {
+    method: 'PUT',
+    headers: await getAuthHeaders(),
+    body: JSON.stringify({ title, description }),
+  });
+  if (!response.ok) throw new Error('Failed to update item');
+  return response.json();
+}
+
+export async function deleteItem(itemId: string) {
+  const response = await fetch(`${API_URL}/items/${itemId}`, {
+    method: 'DELETE',
+    headers: await getAuthHeaders(),
+  });
+  if (!response.ok) throw new Error('Failed to delete item');
+  return response.json();
+}
+
+export async function visualizePdf(file: File): Promise<{ d3_code: string }> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers: Record<string, string> = {};
+  if (session) {
+    headers['Authorization'] = `Bearer ${session.access_token}`;
+  }
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await fetch(`${API_URL}/agent/visualize`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+  if (!response.ok) throw new Error('Failed to process PDF');
+  return response.json();
+}
