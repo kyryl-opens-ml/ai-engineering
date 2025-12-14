@@ -69,7 +69,7 @@ Extensible: Especially extensible in a parallel way.
 
 <img src="./docs/4.png" width="800"/>
 
-A nice bonus to make it really "self-driving software" is that each tool has its own MCP server exposed to agents.
+A nice bonus to make it really "self-driving software" is that each tool has its own MCP server exposed to agents. (deep dive for infrastructure engineers https://kyrylai.com/2025/05/23/build-a-self-healing-k8s-agent-with-librechat-mcp/)
 
 
 - Github MCP:  https://github.com/github/github-mcp-server
@@ -77,7 +77,7 @@ A nice bonus to make it really "self-driving software" is that each tool has its
 - Supabase MCP: https://supabase.com/docs/guides/getting-started/mcp
 - Postgress MCP: https://github.com/crystaldba/postgres-mcp
 - Railway MCP: https://docs.railway.com/reference/mcp-server
-- Dagster MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster
+- Dagster MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster (deep dive about it https://kyrylai.com/2025/04/09/dagster-llm-orchestration-mcp-server/)
 - Sentry MCP: https://github.com/getsentry/sentry-mcp
 - Braintrust MCP: https://www.braintrust.dev/docs/reference/mcp
 
@@ -86,7 +86,7 @@ A nice bonus to make it really "self-driving software" is that each tool has its
 And most important—AI engineering first! What do I mean by this?
 
 
-- Feature branches - each agent has its own branch.
+- Feature branches - each agent has its own branch. (deep dive https://kyrylai.com/2025/08/04/cursor-railway-vibe-coding-pr-environments/)
 - Bulletproof testing & evaluations - CI/CD, customer criteria, end-to-end tests each agent can run on demand.
 - Each agent has its own cloud environment and can be verified independently.
 - Anyone can contribute to the project: via Slack, Web, API, Custom UI, Editors.
@@ -111,10 +111,10 @@ It's here - give it a try! As a starting point I have a very minimal design and 
 
 It has simple evaluations in the form of integration tests: 
 
-- Does it work?
-- Does it produce a valid format?
-- Does another LLM think it's good?
-- Does it perform well based on labeled data from before?
+- Does it work? (link https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L53)
+- Does it produce a valid format? (link https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67)
+- Does another LLM think it's good? (link https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90)
+- Does it perform well based on labeled data from before? (link https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131)
 
 2. Deterministic – simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
 
