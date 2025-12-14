@@ -114,10 +114,10 @@ In the case of an enterprise use case, your stack may be more complicated and va
 
 It has simple evaluations in the form of integration tests: 
 
-- Does it work? ([test_upload_pdf_returns_valid_response](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L53))
-- Does it produce a valid format? ([test_upload_pdf_returns_executable_js](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67))
-- Does another LLM think it's good? ([test_upload_pdf_llm_judge_evaluation](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90))
-- Does it perform well based on labeled data from before? ([test_upload_pdf_compare_to_historic_data](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131))
+- Does it work? ([test_upload_pdf_returns_valid_response](https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L53))
+- Does it produce a valid format? ([test_upload_pdf_returns_executable_js](https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67))
+- Does another LLM think it's good? ([test_upload_pdf_llm_judge_evaluation](https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90))
+- Does it perform well based on labeled data from before? ([test_upload_pdf_compare_to_historic_data](https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131))
 
 Simplified code for the "Does another LLM think it's good?" part.
 
@@ -196,3 +196,4 @@ I am stress-testing this template and contributing back my findings, opinions, a
 So far it's a my safety harness. It allows me to unleash 10 agents on a codebase knowing that if they mess up, the guardrails will catch them before production.
  
 My main recommendation for engineering leaders - no matter your stack - is to empower AI engineering by defining a set of principles and strong verification mechanisms at the company strategy level, and making sure you are consistently following them.
+
