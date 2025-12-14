@@ -4,7 +4,7 @@
 
 Meet the reusable and opinionated AI engineering-first product template—spin up multiple products and features from it, experiment in parallel, all while keeping your agents on the leash: https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template
 
-![Alt text](./docs/3.png)
+<img src="./docs/3.png" width="800"/>
 
 
 ## Goal: 
@@ -34,11 +34,11 @@ Principles:
 
 Long story short: From generations to verifications loop - success is good verifications I am confident about.
 
-![Alt text](./docs/1.png)
+<img src="./docs/1.png" width="800"/>
 
 And company strategy view - verification at scale for multiple products, teams, agents, & features is the main goal! Note this down as one of the main responsibilities of technical leadership.
 
-![Alt text](./docs/2.png)
+<img src="./docs/2.png" width="800"/>
 
 How do we start with it? My answer - Template! 
 
@@ -67,7 +67,7 @@ Extensible: Especially extensible in a parallel way.
 - LLM Monitoring & Evaluation: Braintrust https://braintrust.dev/
 
 
-![Alt text](./docs/4.png)
+<img src="./docs/4.png" width="800"/>
 
 A nice bonus to make it really "self-driving software" is that each tool has its own MCP server exposed to agents.
 
