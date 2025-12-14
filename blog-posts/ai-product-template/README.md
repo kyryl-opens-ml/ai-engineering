@@ -2,23 +2,25 @@
 
 ## TLDR: 
 
-Meet the reusable and opinionated AI engineering - first product template - spin up multiple products and features from it, experiment in parallel, all while keeping your agents on the leash: [AI Product template](https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template)
+Many AI coding agents eventually devolve into chaos. This template is my attempt to stop that from happening.
+[AI Product template](https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template)
+
 
 <img src="./docs/3.png" width="800"/>
 
 
 ## Goal: 
 
-There are several things I want to do:
+We all want self-driving software, aka: 
 
 - Build products fast
 - Experiment with features
 - Use multiple agents to work for me in parallel, for hours, days, weeks
-- Run 10/100/1000 coding agents in parallel without them stepping on each other's toes
+- Run multiple agents in parallel on isolated feature branches with independent verification environments.
 - Go beyond "vibe - coded" POCs
 - Actually run this in production
 
-Aka have self-driving software. That sounds wonderful, and marketing promises me this, but empirical reality, however, says this is not possible yet (at least for me). Very quickly, your product can become a "hot mess."
+Marketing promises this, but empirical reality says this is not possible yet (at least for me). Very quickly, your product can become a "hot mess."
 
 So there are several principles I follow to make this possible:
 
@@ -45,13 +47,12 @@ How do we start with it? My answer - Template!
 
 ## Template:
 
-My current best answer - a custom template - is very slim, simple, testable, extensible, and follows the principles I outlined above as much as possible! 
+My current best answer - a custom template - is very feature-slim, simple, testable, extensible, and follows the principles I outlined above as much as possible! 
 
-Slim: Agents can now write any features, so you don't need much prebuilt stuff.
-Simple: Even a full framework can make things complicated.
-Testable: This is critical to prevent a hot mess.
-Extensible: Especially extensible in a parallel way.
-
+- Feature-slim: Agents can now write any features, so you don't need much prebuilt stuff.
+- Simple/Managed Complexity: Rely on platforms like Railway and Modal to handle the heavy lifting.
+- Testable: Integration tests are first-class citizens. (critical to prevent a hot mess)
+- Extensible: Designed to run parallel feature branches seamlessly.
 
 
 - Frontend: TypeScript + [Vite](https://github.com/vitejs/vite) for the UI
@@ -81,6 +82,7 @@ A nice bonus to make it really "[self - driving software](https://linear.app/now
 - Sentry MCP: [Sentry MCP Server](https://github.com/getsentry/sentry-mcp)
 - Braintrust MCP: [Braintrust MCP Server](https://www.braintrust.dev/docs/reference/mcp)
 
+By standardizing these tools via MCP, we don't just give the human a toolkit; we give the Agent a standardized interface to control the entire infrastructure.
 
 
 And most important - AI engineering first! What do I mean by this?
@@ -99,9 +101,9 @@ In the case of an enterprise use case, your stack may be more complicated and va
 
 ## Code 
 
-It's here - give it a try! As a starting point, I have a very minimal design and two features as examples:
+[Full code](https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template) - give it a try! Spin up multiple products and features from it, experiment in parallel, all while keeping your agents on the leash. As a starting point, I have a very minimal design and two features as examples:
 
-1. Agentic - the user uploads a PDF and the app generates the best visualization for it. Dynamic, non-deterministic, and the artifact is hard to manage/predict.
+1. Agentic - the user uploads a PDF and the app generates the best visualization for it. The output is hard to predict or manage.
 
 <table>
   <tr>
@@ -116,6 +118,57 @@ It has simple evaluations in the form of integration tests:
 - Does it produce a valid format? ([test_upload_pdf_returns_executable_js](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67))
 - Does another LLM think it's good? ([test_upload_pdf_llm_judge_evaluation](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90))
 - Does it perform well based on labeled data from before? ([test_upload_pdf_compare_to_historic_data](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131))
+
+Simplified code for the "Does another LLM think it's good?" part.
+
+```python
+def test_upload_pdf_llm_judge_evaluation(client, sample_pdf_path):
+    """
+    Integration Test: 
+    1. Uploads a PDF to the Agent.
+    2. Captures the generated visualization code.
+    3. Uses a 'Judge' LLM (Gemini) to grade the output.
+    """
+    
+    # 1. Act: Upload PDF and get the agent's response
+    with open(sample_pdf_path, "rb") as f:
+        response = client.post(
+            "/agent/visualize",
+            files={"file": ("sample.pdf", f, "application/pdf")},
+        )
+    
+    assert response.status_code == 200
+    generated_code = response.json()["d3_code"]
+
+    # 2. Arrange: Set up the Judge
+    judge_client = genai.Client(api_key=settings.gemini_api_key)
+    
+    judge_prompt = f"""
+    You are an expert code reviewer.
+    Evaluate this D3.js code generated from a PDF.
+    
+    Code:
+    ```javascript
+    {generated_code}
+    ```
+    
+    Check for:
+    1. Valid JavaScript syntax.
+    2. Meaningful visualization logic.
+    
+    Respond with ONLY "PASS" or "FAIL" followed by a reason.
+    """
+
+    # 3. Assert: The Judge decides if the test passes
+    judge_response = judge_client.models.generate_content(
+        model="gemini-3-pro-preview",
+        contents=judge_prompt
+    )
+
+    result = judge_response.text.strip().upper()
+    assert result.startswith("PASS"), f"LLM Judge rejected the code: {judge_response.text}"
+
+```
 
 2. Deterministic - simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
 
@@ -139,7 +192,7 @@ Based on this, you can add new features in parallel, on top of existing ones or 
 
 ## Outcome: 
 
-I am running a reality check of this template and contributing back my findings, opinions, and learnings. 
-But so far, this is one of the best ways (at least for me) to ship 10x faster while staying in control! 
+I am stress-testing this template and contributing back my findings, opinions, and learnings. 
+So far it's a my safety harness. It allows me to unleash 10 agents on a codebase knowing that if they mess up, the guardrails will catch them before production.
  
 My main recommendation for engineering leaders - no matter your stack - is to empower AI engineering by defining a set of principles and strong verification mechanisms at the company strategy level, and making sure you are consistently following them.
