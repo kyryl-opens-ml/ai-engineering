@@ -18,7 +18,7 @@ There are several things I want to do:
 - Go beyond "vibe-coded" POCs
 - Actually run this in production
 
-Aka have self-driving software That sounds wonderful and marketing promises me this, but empirical reality, however, says this is not possible yet (at least for me). Very quickly, your product can become a "hot mess."
+Aka have self-driving software. That sounds wonderful and marketing promises me this, but empirical reality, however, says this is not possible yet (at least for me). Very quickly, your product can become a "hot mess."
 
 So there are several principles I follow to make this possible:
 
@@ -26,26 +26,26 @@ So there are several principles I follow to make this possible:
 Principles:
 
 - Prioritize simplicity (always)
-- Test, test, and test again. Integration tests and treat agent evaludation are first class citizen in any design.
+- Test, test, and test again. Integration tests and agent evaluation are first-class citizens in any design.
 - Focus on security.
 - Implement guardrails.
 - Perform rigorous verification for any change.
 - Maintain a good overview of agents.
 
-Long story short: From genrations to verificatiosn loop - sucess is good verifications I am confidenr about
+Long story short: From generations to verifications loop - success is good verifications I am confident about.
 
 ![Alt text](./docs/1.png)
 
-And company statengety view - verification at scale for multiple product, teams, agens, & features are main goal! Note down as one of the main resposnncit of teachnical leadership to do this.
+And company strategy view - verification at scale for multiple products, teams, agents, & features is the main goal! Note this down as one of the main responsibilities of technical leadership.
 
 ![Alt text](./docs/2.png)
 
-How do we starte with it? I my answer - Tempalte! 
+How do we start with it? My answer - Template! 
 
 
 ## Template:
 
-My current best answer - a custom template - is very slim, simple, testable, extensible and follow principlese I outlied above as much as possiable! 
+My current best answer - a custom template - is very slim, simple, testable, extensible and follows the principles I outlined above as much as possible! 
 
 Slim: Agents can now write any features, so you don't need much prebuilt stuff.
 Simple: Even a full framework can make things complicated.
@@ -72,37 +72,35 @@ Extensible: Especially extensible in a parallel way.
 A nice bonus to make it really "self-driving software" is that each tool has its own MCP server exposed to agents.
 
 
-
-
-(MCP  https://github.com/github/github-mcp-server)
-(MCP  https://cloud.google.com/blog/products/ai-machine-learning/announcing-official-mcp-support-for-google-services)
-(MCP: https://supabase.com/docs/guides/getting-started/mcp)
-(MCP: https://github.com/crystaldba/postgres-mcp)
-(MCP: https://docs.railway.com/reference/mcp-server)
-(MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster)
-(MCP: https://github.com/getsentry/sentry-mcp)
-(MCP: https://www.braintrust.dev/docs/reference/mcp)
+- Github MCP:  https://github.com/github/github-mcp-server
+- GCP MCP:  https://cloud.google.com/blog/products/ai-machine-learning/announcing-official-mcp-support-for-google-services
+- Supabase MCP: https://supabase.com/docs/guides/getting-started/mcp
+- Postgress MCP: https://github.com/crystaldba/postgres-mcp
+- Railway MCP: https://docs.railway.com/reference/mcp-server
+- Dagster MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster
+- Sentry MCP: https://github.com/getsentry/sentry-mcp
+- Braintrust MCP: https://www.braintrust.dev/docs/reference/mcp
 
 
 
 And most important—AI engineering first! What do I mean by this?
 
 
-- Feature branches - each agents has it's own branch.
-- Bulletproof testing & evaludations - CI/CD, custoemr criteris, end2end test each agent can run on demans.
-- Each agent has its own cloud environment and can be verified independently
-- Anyone can contribute to project: via Slack, Web, API, Custom UI, Editors.
+- Feature branches - each agent has its own branch.
+- Bulletproof testing & evaluations - CI/CD, customer criteria, end-to-end tests each agent can run on demand.
+- Each agent has its own cloud environment and can be verified independently.
+- Anyone can contribute to the project: via Slack, Web, API, Custom UI, Editors.
 
 Simple check for it: 
-- could 10 agents can run in parallel and produce meaningful results? 
-- Do you have evidencet to proce ai coding agent ouput ready to merge? 
+- Could 10 agents run in parallel and produce meaningful results? 
+- Do you have evidence to prove AI coding agent output is ready to merge? 
 
 In the case of an enterprise use case, your stack may be more complicated and vary widely, but the core principle—AI engineering first—still holds true in every case.
 ## Code 
 
-It's here - give it a try! As a starting point I have very miniaml designad and two features as examples:
+It's here - give it a try! As a starting point I have a very minimal design and two features as examples:
 
-1. Agentic – the user uploads a PDF and the app generates the best visualization for it. Dynamic, non determnitic and artifacet is hard to manage / predict.
+1. Agentic – the user uploads a PDF and the app generates the best visualization for it. Dynamic, non-deterministic, and the artifact is hard to manage/predict.
 
 <table>
   <tr>
@@ -111,12 +109,12 @@ It's here - give it a try! As a starting point I have very miniaml designad and 
   </tr>
 </table>
 
-It has simple evaliations in form of integration tests; 
+It has simple evaluations in the form of integration tests: 
 
-- does it works
-- does it proeuce valdiate format
-- does another llm thing it;s good! 
-- does it perfoce well based on latberle data before.
+- Does it work?
+- Does it produce a valid format?
+- Does another LLM think it's good?
+- Does it perform well based on labeled data from before?
 
 2. Deterministic – simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
 
@@ -127,15 +125,15 @@ It has simple evaliations in form of integration tests;
   </tr>
 </table>
 
-CRUD for items - you've seen it before, and testing it is very straightforward: Arrange-Act-Assert pattern (https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/). This seems easy to add, but I swas multiple time (and hostenre guyily of this myself) - if you  miss to add it ad right time - cost of this - mgiht be very hight. 
+CRUD (https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) for items - you've seen it before, and testing it is very straightforward: Arrange-Act-Assert pattern (https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/). This seems easy to add, but I saw multiple times (and honestly I'm guilty of this myself) - if you miss adding it at the right time - the cost of this might be very high. 
 
-Never undervalue this stage, and always ask agent to add integration tests and make sure to follow TDD!  
+Never undervalue this stage, and always ask the agent to add integration tests and make sure to follow TDD!  
 
 Both are important, and both are must-haves. 
 
-- Feature branches - when you add new feature or build on top of Agentic feature & Deterministic feature - make sure agent has full avilait to have seprate envirments. 
+- Feature branches - when you add a new feature or build on top of Agentic feature & Deterministic feature - make sure the agent has full availability to have separate environments. 
 
-Based on this you can add new feature in prappalr, on top of existing one or combinations. 
+Based on this you can add new features in parallel, on top of existing ones or combinations. 
 
 
 ## Outcome: 
