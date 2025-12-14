@@ -2,7 +2,7 @@
 
 ## TLDR: 
 
-Meet the reusable and opinionated AI engineering - first product template—spin up multiple products and features from it, experiment in parallel, all while keeping your agents on the leash: https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template
+Meet the reusable and opinionated AI engineering - first product template - spin up multiple products and features from it, experiment in parallel, all while keeping your agents on the leash: [AI Product template](https://github.com/kyryl-opens-ml/ai-engineering/tree/ai-product-template/blog-posts/ai-product-template)
 
 <img src="./docs/3.png" width="800"/>
 
@@ -32,20 +32,20 @@ Principles:
 - Perform rigorous verification for any change.
 - Maintain a good overview of agents.
 
-Long story short: From generations to verifications loop—success is good verifications I am confident about.
+Long story short: From generations to verifications loop - success is good verifications I am confident about.
 
 <img src="./docs/1.png" width="800"/>
 
-And company strategy view—verification at scale for multiple products, teams, agents, and features is the main goal! Note this down as one of the main responsibilities of technical leadership.
+And company strategy view - verification at scale for multiple products, teams, agents, and features is the main goal! Note this down as one of the main responsibilities of technical leadership.
 
 <img src="./docs/2.png" width="800"/>
 
-How do we start with it? My answer — Template! 
+How do we start with it? My answer - Template! 
 
 
 ## Template:
 
-My current best answer - a custom template — is very slim, simple, testable, extensible, and follows the principles I outlined above as much as possible! 
+My current best answer - a custom template - is very slim, simple, testable, extensible, and follows the principles I outlined above as much as possible! 
 
 Slim: Agents can now write any features, so you don't need much prebuilt stuff.
 Simple: Even a full framework can make things complicated.
@@ -54,39 +54,39 @@ Extensible: Especially extensible in a parallel way.
 
 
 
-- Frontend: TypeScript + Vite for the UI: https://github.com/vitejs/vite
-- Backend: Python + FastAPI for the API: https://github.com/fastapi
-- CI/CD: GitHub Actions https://github.com/features/actions
-- LLM: Gemini G3 (text, vision, live API, RAG) + DSPy for proper prompt optimization
-- Auth: Supabase https://github.com/supabase/supabase 
-- Database: Postgres https://github.com/postgres/postgres
-- Platform: Railway https://railway.app/
-- ML: Modal https://modal.com/
-- Orchestration: Dagster https://github.com/dagster-io/dagster
-- Error Monitoring: Sentry https://github.com/getsentry/sentry
-- LLM Monitoring & Evaluation: Braintrust https://braintrust.dev/
+- Frontend: TypeScript + [Vite](https://github.com/vitejs/vite) for the UI
+- Backend: Python + [FastAPI](https://github.com/fastapi) for the API
+- CI/CD: [GitHub Actions](https://github.com/features/actions)
+- LLM: Gemini 3 (text, vision, live API, RAG) + DSPy for proper prompt optimization
+- Auth: [Supabase](https://github.com/supabase/supabase)
+- Database: [Postgres](https://github.com/postgres/postgres)
+- Platform: [Railway](https://railway.app/)
+- ML: [Modal](https://modal.com/)
+- Orchestration: [Dagster](https://github.com/dagster-io/dagster)
+- Error Monitoring: [Sentry](https://github.com/getsentry/sentry)
+- LLM Monitoring & Evaluation: [Braintrust](https://braintrust.dev/)
 
 
 <img src="./docs/4.png" width="800"/>
 
-A nice bonus to make it really "self - driving software" (link https://linear.app/now/self-driving-saas) is that each tool has its own MCP server exposed to agents. (Deep dive for infrastructure engineers: https://kyrylai.com/2025/05/23/build-a-self-healing-k8s-agent-with-librechat-mcp/)
+A nice bonus to make it really "[self - driving software](https://linear.app/now/self-driving-saas)" is that each tool has its own MCP server exposed to agents. (Deep dive for infrastructure engineers: [Build a Self-Healing K8s Agent with LibreChat MCP](https://kyrylai.com/2025/05/23/build-a-self-healing-k8s-agent-with-librechat-mcp/))
 
 
-- GitHub MCP: https://github.com/github/github-mcp-server
-- GCP MCP: https://cloud.google.com/blog/products/ai-machine-learning/announcing-official-mcp-support-for-google-services
-- Supabase MCP: https://supabase.com/docs/guides/getting-started/mcp
-- Postgres MCP: https://github.com/crystaldba/postgres-mcp
-- Railway MCP: https://docs.railway.com/reference/mcp-server
-- Dagster MCP: https://github.com/kyryl-opens-ml/mcp-server-dagster (deep dive about it: https://kyrylai.com/2025/04/09/dagster-llm-orchestration-mcp-server/)
-- Sentry MCP: https://github.com/getsentry/sentry-mcp
-- Braintrust MCP: https://www.braintrust.dev/docs/reference/mcp
+- GitHub MCP: [Github MCP Server](https://github.com/github/github-mcp-server)
+- GCP MCP: [GCP MCP Server](https://cloud.google.com/blog/products/ai-machine-learning/announcing-official-mcp-support-for-google-services)
+- Supabase MCP: [Supabase MCP Server](https://supabase.com/docs/guides/getting-started/mcp)
+- Postgres MCP: [Postgres MCP Server ](https://github.com/crystaldba/postgres-mcp)
+- Railway MCP: [Railway MCP Server](https://docs.railway.com/reference/mcp-server)
+- Dagster MCP: [Dagter MCP Server](https://github.com/kyryl-opens-ml/mcp-server-dagster) (deep dive about it: [Dagster LLM Orchestration MCP Server](https://kyrylai.com/2025/04/09/dagster-llm-orchestration-mcp-server/))
+- Sentry MCP: [Sentry MCP Server](https://github.com/getsentry/sentry-mcp)
+- Braintrust MCP: [Braintrust MCP Server](https://www.braintrust.dev/docs/reference/mcp)
 
 
 
-And most important — AI engineering first! What do I mean by this?
+And most important - AI engineering first! What do I mean by this?
 
 
-- Feature branches — each agent has its own branch. (Deep dive: https://kyrylai.com/2025/08/04/cursor-railway-vibe-coding-pr-environments/)
+- Feature branches - each agent has its own branch. (Deep dive: [Cursor Railway Vibe Coding PR Environments](https://kyrylai.com/2025/08/04/cursor-railway-vibe-coding-pr-environments/))
 - Bulletproof testing and evaluations - CI/CD, customer criteria, end-to-end tests each agent can run on demand.
 - Each agent has its own cloud environment and can be verified independently.
 - Anyone can contribute to the project: via Slack, Web, API, Custom UI, Editors.
@@ -95,13 +95,13 @@ Simple check for it:
 - Could 10 agents run in parallel and produce meaningful results? 
 - Do you have evidence to prove AI coding agent output is ready to merge? 
 
-In the case of an enterprise use case, your stack may be more complicated and vary widely, but the core principle—AI engineering first - still holds true in every case.
+In the case of an enterprise use case, your stack may be more complicated and vary widely, but the core principle - AI engineering first - still holds true in every case.
 
 ## Code 
 
-It's here — give it a try! As a starting point, I have a very minimal design and two features as examples:
+It's here - give it a try! As a starting point, I have a very minimal design and two features as examples:
 
-1. Agentic — the user uploads a PDF and the app generates the best visualization for it. Dynamic, non-deterministic, and the artifact is hard to manage/predict.
+1. Agentic - the user uploads a PDF and the app generates the best visualization for it. Dynamic, non-deterministic, and the artifact is hard to manage/predict.
 
 <table>
   <tr>
@@ -112,12 +112,12 @@ It's here — give it a try! As a starting point, I have a very minimal design a
 
 It has simple evaluations in the form of integration tests: 
 
-- Does it work? (link: https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L53)
-- Does it produce a valid format? (link: https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67)
-- Does another LLM think it's good? (link: https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90)
-- Does it perform well based on labeled data from before? (link: https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131)
+- Does it work? ([test_upload_pdf_returns_valid_response](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L53))
+- Does it produce a valid format? ([test_upload_pdf_returns_executable_js](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L67))
+- Does another LLM think it's good? ([test_upload_pdf_llm_judge_evaluation](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L90))
+- Does it perform well based on labeled data from before? ([test_upload_pdf_compare_to_historic_data](https://github.com/kyryl-opens-ml/ai-engineering/blob/ai-product-template/blog-posts/ai-product-template/api/tests/integration/test_agentic_feature.py#L131))
 
-2. Deterministic—simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
+2. Deterministic - simple CRUD on "items" (no AI), just boring stuff (which is hugely valuable).
 
 <table>
   <tr>
@@ -126,7 +126,7 @@ It has simple evaluations in the form of integration tests:
   </tr>
 </table>
 
-CRUD (https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) for items - you've seen it before, and testing it is very straightforward: Arrange-Act-Assert pattern (https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/). This seems easy to add, but I saw multiple times (and honestly I'm guilty of this myself) - if you miss adding it at the right time, the cost of this might be very high. 
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) for items - you've seen it before, and testing it is very straightforward: [Arrange-Act-Assert pattern](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/). This seems easy to add, but I saw multiple times (and honestly I'm guilty of this myself) - if you miss adding it at the right time, the cost of this might be very high. 
 
 Never undervalue this stage, and always ask the agent to add integration tests and make sure to follow TDD!  
 
