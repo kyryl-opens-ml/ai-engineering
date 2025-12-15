@@ -1,0 +1,29 @@
+{
+  "appId": "com.kyrylai.agent-tech-lead",
+  "productName": "Agent Tech Lead",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "mac": {
+    "target": ["dmg", "dir"],
+    "category": "public.app-category.developer-tools"
+  },
+  "dmg": {
+    "contents": [
+      {
+        "x": 130,
+        "y": 220
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  }
+}
+
