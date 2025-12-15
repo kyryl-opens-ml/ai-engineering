@@ -16,10 +16,12 @@ Cursor https://cursor.com/docs/cloud-agent/api/endpoints#list-models, why - dogf
 
 
 Manual stage:
-3. Electron project setup
+3. Electron project setup: DONE (see makefile)
 git commit -m "1. Electron project setup"
 
 4. Script to do this manually: play
+
+npx tsx scripts/cli.ts list github.com/kyryl-opens-ml/ai-engineering
 
 5. Script to do this manually: actual workflow
 6. Script to do this manually: human handoff
