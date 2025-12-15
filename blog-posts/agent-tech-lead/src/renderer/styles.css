@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Virgil&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: #eee;
+  font-family: 'Virgil', 'Segoe Print', 'Comic Sans MS', cursive;
+  background: #fff;
+  color: #1e1e1e;
   min-height: 100vh;
 }
 
@@ -18,33 +20,31 @@ body {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: normal;
   margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #00d9ff, #00ff88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 p {
-  color: #aaa;
-  font-size: 1.1rem;
+  color: #666;
+  font-size: 1rem;
 }
 
 .placeholder {
-  margin-top: 3rem;
-  padding: 4rem;
-  border: 2px dashed #333;
-  border-radius: 12px;
+  margin-top: 2rem;
+  padding: 3rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
   text-align: center;
+  background: #fafafa;
 }
 
 .placeholder span {
-  font-size: 3rem;
+  font-size: 2rem;
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .placeholder p {
-  color: #666;
+  color: #999;
 }

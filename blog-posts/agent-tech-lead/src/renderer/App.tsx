@@ -4,10 +4,9 @@ export default function App() {
       <h1>Agent Tech Lead</h1>
       <p>Kanban board to manage cloud coding agents</p>
       <div className="placeholder">
-        <span>🚀</span>
+        <span>✏️</span>
         <p>Your app content will go here</p>
       </div>
     </div>
   )
 }
-
