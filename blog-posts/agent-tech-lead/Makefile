@@ -1,4 +1,4 @@
-.PHONY: install dev build preview test test-watch test-e2e typecheck package dist run-script clean
+.PHONY: install dev build preview test test-watch test-e2e typecheck lint lint-fix package dist run-script clean
 
 install:
 	npm install
@@ -23,6 +23,12 @@ test-e2e:
 
 typecheck:
 	npm run typecheck
+
+lint:
+	npm run lint
+
+lint-fix:
+	npm run lint:fix
 
 package: build
 	npx electron-builder --mac --dir

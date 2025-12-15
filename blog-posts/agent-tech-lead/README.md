@@ -17,7 +17,10 @@ Cursor https://cursor.com/docs/cloud-agent/api/endpoints#list-models, why - dogf
 
 Manual stage:
 3. Electron project setup
+git commit -m "1. Electron project setup"
+
 4. Script to do this manually: play
+
 5. Script to do this manually: actual workflow
 6. Script to do this manually: human handoff
 
@@ -27,6 +30,16 @@ Product mvp stage:
 [Backlog, Design, Build, Review]
 8. Reproduce from Kanban view
 9. Persistence
+
+Validations:
+
+10. Projects
+11. P1 ML in production
+12. P2 Lienonme
+13. P3 https://context-hosting.com/
+14. P4 NoOCR
+14. P5 Real Deal https://gemini.google.com/u/3/app/bcfe8279336d77da?pageId=none
+
 
 
 Product delivery stage:
