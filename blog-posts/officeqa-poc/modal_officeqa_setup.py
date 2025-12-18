@@ -7,8 +7,6 @@ import modal
 
 MODAL_TOKEN_ID = os.environ.get("MODAL_TOKEN_ID")
 MODAL_TOKEN_SECRET = os.environ.get("MODAL_TOKEN_SECRET")
-if not MODAL_TOKEN_ID or not MODAL_TOKEN_SECRET:
-    raise RuntimeError("Set MODAL_TOKEN_ID and MODAL_TOKEN_SECRET")
 
 REPO_URL = "https://github.com/databricks/officeqa.git"
 BRANCH = "main"
@@ -38,4 +36,6 @@ def sync(branch: str = BRANCH):
 
 @app.local_entrypoint()
 def main(branch: str = BRANCH):
-    sync.call(branch)
+    if not MODAL_TOKEN_ID or not MODAL_TOKEN_SECRET:
+        raise RuntimeError("Set MODAL_TOKEN_ID and MODAL_TOKEN_SECRET")
+    sync.remote(branch)
