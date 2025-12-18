@@ -40,7 +40,7 @@ async function list() {
   if (repoArg) {
     filteredAgents = allAgents.filter(a => a.source.repository === repoArg)
   } else {
-    const repos = [...new Set(allAgents.map(a => a.source.repository))]
+    const repos = Array.from(new Set(allAgents.map(a => a.source.repository)))
     if (repos.length > 1) {
       console.log('\nAvailable repositories:')
       repos.forEach((r, i) => console.log(`  ${i + 1}. ${r}`))
@@ -86,6 +86,36 @@ async function repos() {
   console.log(JSON.stringify(response, null, 2))
 }
 
+async function start() {
+  const client = getClient()
+
+  const repo = await prompt('Repository (e.g. github.com/org/repo): ')
+  if (!repo) {
+    console.error('Repository is required')
+    process.exit(1)
+  }
+
+  const baseBranch = await prompt('Base branch (default: main): ') || 'main'
+  const branchName = await prompt('Target branch name (optional): ')
+
+  const taskPrompt = await prompt('Task prompt: ')
+  if (!taskPrompt) {
+    console.error('Prompt is required')
+    process.exit(1)
+  }
+
+  const autoCreatePr = (await prompt('Auto-create PR? (y/n, default: n): ')).toLowerCase() === 'y'
+
+  const response = await client.createAgent({
+    prompt: { text: taskPrompt },
+    source: { repository: repo, ref: baseBranch },
+    target: { autoCreatePr, branchName: branchName || undefined }
+  })
+
+  console.log('\nAgent created:')
+  console.log(JSON.stringify(response, null, 2))
+}
+
 const command = process.argv[2]
 
 switch (command) {
@@ -94,6 +124,9 @@ switch (command) {
     break
   case 'status':
     status()
+    break
+  case 'start':
+    start()
     break
   case 'models':
     models()
@@ -109,6 +142,7 @@ switch (command) {
     console.log('\nCommands:')
     console.log('  list [repo]    - List all agents (optional: exact repo match)')
     console.log('  status <id>    - Get agent status')
+    console.log('  start          - Launch a new agent')
     console.log('  models         - List available models')
     console.log('  me             - Get API key info')
     console.log('  repos          - List GitHub repositories')
