@@ -1,0 +1,9 @@
+[project]
+name = "officeqa-poc"
+version = "0.1.0"
+description = "Modal helper that syncs databricks/officeqa into a shared volume"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "modal>=1.2.6",
+]
