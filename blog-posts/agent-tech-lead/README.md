@@ -10,7 +10,9 @@ There are also many other amazing resources and books:
 https://github.com/kuchin/awesome-cto
 https://github.com/kdeldycke/awesome-engineering-team-management
 
-The previous consensus was that you can grow to senior and stay at that level for a while in your career. Well - this is not true anymore. Now the default expectation is that you must become a tech lead, but maybe not for people - for AI agents for sure.
+The previous consensus was that you can grow to senior and stay at that level for a while in your career. Well - this is not true anymore. 
+
+Now the default expectation is that you must become a tech lead, but maybe not for people - for AI agents for sure.
 
 Luckily, when we are talking about technical leadership, there is a lot of commonality, so if you're getting better at one, it makes you better at another!
 
@@ -30,17 +32,29 @@ At core you need to keep shit together! Whatever this means, for me it's usually
 Many many more but simplified is: 
 
 roadmap -> list of tasks -> sequence of execution -> steering teammates -> verification.
-
 While keeping same level of tech culture and unblocking people where possible. 
-
 Some tasks as tech lead you are going to do yourself, maybe most boring and unpleasant. 
 
 Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you can use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
 
-## Example: 
+## Getting real! 
+
+So I wrote very minimalist agent managment kanban board! 
 
 
-I found it's hard to communicate ideas, but luckily - with LLMs I can build & show them at very marginal costs, so let's get real here and build shit! 
+- desctribe process: from prompts 
+- define example 
+- show example 
+- try it yourself! (npm install -g ..., npm run )
+- show apis 
+- how future is going to look like! 
+
+
+
+
+
+## Integration test for it: 
+
 
 Let's solve: https://www.databricks.com/blog/introducing-officeqa-benchmark-end-to-end-grounded-reasoning 
 
@@ -50,6 +64,17 @@ Before I would probably think - looks interesting but nah, too much work, and bu
 List of tasks: 
 
 1. pull and setup storage for https://github.com/databricks/officeqa/tree/main
+I want to have a simple modal script to setup this repo https://github.com/databricks/officeqa/tree/main and pull all data
+
+- keep all code in new folder under blog-posts
+- write simple modal app to pull this repo and clone data to shared volume
+- read modal creds from env vars
+
+
+1.1 ingestions 
+
+could you run actual ingestions from blog-posts/officeqa-setup, envs to do this should be in env var
+
 2. function to ingest files to file storage api 
 3. file api for pdfs (v1)
 4. file api for json (v2)
@@ -62,40 +87,15 @@ List of tasks:
 11. llm finetuning eval
 12. reporting and error analysis 
 
+## Similar project: 
+
+https://github.com/eyaltoledano/claude-task-master
 
 
 
-# Great idea #1
-
-This is an amazing idea! 
-POC & Concept: https://aistudio.google.com/u/3/apps/drive/1XMbAEaSgIg8q_PXH-RyRmHiVO9ztEWIc?pli=1&showAssistant=true&showPreview=true&resourceKey=
-
-
-## One sentence: 
-Kanban board to manage cloud coding agents from the same place. Or how I started loving playing games instead of fearing AI.
 
 ## Gameplan: 
 
-1. Small post about the Agents SDK: DONE kyryl-truskovskyi_interesting-observation-i-noticed-most-coding-activity-7402890193491730432-HyQa
-2. Choose only one agent & API: DONE Cursor https://cursor.com/docs/cloud-agent/api/endpoints#list-models, why - dogfooding.
-
-
-Manual stage:
-3. Electron project setup: DONE (see makefile) git commit -m "1. Electron project setup"
-4. Script to do this manually: play: DONE
-npx tsx scripts/cli.ts list github.com/kyryl-opens-ml/ai-engineering
-
-5. Script to do this manually: actual workflow
-
-npx tsx scripts/cli.ts start github.com/kyryl-opens-ml/ai-engineering
-6. Script to do this manually: human handoff
-
-
-Product mvp stage:
-7. Column descriptions
-[Backlog, Design, Build, Review]
-8. Reproduce from Kanban view
-9. Persistence
 
 Let's plan together! 
 
@@ -124,7 +124,15 @@ see empty columns: -> add tasks and start work, some tasks could be done by just
 and I can switch between different projects back and forth. 
 
 
-Validations:
+So Cursor does not have planning mode in Cloud API, let's remove it altogether - go to build right away! (simpler)
+
+Also some suggestions: 
+
+- Design Agent: View in Cursor → I want it to open in browser not inside of app
+- Design Agent: View in Cursor → I want to be able to copy it 
+- don't store history - just pull it from agent and show agent responses too please 
+
+## Validations:
 
 10. Projects
 11. P1 ML in production
@@ -132,8 +140,6 @@ Validations:
 13. P3 https://context-hosting.com/
 14. P4 NoOCR
 14. P5 Real Deal https://gemini.google.com/u/3/app/bcfe8279336d77da?pageId=none
-
-
 
 Product delivery stage:
 10. GitHub integrations
@@ -148,4 +154,5 @@ Gamifications stage:
 16. Character for each
 17. Animations for each
 18. Testing & flow
+
 https://aistudio.google.com/u/3/apps/drive/1AWeIyy7xHf1s7qJPExF-Fjfs-RQ__q2E?showAssistant=true&showPreview=true&resourceKey=
