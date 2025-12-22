@@ -13,7 +13,7 @@ async def main():
     async with MCPServerSse(
         name="DuckDB MCP Server",
         params={
-            "url": "http://0.0.0.0:8000/sse",
+            "url": "http://127.0.0.1:8000/sse",
         },
     ) as server:
         tools = await server.list_tools()

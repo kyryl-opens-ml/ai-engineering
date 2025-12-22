@@ -154,8 +154,11 @@ uv run ./labeling/create_dataset_synthetic.py
 
 ## MCP with DuckDB
 
-```
+See `duckdb-mcp/README.md`.
 
+```bash
+uv sync
+uv run python duckdb-mcp/duckdb_mcp.py
 ```
 
 ## Updated design doc
