@@ -235,22 +235,71 @@ body {
   color: var(--text-muted);
 }
 
+.project-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.project-item:hover .project-actions {
+  opacity: 1;
+}
+
+.btn-edit,
 .btn-delete {
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   padding: 0.25rem;
-  opacity: 0;
-  transition: opacity 0.15s;
 }
 
-.project-item:hover .btn-delete {
-  opacity: 1;
+.btn-edit:hover {
+  color: var(--accent);
 }
 
 .btn-delete:hover {
   color: var(--danger);
+}
+
+.project-rename-form {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.project-rename-form input {
+  flex: 1;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+
+.btn-save,
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-save {
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.btn-cancel {
+  color: var(--text-muted);
 }
 
 .kanban-board {
@@ -1148,4 +1197,141 @@ body {
 .agent-status-badge.error {
   background: #fee2e2;
   color: #991b1b;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px dashed var(--border-dashed);
+}
+
+.view-toggle button {
+  flex: 1;
+  background: var(--bg);
+  border: 1px dashed var(--border-dashed);
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.view-toggle button:hover {
+  border-color: var(--accent);
+}
+
+.view-toggle button.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.game-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem;
+}
+
+.game-view.loading {
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed var(--border-dashed);
+}
+
+.game-header h2 {
+  font-weight: normal;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.game-header p {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.game-stats {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.game-stats .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border-dashed);
+  border-radius: 8px;
+}
+
+.game-stats .stat-value {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.game-stats .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.game-canvas-container {
+  flex: 1;
+  border: 2px dashed var(--border-dashed);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.game-legend {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--bg);
+  border: 1px dashed var(--border-dashed);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.game-legend h4 {
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border-dashed);
+  font-size: 0.65rem;
+  color: var(--text-muted);
 }

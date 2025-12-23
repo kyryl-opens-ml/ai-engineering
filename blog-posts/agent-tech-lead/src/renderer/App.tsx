@@ -3,10 +3,14 @@ import type { Project } from '../shared/types'
 import { ProjectSelector } from './components/ProjectSelector'
 import { KanbanBoard } from './components/KanbanBoard'
 import { Settings } from './components/Settings'
+import { GameView } from './components/GameView'
+
+type ViewMode = 'kanban' | 'game'
 
 export default function App() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
   const [showSettings, setShowSettings] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('kanban')
 
   return (
     <div className="app">
@@ -15,11 +19,31 @@ export default function App() {
           <h1>Agent Tech Lead</h1>
           <button className="btn-settings" onClick={() => setShowSettings(true)}>⚙</button>
         </div>
-        <ProjectSelector currentProject={currentProject} onSelectProject={setCurrentProject} />
+
+        <div className="view-toggle">
+          <button
+            className={viewMode === 'kanban' ? 'active' : ''}
+            onClick={() => setViewMode('kanban')}
+          >
+            📋 Kanban
+          </button>
+          <button
+            className={viewMode === 'game' ? 'active' : ''}
+            onClick={() => setViewMode('game')}
+          >
+            🎮 Game
+          </button>
+        </div>
+
+        {viewMode === 'kanban' && (
+          <ProjectSelector currentProject={currentProject} onSelectProject={setCurrentProject} />
+        )}
       </aside>
 
       <main className="main-content">
-        {currentProject ? (
+        {viewMode === 'game' ? (
+          <GameView />
+        ) : currentProject ? (
           <KanbanBoard project={currentProject} />
         ) : (
           <div className="empty-state">

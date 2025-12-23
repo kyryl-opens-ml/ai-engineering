@@ -20,6 +20,10 @@ export function registerIpcHandlers(agentService: AgentService) {
     db.deleteProject(id)
   })
 
+  ipcMain.handle('project:rename', (_, id: string, name: string) => {
+    return db.renameProject(id, name)
+  })
+
   ipcMain.handle('task:list', (_, projectId: string) => {
     return db.listTasks(projectId)
   })
