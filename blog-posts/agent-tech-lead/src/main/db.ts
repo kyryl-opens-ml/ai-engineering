@@ -92,6 +92,11 @@ export function deleteProject(id: string): void {
   getDb().prepare('DELETE FROM projects WHERE id = ?').run(id)
 }
 
+export function renameProject(id: string, name: string): Project {
+  getDb().prepare('UPDATE projects SET name = ? WHERE id = ?').run(name, id)
+  return getProject(id)!
+}
+
 export function listTasks(projectId: string): Task[] {
   return getDb()
     .prepare('SELECT * FROM tasks WHERE project_id = ? ORDER BY status, position')

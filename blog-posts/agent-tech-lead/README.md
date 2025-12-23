@@ -19,7 +19,9 @@ Luckily, when we are talking about technical leadership, there is a lot of commo
 
 ## Tech Lead Job
 
+<a href="https://www.imdb.com/title/tt0903747/">
 <img src="./docs/1.1.png" width="600"/>
+</a>
 
 At core you need to keep shit together! Whatever this means, for me it's usually:
 
@@ -40,7 +42,9 @@ Some tasks as tech lead you are going to do yourself, maybe most boring and unpl
 
 ## Meet your new subordinates! 
 
+<a href="https://www.imdb.com/title/tt0386676/">
 <img src="./docs/1.2.png" width="600"/>
+</a>
 
 
 Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you are going to use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
@@ -73,7 +77,7 @@ I wrote a simple desktop app to show how the future job would look like:
 We have the following columns: 
 
 - Backlog - column to add big features / sizable chunk of work - think about it as something that would take you personally days 
-- Design** - column I wish I would have, but I don't - I have built this on top of Cursor Cloud API and it does not have plan mode in cloud agent, but degeneracy will come there. 
+- Design** - column I wish I would have, but I don't - I have built this on top of Cursor Cloud API and it does not have plan mode in cloud agent, but eventually will come there. 
 - Build - column where Cursor actually starts a coding agent and implements it, this pulls conversation from actual Cursor's cloud agent - and is in sync with it. 
 
 <table>
@@ -120,9 +124,12 @@ Code for the agent tech lead desktop app is here: https://github.com/kyryl-opens
 
 Feel free to modify and change it for your own needs and your own unique workflows.
 
-On a funny note, software engineering would become almost a strategy game! If you ever played Warhammer, StarCraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at local scale when someone gets stuck! 
+And now the main punch: software engineering will become a strategy game! If you ever played Warhammer, StarCraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at local scale when someone gets stuck! 
+
+From kanban you are going to move to this! 
 
 
-## Similar project: 
+<img src="./docs/1.11.png" width="600"/>
 
-https://github.com/eyaltoledano/claude-task-master
+
+This is such an exciting future! 

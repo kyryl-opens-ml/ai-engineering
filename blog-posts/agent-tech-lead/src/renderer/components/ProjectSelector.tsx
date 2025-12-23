@@ -38,6 +38,8 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
   const [repository, setRepository] = useState('')
   const [loading, setLoading] = useState(true)
   const [parsedRepo, setParsedRepo] = useState<ParsedRepo>({ repository: '' })
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
 
   useEffect(() => {
     loadProjects()
@@ -77,6 +79,28 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
     if (currentProject?.id === id) {
       onSelectProject(projects.find((p) => p.id !== id) ?? null!)
     }
+  }
+
+  function startEditing(project: Project, e: React.MouseEvent) {
+    e.stopPropagation()
+    setEditingId(project.id)
+    setEditName(project.name)
+  }
+
+  async function saveRename() {
+    if (!editingId || !editName.trim()) return
+    const updated = await window.api.project.rename(editingId, editName.trim())
+    setProjects(projects.map((p) => (p.id === editingId ? updated : p)))
+    if (currentProject?.id === editingId) {
+      onSelectProject(updated)
+    }
+    setEditingId(null)
+    setEditName('')
+  }
+
+  function cancelEditing() {
+    setEditingId(null)
+    setEditName('')
   }
 
   if (loading) {
@@ -130,21 +154,52 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
               onClick={() => onSelectProject(project)}
             >
               <div className="project-info">
-                <span className="project-name">{project.name}</span>
-                <span className="project-repo">{project.repository}</span>
-                {project.subfolder && (
-                  <span className="project-subfolder">📁 {project.subfolder}</span>
+                {editingId === project.id ? (
+                  <div className="project-rename-form" onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveRename()
+                        if (e.key === 'Escape') cancelEditing()
+                      }}
+                      autoFocus
+                    />
+                    <button className="btn-save" onClick={saveRename}>✓</button>
+                    <button className="btn-cancel" onClick={cancelEditing}>✕</button>
+                  </div>
+                ) : (
+                  <>
+                    <span className="project-name">{project.name}</span>
+                    <span className="project-repo">{project.repository}</span>
+                    {project.subfolder && (
+                      <span className="project-subfolder">📁 {project.subfolder}</span>
+                    )}
+                  </>
                 )}
               </div>
-              <button
-                className="btn-delete"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  deleteProject(project.id)
-                }}
-              >
-                ✕
-              </button>
+              {editingId !== project.id && (
+                <div className="project-actions">
+                  <button
+                    className="btn-edit"
+                    onClick={(e) => startEditing(project, e)}
+                    title="Rename"
+                  >
+                    ✎
+                  </button>
+                  <button
+                    className="btn-delete"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      deleteProject(project.id)
+                    }}
+                    title="Delete"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}
@@ -152,4 +207,3 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
     </div>
   )
 }
-

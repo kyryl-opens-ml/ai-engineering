@@ -7,7 +7,8 @@ const api = {
     get: (id: string): Promise<Project | undefined> => ipcRenderer.invoke('project:get', id),
     create: (name: string, repository: string, defaultBranch?: string, subfolder?: string): Promise<Project> =>
       ipcRenderer.invoke('project:create', name, repository, defaultBranch, subfolder),
-    delete: (id: string): Promise<void> => ipcRenderer.invoke('project:delete', id)
+    delete: (id: string): Promise<void> => ipcRenderer.invoke('project:delete', id),
+    rename: (id: string, name: string): Promise<Project> => ipcRenderer.invoke('project:rename', id, name)
   },
 
   task: {
