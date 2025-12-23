@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { DragDropContext, type DropResult } from '@hello-pangea/dnd'
-import type { Project, Task, TaskStatus } from '../../shared/types'
+import type { Project, Task, TaskStatus, CreateTaskParams } from '../../shared/types'
 import { Column } from './Column'
 import { TaskModal } from './TaskModal'
+import { AddTaskModal } from './AddTaskModal'
 
 interface KanbanBoardProps {
   project: Project
@@ -12,6 +13,7 @@ const columns: { status: TaskStatus; title: string }[] = [
   { status: 'backlog', title: 'Backlog' },
   { status: 'build', title: 'Build' },
   { status: 'review', title: 'Review' },
+  { status: 'human', title: 'Human Takeover' },
   { status: 'done', title: 'Done' },
   { status: 'canceled', title: 'Canceled' }
 ]
@@ -19,8 +21,8 @@ const columns: { status: TaskStatus; title: string }[] = [
 export function KanbanBoard({ project }: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
-  const [showNewTask, setShowNewTask] = useState(false)
-  const [newTaskTitle, setNewTaskTitle] = useState('')
+  const [showAddTask, setShowAddTask] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const loadTasks = useCallback(async () => {
     const list = await window.api.task.list(project.id)
@@ -67,15 +69,30 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
       })
     })
 
-    await window.api.task.move(taskId, destStatus, result.destination.index)
+    try {
+      setError(null)
+      await window.api.task.move(taskId, destStatus, result.destination.index)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to move task')
+      setTasks((prev) => {
+        const reverted = prev.map((t) => {
+          if (t.id === taskId) {
+            return { ...t, status: sourceStatus, position: result.source.index }
+          }
+          return t
+        })
+        return reverted.sort((a, b) => {
+          if (a.status !== b.status) return 0
+          return a.position - b.position
+        })
+      })
+    }
   }
 
-  async function createTask() {
-    if (!newTaskTitle.trim()) return
-    const task = await window.api.task.create(project.id, newTaskTitle.trim())
+  async function createTask(params: CreateTaskParams) {
+    const task = await window.api.task.create(project.id, params)
     setTasks([...tasks, task])
-    setNewTaskTitle('')
-    setShowNewTask(false)
+    setShowAddTask(false)
   }
 
   function getTasksForColumn(status: TaskStatus): Task[] {
@@ -87,20 +104,13 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
       <div className="board-header">
         <h2>{project.name}</h2>
         <span className="repo-badge">{project.repository}</span>
+        {project.subfolder && <span className="subfolder-badge">📁 {project.subfolder}</span>}
       </div>
 
-      {showNewTask && (
-        <div className="new-task-inline">
-          <input
-            type="text"
-            placeholder="Task title..."
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && createTask()}
-            autoFocus
-          />
-          <button onClick={createTask}>Add</button>
-          <button onClick={() => setShowNewTask(false)}>Cancel</button>
+      {error && (
+        <div className="board-error">
+          <span>{error}</span>
+          <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
 
@@ -113,7 +123,7 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
               title={col.title}
               tasks={getTasksForColumn(col.status)}
               onTaskClick={setSelectedTask}
-              onAddTask={col.status === 'backlog' ? () => setShowNewTask(true) : undefined}
+              onAddTask={col.status === 'backlog' ? () => setShowAddTask(true) : undefined}
             />
           ))}
         </div>
@@ -131,6 +141,13 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
             setTasks((prev) => prev.filter((t) => t.id !== selectedTask.id))
             setSelectedTask(null)
           }}
+        />
+      )}
+
+      {showAddTask && (
+        <AddTaskModal
+          onClose={() => setShowAddTask(false)}
+          onCreate={createTask}
         />
       )}
     </div>

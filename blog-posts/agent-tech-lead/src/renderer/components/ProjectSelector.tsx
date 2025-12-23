@@ -7,6 +7,25 @@ declare global {
   }
 }
 
+interface ParsedRepo {
+  repository: string
+  defaultBranch?: string
+  subfolder?: string
+}
+
+function parseGitHubUrl(url: string): ParsedRepo {
+  const trimmed = url.trim()
+  const match = trimmed.match(/^(https:\/\/github\.com\/[^\/]+\/[^\/]+)\/tree\/([^\/]+)\/(.+)$/)
+  if (match) {
+    return {
+      repository: match[1],
+      defaultBranch: match[2],
+      subfolder: match[3]
+    }
+  }
+  return { repository: trimmed }
+}
+
 interface ProjectSelectorProps {
   currentProject: Project | null
   onSelectProject: (project: Project) => void
@@ -18,10 +37,15 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
   const [name, setName] = useState('')
   const [repository, setRepository] = useState('')
   const [loading, setLoading] = useState(true)
+  const [parsedRepo, setParsedRepo] = useState<ParsedRepo>({ repository: '' })
 
   useEffect(() => {
     loadProjects()
   }, [])
+
+  useEffect(() => {
+    setParsedRepo(parseGitHubUrl(repository))
+  }, [repository])
 
   async function loadProjects() {
     setLoading(true)
@@ -32,10 +56,17 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
 
   async function createProject() {
     if (!name.trim() || !repository.trim()) return
-    const project = await window.api.project.create(name.trim(), repository.trim())
+    const parsed = parseGitHubUrl(repository)
+    const project = await window.api.project.create(
+      name.trim(),
+      parsed.repository,
+      parsed.defaultBranch,
+      parsed.subfolder
+    )
     setProjects([project, ...projects])
     setName('')
     setRepository('')
+    setParsedRepo({ repository: '' })
     setShowNew(false)
     onSelectProject(project)
   }
@@ -75,6 +106,13 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
             value={repository}
             onChange={(e) => setRepository(e.target.value)}
           />
+          {parsedRepo.subfolder && (
+            <div className="monorepo-info">
+              <span className="monorepo-label">Monorepo detected:</span>
+              <span className="monorepo-detail">Branch: {parsedRepo.defaultBranch}</span>
+              <span className="monorepo-detail">Subfolder: {parsedRepo.subfolder}</span>
+            </div>
+          )}
           <button className="btn-create" onClick={createProject}>
             Create Project
           </button>
@@ -94,6 +132,9 @@ export function ProjectSelector({ currentProject, onSelectProject }: ProjectSele
               <div className="project-info">
                 <span className="project-name">{project.name}</span>
                 <span className="project-repo">{project.repository}</span>
+                {project.subfolder && (
+                  <span className="project-subfolder">📁 {project.subfolder}</span>
+                )}
               </div>
               <button
                 className="btn-delete"

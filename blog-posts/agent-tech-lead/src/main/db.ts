@@ -16,6 +16,8 @@ export function initDb(dbPath?: string): Database.Database {
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       repository TEXT NOT NULL,
+      default_branch TEXT,
+      subfolder TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -28,6 +30,9 @@ export function initDb(dbPath?: string): Database.Database {
       agent_id TEXT,
       agent_status TEXT,
       agent_url TEXT,
+      base_branch TEXT,
+      target_branch TEXT,
+      model TEXT,
       position INTEGER DEFAULT 0,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -37,6 +42,29 @@ export function initDb(dbPath?: string): Database.Database {
     CREATE INDEX IF NOT EXISTS idx_tasks_project ON tasks(project_id);
     CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status);
   `)
+
+  const taskColumns = db.prepare("PRAGMA table_info(tasks)").all() as { name: string }[]
+  const taskColumnNames = taskColumns.map(c => c.name)
+  
+  if (!taskColumnNames.includes('base_branch')) {
+    db.exec('ALTER TABLE tasks ADD COLUMN base_branch TEXT')
+  }
+  if (!taskColumnNames.includes('target_branch')) {
+    db.exec('ALTER TABLE tasks ADD COLUMN target_branch TEXT')
+  }
+  if (!taskColumnNames.includes('model')) {
+    db.exec('ALTER TABLE tasks ADD COLUMN model TEXT')
+  }
+
+  const projectColumns = db.prepare("PRAGMA table_info(projects)").all() as { name: string }[]
+  const projectColumnNames = projectColumns.map(c => c.name)
+
+  if (!projectColumnNames.includes('default_branch')) {
+    db.exec('ALTER TABLE projects ADD COLUMN default_branch TEXT')
+  }
+  if (!projectColumnNames.includes('subfolder')) {
+    db.exec('ALTER TABLE projects ADD COLUMN subfolder TEXT')
+  }
 
   return db
 }
@@ -54,9 +82,9 @@ export function getProject(id: string): Project | undefined {
   return getDb().prepare('SELECT * FROM projects WHERE id = ?').get(id) as Project | undefined
 }
 
-export function createProject(name: string, repository: string): Project {
+export function createProject(name: string, repository: string, defaultBranch?: string, subfolder?: string): Project {
   const id = randomUUID()
-  getDb().prepare('INSERT INTO projects (id, name, repository) VALUES (?, ?, ?)').run(id, name, repository)
+  getDb().prepare('INSERT INTO projects (id, name, repository, default_branch, subfolder) VALUES (?, ?, ?, ?, ?)').run(id, name, repository, defaultBranch ?? null, subfolder ?? null)
   return getProject(id)!
 }
 
@@ -74,7 +102,14 @@ export function getTask(id: string): Task | undefined {
   return getDb().prepare('SELECT * FROM tasks WHERE id = ?').get(id) as Task | undefined
 }
 
-export function createTask(projectId: string, title: string, description?: string): Task {
+export function createTask(
+  projectId: string,
+  title: string,
+  description?: string,
+  baseBranch?: string,
+  targetBranch?: string,
+  model?: string
+): Task {
   const id = randomUUID()
   const maxPos = getDb()
     .prepare('SELECT COALESCE(MAX(position), -1) as max FROM tasks WHERE project_id = ? AND status = ?')
@@ -82,9 +117,9 @@ export function createTask(projectId: string, title: string, description?: strin
 
   getDb()
     .prepare(
-      'INSERT INTO tasks (id, project_id, title, description, status, position) VALUES (?, ?, ?, ?, ?, ?)'
+      'INSERT INTO tasks (id, project_id, title, description, base_branch, target_branch, model, status, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     )
-    .run(id, projectId, title, description ?? null, 'backlog', maxPos.max + 1)
+    .run(id, projectId, title, description ?? null, baseBranch ?? null, targetBranch ?? null, model ?? null, 'backlog', maxPos.max + 1)
 
   return getTask(id)!
 }

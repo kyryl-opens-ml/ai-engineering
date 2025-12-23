@@ -26,7 +26,10 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  initDb()
+  const dbPath = process.env.NODE_ENV === 'development'
+    ? path.join(process.cwd(), 'db.db')
+    : path.join(app.getPath('userData'), 'db.db')
+  initDb(dbPath)
 
   agentService = new AgentService()
   registerIpcHandlers(agentService)

@@ -1,4 +1,4 @@
-export type TaskStatus = 'backlog' | 'build' | 'review' | 'done' | 'canceled'
+export type TaskStatus = 'backlog' | 'build' | 'review' | 'human' | 'done' | 'canceled'
 
 export type AgentStatus = 'CREATING' | 'RUNNING' | 'FINISHED' | 'STOPPED' | 'ERROR'
 
@@ -6,6 +6,8 @@ export interface Project {
   id: string
   name: string
   repository: string
+  default_branch: string | null
+  subfolder: string | null
   created_at: string
 }
 
@@ -18,9 +20,20 @@ export interface Task {
   agent_id: string | null
   agent_status: AgentStatus | null
   agent_url: string | null
+  base_branch: string | null
+  target_branch: string | null
+  model: string | null
   position: number
   created_at: string
   updated_at: string
+}
+
+export interface CreateTaskParams {
+  title: string
+  description?: string
+  baseBranch?: string
+  targetBranch?: string
+  model?: string
 }
 
 export interface AgentMessage {

@@ -93,6 +93,18 @@ export class CursorClient {
     this.apiKey = apiKey ?? process.env.CURSOR_API_KEY ?? ''
   }
 
+  setApiKey(apiKey: string) {
+    this.apiKey = apiKey
+  }
+
+  getApiKey(): string {
+    return this.apiKey
+  }
+
+  hasApiKey(): boolean {
+    return !!this.apiKey
+  }
+
   private ensureApiKey() {
     if (!this.apiKey) {
       throw new Error('CURSOR_API_KEY is required. Set it in your environment or .env file.')
