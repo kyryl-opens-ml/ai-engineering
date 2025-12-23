@@ -114,19 +114,20 @@ For a practical example - you can try to import my "integration test" for this b
 
 
 
-## Future of job 
+## Future of the Job 
 
 Long story short - each engineer who wants to keep their job has to become an agent tech lead. 
 Code for the agent tech lead desktop app is here: https://github.com/kyryl-opens-ml/ai-engineering/tree/agent-tech-lead/blog-posts/agent-tech-lead 
 
 Feel free to modify and change it for your own needs and your own unique workflows.
 
-And now the main punch: software engineering will become a strategy game! If you ever played Warhammer, StarCraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at local scale when someone gets stuck! 
+Also, the job description for this role: https://github.com/kyryl-opens-ml/ai-engineering/blob/agent-tech-lead/blog-posts/agent-tech-lead/JobDescription.md - feel free to reuse it! 
 
-From kanban you are going to move to this! 
+And now the main punch: software engineering will become a strategy game! If you've ever played WARHAMMER 40,000, StarCraft, Warcraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at a local scale when someone gets stuck! 
+
+From Kanban, you are going to move to this! 
 
 
 <img src="./docs/1.8.png" width="600"/>
-
 
 This is such an exciting future! 
