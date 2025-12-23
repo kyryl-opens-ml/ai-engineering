@@ -109,7 +109,8 @@ And now your job is to:
 2. handle corner cases & hard cases
 3. make sure system is optimized for multiple agents: access, verification, sequence. 
 
-For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge: 
+For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge: https://github.com/kyryl-opens-ml/ai-engineering/blob/agent-tech-lead/blog-posts/agent-tech-lead/scripts/sample-tasks.txt
+
 
 
 ## Future of job 
