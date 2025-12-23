@@ -3,4 +3,4 @@ dist/
 release/
 *.log
 .DS_Store
-node_modules
+db.db

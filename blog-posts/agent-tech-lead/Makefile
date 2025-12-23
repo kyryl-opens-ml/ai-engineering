@@ -1,4 +1,4 @@
-.PHONY: install dev build preview test test-watch test-e2e typecheck lint lint-fix package dist run-script clean
+.PHONY: install dev build preview test test-watch test-e2e typecheck lint lint-fix package dist run-script import-tasks clean
 
 install:
 	npm install
@@ -38,6 +38,9 @@ dist: build
 
 run-script:
 	npx tsx scripts/$(FILE)
+
+import-tasks:
+	npx tsx scripts/import-tasks.ts $(FILE)
 
 clean:
 	rm -rf dist release node_modules

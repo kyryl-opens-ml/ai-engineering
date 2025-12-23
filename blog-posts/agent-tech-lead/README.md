@@ -17,7 +17,7 @@ Now the default expectation is that you must become a tech lead, but maybe not f
 Luckily, when we are talking about technical leadership, there is a lot of commonality, so if you're getting better at one, it makes you better at another!
 
 
-## Job explanation
+## Tech Lead Job
 
 At core you need to keep shit together! Whatever this means, for me it's usually:
 
@@ -31,61 +31,80 @@ At core you need to keep shit together! Whatever this means, for me it's usually
 
 Many many more but simplified is: 
 
-roadmap -> list of tasks -> sequence of execution -> steering teammates -> verification.
+roadmap/tech plan -> list of tasks -> sequence of execution -> steering teammates -> verification.
+
 While keeping same level of tech culture and unblocking people where possible. 
 Some tasks as tech lead you are going to do yourself, maybe most boring and unpleasant. 
 
-Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you can use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
+## Meet your new subordinates! 
 
-## Getting real! 
+Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you are gping to use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
 
-So I wrote very minimalist agent managment kanban board! 
+Your new team is very good! It's a combination of LLM + Agent & Configuration on top of it. 
+I used Cursor Cloud API [https://cursor.com/docs/cloud-agent/api/endpoints] for this blog post with the option to select from 5 LLMs. 
 
-
-- desctribe process: from prompts 
-- define example 
-- show example 
-- try it yourself! (npm install -g ..., npm run )
-- show apis 
-- how future is going to look like! 
-
+- claude-4.5-opus-high-thinking
+- gpt-5.2
+- gpt-5.2-high
+- gemini-3-pro
+- gemini-3-flash
 
 
+As of now, publicly you can build this on top of Cursor Cloud API [https://cursor.com/docs/cloud-agent/api/endpoints] or Jules API [https://developers.google.com/jules/api]. 
+
+I chose Cursor Cloud API because (a) I'm a heavy Cursor user (b) Cursor handles GitHub integration for me already. But there are many more options and they all at some point in time are going to have cloud API - OpenAI Codex, Claud Code, RooCode [https://roocode.com/] etc.
 
 
-## Integration test for it: 
+## Agent Tech Lead Job!
+
+Techical side of your new job - is very simlar to usualy tech lead job - just need spend more time for setting right enginereirng course, since your subordinates are neven sleep, never tired and sometimes fails incredylbly! 
+
+I wrote simpe descrtipt app to show how the future job would looks like: 
 
 
-Let's solve: https://www.databricks.com/blog/introducing-officeqa-benchmark-end-to-end-grounded-reasoning 
-
-Before I would probably think - looks interesting but nah, too much work, and busy with other stuff. But I have an on-demand team of super engineers (with some dementia but nobody is perfect), and I believe in my tech leading skills so let's cook it.
+<img src="./docs/1.png" width="800"/>
 
 
-List of tasks: 
+We have the following columns: 
 
-1. pull and setup storage for https://github.com/databricks/officeqa/tree/main
-I want to have a simple modal script to setup this repo https://github.com/databricks/officeqa/tree/main and pull all data
+- Backlog - column to add big features / sizable chunk of work - think about it as something that would take you personally days 
+- Design** - column I wish I would have, but I don't - I have built this on top of Cursor Cloud API and it does not have plan mode in cloud agent, but degeneracy will come there. 
+- Build - column where Cursor actually starts a coding agent and implements it, this pulls conversation from actual cursors cloud agetn - and in sync with it. 
 
-- keep all code in new folder under blog-posts
-- write simple modal app to pull this repo and clone data to shared volume
-- read modal creds from env vars
+- Review - column where I review outcome manually - aka wait for human input and verification. main point - make this fast and stragirofkrwith end-to-end and integration tests.
+
+- Done - I successfully integrated agent work into project - good example 
+- Canceled - I gave up on this agent - bad example 
+
+Critical to have Done & Canceled to have feedback loops for your coding agents.
+
+- Human Takeover - something human must take over or required access granted. 
 
 
-1.1 ingestions 
+Each task is a separate agent and you can run hundreds of them in parallel.
+And now your job is to: 
 
-could you run actual ingestions from blog-posts/officeqa-setup, envs to do this should be in env var
+1. plan their work & global architecture 
+2. handle corner cases & hard cases
+3. make sure system is optimized for multiple agents: access, verification, sequence. 
 
-2. function to ingest files to file storage api 
-3. file api for pdfs (v1)
-4. file api for json (v2)
-5. file api for transformed (v3)
-6. evals for simple llm
-7. evals for simple llm + rag (v1, v2, v3, and combinations)
-8. dspy optimization
-9. dspy evals 
-10. llm finetuning for training data
-11. llm finetuning eval
-12. reporting and error analysis 
+For peactical example - you can try to import my "inegration test" for this lbog post - project to solve OfficeQA chellange.
+
+
+## Future of job 
+
+Long story shoudl - each engineerg if want to keep there job has to become agent tech lead. 
+Code for the agent tech lead escrpt app is here: Fee free to modify and change it for your own need and our own unique workflows.
+
+On funny notes software enginerring would become almost a strategy game! If you ever played warhammet, starscraf of rome totatl war: yoiu comapny become your map, your codign agents becoem unit and your job is to place them, unbload them and inverveate to local scale when someone get stacuk! 
+
+
+
+
+
+
+
+
 
 ## Similar project: 
 
@@ -93,66 +112,3 @@ https://github.com/eyaltoledano/claude-task-master
 
 
 
-
-## Gameplan: 
-
-
-Let's plan together! 
-
-I want to build a kanban board for my agents in my electron app: 
-
-Backlog, Design, Build, Review, Done, Canceled
-
-Backlog - column where I add tasks manually 
-Design - column where I want to have a plan and ask Cursor for input on my task, concerns, etc 
-Build - column where I want Cursor to actually start a coding agent and implement it. After done I want to see status of implementation and comment aka follow up if I don't like this. 
-Review - column where I review outcome manually - aka wait for human input and verification. 
-Done - I successfully integrated agent work into project - good example 
-Canceled - I gave up on this agent and this is a failed case.
-
-
-Each task should be editable - so I provide input and can add comments. Coding agent also outputs metadata there - so I can see URL and results. 
-
-By default Design - just ask and don't implement 
-By default Build - don't create PR 
-
-
-Please add persistence layer - simple SQLite on file system would work. Also limit everything to one repo. Also have notion of projects or workspace. So flow is: 
-
-I start new workspace and enter target repo: 
-see empty columns: -> add tasks and start work, some tasks could be done by just agent, some tasks I have to do manually. 
-and I can switch between different projects back and forth. 
-
-
-So Cursor does not have planning mode in Cloud API, let's remove it altogether - go to build right away! (simpler)
-
-Also some suggestions: 
-
-- Design Agent: View in Cursor → I want it to open in browser not inside of app
-- Design Agent: View in Cursor → I want to be able to copy it 
-- don't store history - just pull it from agent and show agent responses too please 
-
-## Validations:
-
-10. Projects
-11. P1 ML in production
-12. P2 Lienonme
-13. P3 https://context-hosting.com/
-14. P4 NoOCR
-14. P5 Real Deal https://gemini.google.com/u/3/app/bcfe8279336d77da?pageId=none
-
-Product delivery stage:
-10. GitHub integrations
-11. Testing
-12. Blog post text
-13. NPM desktop
-14. NPM cloud
-
-
-Gamifications stage:
-15. Game descriptions - map with Kanban
-16. Character for each
-17. Animations for each
-18. Testing & flow
-
-https://aistudio.google.com/u/3/apps/drive/1AWeIyy7xHf1s7qJPExF-Fjfs-RQ__q2E?showAssistant=true&showPreview=true&resourceKey=
