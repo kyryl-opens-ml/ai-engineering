@@ -110,18 +110,18 @@ And now your job is to:
 2. handle corner cases & hard cases
 3. make sure system is optimized for multiple agents: access, verification, sequence. 
 
-For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge: https://github.com/kyryl-opens-ml/ai-engineering/blob/agent-tech-lead/blog-posts/agent-tech-lead/scripts/sample-tasks.txt
+For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge: https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/scripts/sample-tasks.txt
 
 
 
 ## Future of the Job 
 
 Long story short - each engineer who wants to keep their job has to become an agent tech lead. 
-Code for the agent tech lead desktop app is here: https://github.com/kyryl-opens-ml/ai-engineering/tree/agent-tech-lead/blog-posts/agent-tech-lead 
+Code for the agent tech lead desktop app is here: https://github.com/kyryl-opens-ml/ai-engineering/tree/main/blog-posts/agent-tech-lead
 
 Feel free to modify and change it for your own needs and your own unique workflows.
 
-Also, the job description for this role: https://github.com/kyryl-opens-ml/ai-engineering/blob/agent-tech-lead/blog-posts/agent-tech-lead/JobDescription.md - feel free to reuse it! 
+Also, the job description for this role: https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/JobDescription.md - feel free to reuse it! 
 
 And now the main punch: software engineering will become a strategy game! If you've ever played WARHAMMER 40,000, StarCraft, Warcraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at a local scale when someone gets stuck! 
 
