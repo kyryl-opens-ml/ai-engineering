@@ -19,7 +19,7 @@ Luckily, when we are talking about technical leadership, there is a lot of commo
 
 ## Tech Lead Job
 
-<img src="./docs/12.png" width="600"/>
+<img src="./docs/1.1.png" width="600"/>
 
 At core you need to keep shit together! Whatever this means, for me it's usually:
 
@@ -40,7 +40,7 @@ Some tasks as tech lead you are going to do yourself, maybe most boring and unpl
 
 ## Meet your new subordinates! 
 
-<img src="./docs/13.png" width="600"/>
+<img src="./docs/1.2.png" width="600"/>
 
 
 Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you are going to use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
@@ -67,7 +67,7 @@ The technical side of your new job is very similar to the usual tech lead job - 
 I wrote a simple desktop app to show how the future job would look like: 
 
 
-<img src="./docs/6.png" width="600"/>
+<img src="./docs/1.3.png" width="600"/>
 
 
 We have the following columns: 
@@ -78,8 +78,8 @@ We have the following columns:
 
 <table>
   <tr>
-    <td><img src="./docs/2.png" width="400"/></td>
-    <td><img src="./docs/5.png" width="400"/></td>
+    <td><img src="./docs/1.4.png" width="400"/></td>
+    <td><img src="./docs/1.5.png" width="400"/></td>
   </tr>
 </table>
 
@@ -88,8 +88,8 @@ We have the following columns:
 
 <table>
   <tr>
-    <td><img src="./docs/3.png" width="400"/></td>
-    <td><img src="./docs/4.png" width="400"/></td>
+    <td><img src="./docs/1.6.png" width="400"/></td>
+    <td><img src="./docs/1.7.png" width="400"/></td>
   </tr>
 </table>
 
@@ -109,13 +109,15 @@ And now your job is to:
 2. handle corner cases & hard cases
 3. make sure system is optimized for multiple agents: access, verification, sequence. 
 
-For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge.
+For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge: 
 
 
 ## Future of job 
 
 Long story short - each engineer who wants to keep their job has to become an agent tech lead. 
-Code for the agent tech lead desktop app is here: Feel free to modify and change it for your own needs and your own unique workflows.
+Code for the agent tech lead desktop app is here: https://github.com/kyryl-opens-ml/ai-engineering/tree/agent-tech-lead/blog-posts/agent-tech-lead 
+
+Feel free to modify and change it for your own needs and your own unique workflows.
 
 On a funny note, software engineering would become almost a strategy game! If you ever played Warhammer, StarCraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at local scale when someone gets stuck! 
 

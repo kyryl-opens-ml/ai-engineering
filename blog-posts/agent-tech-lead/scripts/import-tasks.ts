@@ -47,11 +47,41 @@ function parseTasks(input: string): ParsedTask[] {
 function initDb(dbPath: string): Database.Database {
   const db = new Database(dbPath)
   db.pragma('journal_mode = WAL')
+  
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS projects (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      repository TEXT NOT NULL,
+      default_branch TEXT,
+      subfolder TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS tasks (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      status TEXT NOT NULL DEFAULT 'backlog',
+      agent_id TEXT,
+      agent_status TEXT,
+      agent_url TEXT,
+      base_branch TEXT,
+      target_branch TEXT,
+      model TEXT,
+      position INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+    );
+  `)
+  
   return db
 }
 
-function getProjects(db: Database.Database): { id: string; name: string; repository: string }[] {
-  return db.prepare('SELECT id, name, repository FROM projects ORDER BY created_at DESC').all() as { id: string; name: string; repository: string }[]
+function getProjectByName(db: Database.Database, name: string): { id: string; name: string; repository: string } | undefined {
+  return db.prepare('SELECT id, name, repository FROM projects WHERE name = ?').get(name) as { id: string; name: string; repository: string } | undefined
 }
 
 function createProject(db: Database.Database, name: string, repository: string): string {
@@ -71,87 +101,77 @@ function createTask(db: Database.Database, projectId: string, title: string, des
   ).run(id, projectId, title, description, 'backlog', maxPos.max + 1)
 }
 
+function printUsage() {
+  console.log('Usage: npx tsx scripts/import-tasks.ts --name <project> --repo <url> --file <tasks.txt> [--db <path>]')
+  console.log('')
+  console.log('Options:')
+  console.log('  --name <project>   Project name (creates if not exists)')
+  console.log('  --repo <url>       GitHub repository URL (e.g. https://github.com/org/repo)')
+  console.log('  --file <path>      Path to text file with tasks')
+  console.log('  --db <path>        Path to database file (default: ./db.db)')
+  console.log('  --yes              Skip confirmation prompt')
+  console.log('')
+  console.log('Example:')
+  console.log('  npx tsx scripts/import-tasks.ts --name "My Project" --repo "https://github.com/me/repo" --file tasks.txt')
+}
+
 async function main() {
   const args = process.argv.slice(2)
   
-  if (args.length < 1) {
-    console.log('Usage: npx tsx scripts/import-tasks.ts <file.txt> [--db <path>] [--project <id>]')
-    console.log('\nOptions:')
-    console.log('  <file.txt>       Path to text file with tasks')
-    console.log('  --db <path>      Path to database file (default: ./db.db)')
-    console.log('  --project <id>   Project ID to import tasks into')
-    process.exit(1)
+  if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+    printUsage()
+    process.exit(0)
   }
 
-  const inputFile = args[0]
+  let projectName: string | undefined
+  let repoUrl: string | undefined
+  let inputFile: string | undefined
   let dbPath = path.join(process.cwd(), 'db.db')
-  let projectId: string | undefined
+  let skipConfirm = false
 
-  for (let i = 1; i < args.length; i++) {
-    if (args[i] === '--db' && args[i + 1]) {
-      dbPath = args[++i]
-    } else if (args[i] === '--project' && args[i + 1]) {
-      projectId = args[++i]
+  for (let i = 0; i < args.length; i++) {
+    switch (args[i]) {
+      case '--name':
+        projectName = args[++i]
+        break
+      case '--repo':
+        repoUrl = args[++i]
+        break
+      case '--file':
+        inputFile = args[++i]
+        break
+      case '--db':
+        dbPath = args[++i]
+        break
+      case '--yes':
+      case '-y':
+        skipConfirm = true
+        break
     }
   }
 
-  if (!fs.existsSync(inputFile)) {
+  if (!projectName || !repoUrl || !inputFile) {
+    console.error('Error: --name, --repo, and --file are required\n')
+    printUsage()
+    process.exit(1)
+  }
+
+  if (!inputFile || !fs.existsSync(inputFile)) {
     console.error(`File not found: ${inputFile}`)
     process.exit(1)
   }
 
-  if (!fs.existsSync(dbPath)) {
-    console.error(`Database not found: ${dbPath}`)
-    process.exit(1)
-  }
-
   const db = initDb(dbPath)
-  let projects = getProjects(db)
-
-  if (projects.length === 0) {
-    console.log('No projects found. Let\'s create one.\n')
-    
-    const readline = await import('readline')
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-    
-    const name = await new Promise<string>(resolve => {
-      rl.question('Project name: ', resolve)
-    })
-    const repository = await new Promise<string>(resolve => {
-      rl.question('Repository (e.g. github.com/org/repo): ', resolve)
-    })
-    rl.close()
-    
-    if (!name || !repository) {
-      console.error('Name and repository are required')
-      db.close()
-      process.exit(1)
-    }
-    
-    projectId = createProject(db, name, repository)
-    console.log(`\nCreated project: ${name}`)
-  }
-
-  if (!projectId) {
-    projects = getProjects(db)
-    console.log('\nAvailable projects:')
-    projects.forEach((p, i) => console.log(`  ${i + 1}. ${p.name} (${p.repository})`))
-    
-    const readline = await import('readline')
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-    
-    const answer = await new Promise<string>(resolve => {
-      rl.question('\nSelect project number: ', resolve)
-    })
-    rl.close()
-    
-    const idx = parseInt(answer, 10) - 1
-    if (idx < 0 || idx >= projects.length) {
-      console.error('Invalid selection')
-      db.close()
-      process.exit(1)
-    }
-    projectId = projects[idx].id
+  
+  let project = getProjectByName(db, projectName)
+  let projectId: string
+  
+  if (project) {
+    console.log(`Using existing project: ${project.name} (${project.repository})`)
+    projectId = project.id
+  } else {
+    projectId = createProject(db, projectName, repoUrl)
+    console.log(`Created new project: ${projectName} (${repoUrl})`)
   }
 
   const input = fs.readFileSync(inputFile, 'utf-8')
@@ -166,18 +186,20 @@ async function main() {
   console.log(`\nParsed ${tasks.length} tasks:`)
   tasks.forEach((t, i) => console.log(`  ${i + 1}. ${t.title}`))
 
-  const readline = await import('readline')
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-  
-  const confirm = await new Promise<string>(resolve => {
-    rl.question('\nImport these tasks to backlog? (y/n): ', resolve)
-  })
-  rl.close()
+  if (!skipConfirm) {
+    const readline = await import('readline')
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+    
+    const confirm = await new Promise<string>(resolve => {
+      rl.question('\nImport these tasks to backlog? (y/n): ', resolve)
+    })
+    rl.close()
 
-  if (confirm.toLowerCase() !== 'y') {
-    console.log('Aborted')
-    db.close()
-    process.exit(0)
+    if (confirm.toLowerCase() !== 'y') {
+      console.log('Aborted')
+      db.close()
+      process.exit(0)
+    }
   }
 
   for (const task of tasks) {
@@ -190,4 +212,3 @@ async function main() {
 }
 
 main().catch(console.error)
-

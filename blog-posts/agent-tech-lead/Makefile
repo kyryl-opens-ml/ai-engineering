@@ -1,9 +1,15 @@
-.PHONY: install dev build preview test test-watch test-e2e typecheck lint lint-fix package dist run-script import-tasks clean
+.PHONY: install dev build preview test test-watch test-e2e typecheck lint lint-fix package dist run-script import-tasks rebuild-electron rebuild-node clean
 
 install:
 	npm install
 
-dev:
+rebuild-electron:
+	npx electron-rebuild -f -w better-sqlite3
+
+rebuild-node:
+	npm rebuild better-sqlite3
+
+dev: rebuild-electron
 	npm run dev
 
 build:
@@ -39,8 +45,8 @@ dist: build
 run-script:
 	npx tsx scripts/$(FILE)
 
-import-tasks:
-	npx tsx scripts/import-tasks.ts $(FILE)
+import-tasks: rebuild-node
+	npx tsx scripts/import-tasks.ts $(ARGS)
 
 clean:
 	rm -rf dist release node_modules
