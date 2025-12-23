@@ -19,6 +19,8 @@ Luckily, when we are talking about technical leadership, there is a lot of commo
 
 ## Tech Lead Job
 
+<img src="./docs/12.png" width="600"/>
+
 At core you need to keep shit together! Whatever this means, for me it's usually:
 
 - chat with product or act as product sometimes (however this is a different skillset)
@@ -38,7 +40,10 @@ Some tasks as tech lead you are going to do yourself, maybe most boring and unpl
 
 ## Meet your new subordinates! 
 
-Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you are gping to use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
+<img src="./docs/13.png" width="600"/>
+
+
+Do you see where I am coming from? This is basically everyone's responsibility now. But instead of people you are going to use coding agents. And don't do tasks yourself but spend most time on verification and steering coding agents. 
 
 Your new team is very good! It's a combination of LLM + Agent & Configuration on top of it. 
 I used Cursor Cloud API [https://cursor.com/docs/cloud-agent/api/endpoints] for this blog post with the option to select from 5 LLMs. 
@@ -52,26 +57,42 @@ I used Cursor Cloud API [https://cursor.com/docs/cloud-agent/api/endpoints] for 
 
 As of now, publicly you can build this on top of Cursor Cloud API [https://cursor.com/docs/cloud-agent/api/endpoints] or Jules API [https://developers.google.com/jules/api]. 
 
-I chose Cursor Cloud API because (a) I'm a heavy Cursor user (b) Cursor handles GitHub integration for me already. But there are many more options and they all at some point in time are going to have cloud API - OpenAI Codex, Claud Code, RooCode [https://roocode.com/] etc.
+I chose Cursor Cloud API because (a) I'm a heavy Cursor user (b) Cursor handles GitHub integration for me already. But there are many more options and they all at some point in time are going to have cloud API - OpenAI Codex, Claude Code, RooCode [https://roocode.com/] etc.
 
 
 ## Agent Tech Lead Job!
 
-Techical side of your new job - is very simlar to usualy tech lead job - just need spend more time for setting right enginereirng course, since your subordinates are neven sleep, never tired and sometimes fails incredylbly! 
+The technical side of your new job is very similar to the usual tech lead job - you just need to spend more time setting the right engineering course, since your subordinates never sleep, never get tired, and sometimes fail incredibly! 
 
-I wrote simpe descrtipt app to show how the future job would looks like: 
+I wrote a simple desktop app to show how the future job would look like: 
 
 
-<img src="./docs/1.png" width="800"/>
+<img src="./docs/6.png" width="600"/>
 
 
 We have the following columns: 
 
 - Backlog - column to add big features / sizable chunk of work - think about it as something that would take you personally days 
 - Design** - column I wish I would have, but I don't - I have built this on top of Cursor Cloud API and it does not have plan mode in cloud agent, but degeneracy will come there. 
-- Build - column where Cursor actually starts a coding agent and implements it, this pulls conversation from actual cursors cloud agetn - and in sync with it. 
+- Build - column where Cursor actually starts a coding agent and implements it, this pulls conversation from actual Cursor's cloud agent - and is in sync with it. 
 
-- Review - column where I review outcome manually - aka wait for human input and verification. main point - make this fast and stragirofkrwith end-to-end and integration tests.
+<table>
+  <tr>
+    <td><img src="./docs/2.png" width="400"/></td>
+    <td><img src="./docs/5.png" width="400"/></td>
+  </tr>
+</table>
+
+
+- Review - column where I review outcome manually - aka wait for human input and verification. Main point - make this fast and straightforward with end-to-end and integration tests.
+
+<table>
+  <tr>
+    <td><img src="./docs/3.png" width="400"/></td>
+    <td><img src="./docs/4.png" width="400"/></td>
+  </tr>
+</table>
+
 
 - Done - I successfully integrated agent work into project - good example 
 - Canceled - I gave up on this agent - bad example 
@@ -88,27 +109,17 @@ And now your job is to:
 2. handle corner cases & hard cases
 3. make sure system is optimized for multiple agents: access, verification, sequence. 
 
-For peactical example - you can try to import my "inegration test" for this lbog post - project to solve OfficeQA chellange.
+For a practical example - you can try to import my "integration test" for this blog post - project to solve OfficeQA challenge.
 
 
 ## Future of job 
 
-Long story shoudl - each engineerg if want to keep there job has to become agent tech lead. 
-Code for the agent tech lead escrpt app is here: Fee free to modify and change it for your own need and our own unique workflows.
+Long story short - each engineer who wants to keep their job has to become an agent tech lead. 
+Code for the agent tech lead desktop app is here: Feel free to modify and change it for your own needs and your own unique workflows.
 
-On funny notes software enginerring would become almost a strategy game! If you ever played warhammet, starscraf of rome totatl war: yoiu comapny become your map, your codign agents becoem unit and your job is to place them, unbload them and inverveate to local scale when someone get stacuk! 
-
-
-
-
-
-
-
+On a funny note, software engineering would become almost a strategy game! If you ever played Warhammer, StarCraft, or Rome Total War: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at local scale when someone gets stuck! 
 
 
 ## Similar project: 
 
 https://github.com/eyaltoledano/claude-task-master
-
-
-
