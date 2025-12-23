@@ -129,7 +129,7 @@ And now the main punch: software engineering will become a strategy game! If you
 From kanban you are going to move to this! 
 
 
-<img src="./docs/1.11.png" width="600"/>
+<img src="./docs/1.8.png" width="600"/>
 
 
 This is such an exciting future! 
