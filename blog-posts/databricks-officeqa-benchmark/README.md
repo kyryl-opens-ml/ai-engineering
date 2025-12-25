@@ -1,15 +1,38 @@
 # databricks-officeqa-benchmark
 
+Experiments and tooling to reproduce and extend the Databricks OfficeQA benchmark workflow (data ingestion, corpus creation for RAG, and evaluation).
 
-I want to solve 
-https://www.databricks.com/blog/introducing-officeqa-benchmark-end-to-end-grounded-reasoning
+Reference: [Introducing the OfficeQA benchmark: End-to-end grounded reasoning](https://www.databricks.com/blog/introducing-officeqa-benchmark-end-to-end-grounded-reasoning)
 
-with agent tech lead 
+## Setup
 
-## list of tasks 
+Requirements:
+- Python 3.10+
+- `uv`
+
+Install dependencies:
+
+```bash
+make install
+```
+
+Run tests:
+
+```bash
+make test
+```
+
+Lint and format:
+
+```bash
+make lint
+make format
+```
+
+## Roadmap
 
 0. Setup
-- Repo setup https://github.com/kyryl-opens-ml/agent-sandbox-officeqa
+- Repo setup: `https://github.com/kyryl-opens-ml/agent-sandbox-officeqa`
 - Model account setup: storage 
 - GCP account setup: file api 
 - Make sure to add all accounts you need for this project, and know how you plan to use them and in which case.
@@ -22,14 +45,14 @@ Implement UV style python project with readme, package name, makefile and test.
 - README with project overview and setup instructions
 
 2. Data ingestion
-Pull and setup storage for https://github.com/databricks/officeqa/tree/main
+Pull and setup storage for `https://github.com/databricks/officeqa/tree/main`
 I want to have a simple modal script to setup this repo and pull all data.
 - Write simple modal app to pull this repo and clone data to shared volume
 - Read modal creds from env vars
 - Verify data integrity after pull (file counts, sizes)
 
 3. RAG creating functionality
-Based on https://ai.google.dev/gemini-api/docs/file-search
+Based on `https://ai.google.dev/gemini-api/docs/file-search`
 Write python function which reads data from storage and uploads it to File Search tool.
 - Structure as modal function
 - Add Gemini creds to modal secrets
@@ -73,7 +96,7 @@ Eval functions for LLM + RAG combinations.
 - Compare against baseline, output delta table
 
 9. DSPy optimization
-Based on https://dspy.ai/
+Based on `https://dspy.ai/`
 - Define signature for QA task
 - Implement retrieval module with GCP RAG
 - Run BootstrapFewShot or MIPRO optimization
@@ -100,8 +123,3 @@ Fine-tune Gemini on officeqa training split.
 - Generate comparison table (baseline vs RAG vs DSPy vs fine-tuned)
 - Error categorization: retrieval failures, reasoning failures, format issues
 - Export to markdown report + CSV for further analysis
-
-
-
-
-## 
