@@ -29,6 +29,25 @@ make lint
 make format
 ```
 
+## OfficeQA data on Modal Volume
+
+This downloads the `databricks/officeqa` repo and all Git LFS data (including `treasury_bulletin_pdfs/`, ~20GB) into a shared Modal Volume at `/vol/officeqa/repo` and writes an integrity manifest to `/vol/officeqa/manifest.json` (file counts + total bytes).
+
+```bash
+export MODAL_TOKEN_ID=...
+export MODAL_TOKEN_SECRET=...
+export OFFICEQA_VOLUME=officeqa-data
+
+uv run modal run modal_officeqa_storage.py --action pull
+uv run modal run modal_officeqa_storage.py --action verify
+```
+
+To re-download from scratch:
+
+```bash
+uv run modal run modal_officeqa_storage.py --action pull --force true
+```
+
 ## Roadmap
 
 0. Setup
