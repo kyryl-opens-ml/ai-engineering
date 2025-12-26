@@ -57,13 +57,11 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
-## Vertex AI RAG corpus: raw PDFs
-
-This creates a Vertex AI RAG corpus and uploads the raw PDFs from `/vol/officeqa/repo/treasury_bulletin_pdfs`. Upload state is stored on the OfficeQA Modal Volume at `/vol/officeqa/gcp_rag/raw_pdfs/upload_state.json` so runs are resumable.
+## Gemini File Search corpus: parsed JSON
 
 ```bash
-modal secret create gcp GCP_PROJECT=... GCP_LOCATION=us-central1 GCP_SERVICE_ACCOUNT_JSON=...
-uv run modal run src/databricks_officeqa_benchmark/modal_vertex_rag_raw_pdfs.py
+modal secret create gemini GEMINI_API_KEY=...
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_parsed_json.py
 ```
 
 ## Roadmap
