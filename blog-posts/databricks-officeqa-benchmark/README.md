@@ -57,6 +57,13 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
+## Gemini File Search corpus: parsed JSON
+
+```bash
+modal secret create gemini GEMINI_API_KEY=...
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_parsed_json.py
+```
+
 ## Roadmap
 
 0. Setup
