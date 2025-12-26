@@ -57,6 +57,15 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
+## Parsed JSON File Search corpus creation
+
+This unzips `treasury_bulletins_parsed/jsons/` and uploads the `.json` files directly to a new File Search store.
+
+```bash
+modal secret create gemini GEMINI_API_KEY=...
+uv run modal run src/databricks_officeqa_benchmark/modal_parsed_json_file_search.py
+```
+
 ## Roadmap
 
 0. Setup
