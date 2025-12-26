@@ -90,8 +90,14 @@ Write python function which reads data from storage and uploads it to File Searc
 Implement eval function for simple LLM (no RAG, just prompting).
 - Read QA pairs from modal storage
 - Run inference with base Gemini
+- Run inference with random baseline (for fast verification)
 - Calculate accuracy, F1, exact match
 - Print metrics to CLI, save results to JSON
+
+```bash
+modal secret create gemini GEMINI_API_KEY=...
+uv run modal run src/databricks_officeqa_benchmark/modal_eval_simple.py --max-questions 10 --out-path results.json
+```
 
 5. RAG ingestion: Raw PDFs
 Upload raw PDFs to GCP RAG corpus.
