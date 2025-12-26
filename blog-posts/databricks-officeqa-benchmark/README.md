@@ -57,6 +57,34 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
+## Gemini File Search stores for OfficeQA corpora
+
+These create three separate File Search stores, one per corpus. Each script prints the created store name (like `fileSearchStores/...`) and writes a run record to `/vol/officeqa/file_search_runs/` on the Modal volume.
+
+Raw PDFs:
+
+```bash
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_pdfs.py
+```
+
+Parsed JSONs (auto-unzips `treasury_bulletins_parsed/jsons/*.zip` if needed):
+
+```bash
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_jsons.py
+```
+
+Transformed TXT (auto-unzips `treasury_bulletins_parsed/transformed/*.zip` if needed):
+
+```bash
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_transformed.py
+```
+
+Common flags:
+- `--store-display-name`: override the default store display name
+- `--max-files`: upload only the first N files (sorted)
+- `--max-file-size-mb`: skip files larger than this size
+- `--poll-interval-s`: polling interval for upload operations
+
 ## Roadmap
 
 0. Setup
