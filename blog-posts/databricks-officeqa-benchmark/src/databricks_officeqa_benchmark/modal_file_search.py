@@ -14,6 +14,12 @@ image = modal.Image.debian_slim(python_version="3.12").pip_install(
 
 gemini_secret = modal.Secret.from_name("gemini")
 
+DEFAULT_VOLUME_NAME = "officeqa-data"
+VOLUME_MOUNT = Path("/vol")
+volume = modal.Volume.from_name(
+    os.environ.get("OFFICEQA_VOLUME", DEFAULT_VOLUME_NAME), create_if_missing=True
+)
+
 
 def _iter_files(root: Path, include_glob: str) -> Iterable[Path]:
     for path in root.glob(include_glob):
@@ -21,7 +27,12 @@ def _iter_files(root: Path, include_glob: str) -> Iterable[Path]:
             yield path
 
 
-@app.function(image=image, secrets=[gemini_secret], timeout=60 * 60)
+@app.function(
+    image=image,
+    secrets=[gemini_secret],
+    timeout=60 * 60,
+    volumes={str(VOLUME_MOUNT): volume},
+)
 def upload_storage_to_file_search_store(
     storage_path: str,
     store_display_name: str | None = None,

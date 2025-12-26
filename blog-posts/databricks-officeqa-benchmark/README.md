@@ -48,6 +48,15 @@ To re-download from scratch:
 uv run modal run modal_officeqa_storage.py --action pull --force true
 ```
 
+## Gemini File Search corpus creation
+
+This creates a Gemini File Search store and uploads files from `storage_path` (including the OfficeQA Modal Volume mounted at `/vol`).
+
+```bash
+modal secret create gemini GEMINI_API_KEY=...
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
+```
+
 ## Roadmap
 
 0. Setup
