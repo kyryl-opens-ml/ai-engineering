@@ -57,18 +57,10 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
-## Vertex AI RAG corpus creation (transformed TXT)
-
-This creates a new Vertex AI RAG corpus and uploads the transformed text files from `treasury_bulletins_parsed/transformed/` on the Modal volume.
+Parsed JSON store:
 
 ```bash
-modal secret create gcp \
-  GOOGLE_CLOUD_PROJECT=... \
-  GOOGLE_CLOUD_LOCATION=... \
-  GCP_SERVICE_ACCOUNT_JSON="$(cat service-account.json)"
-
-uv run modal run src/databricks_officeqa_benchmark/modal_gcp_rag_transformed_txt.py \
-  --storage-path /vol/officeqa/repo
+uv run modal run src/databricks_officeqa_benchmark/modal_file_search_parsed_json.py --storage-path /vol/officeqa/repo
 ```
 
 ## Roadmap
