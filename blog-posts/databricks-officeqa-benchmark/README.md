@@ -57,6 +57,15 @@ modal secret create gemini GEMINI_API_KEY=...
 uv run modal run src/databricks_officeqa_benchmark/modal_file_search.py --storage-path /vol/officeqa/repo
 ```
 
+## GCP RAG corpus creation (parsed JSON)
+
+This unzips `treasury_bulletins_parsed/jsons/` and uploads chunked JSONL (text + element metadata, tables as HTML).
+
+```bash
+modal secret create gcp GOOGLE_CLOUD_PROJECT=... GCP_LOCATION=... GCP_SERVICE_ACCOUNT_JSON=...
+uv run modal run src/databricks_officeqa_benchmark/modal_gcp_rag_parsed_json.py
+```
+
 ## Roadmap
 
 0. Setup
