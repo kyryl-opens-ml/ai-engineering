@@ -9,7 +9,9 @@ from typing import Any
 
 import modal
 
-from databricks_officeqa_benchmark.metrics import exact_match, f1_score, mean
+
+def mean(xs: list[float]) -> float:
+    return sum(xs) / len(xs) if xs else 0.0
 
 
 @dataclass(frozen=True)
@@ -121,11 +123,7 @@ def eval_simple_remote(
 
     examples: list[dict[str, Any]] = []
     gemini_scores: list[float] = []
-    gemini_em: list[float] = []
-    gemini_f1: list[float] = []
     rand_scores: list[float] = []
-    rand_em: list[float] = []
-    rand_f1: list[float] = []
 
     for x in qa:
         gemini_pred = _gemini_answer(client=client, model=model, question=x.question)
@@ -134,26 +132,16 @@ def eval_simple_remote(
         gemini_acc = (
             float(score_answer(x.answer, gemini_pred, tolerance=tolerance))
             if score_answer
-            else exact_match(x.answer, gemini_pred)
+            else float(x.answer.strip().lower() == gemini_pred.strip().lower())
         )
         rand_acc = (
             float(score_answer(x.answer, rand_pred, tolerance=tolerance))
             if score_answer
-            else exact_match(x.answer, rand_pred)
+            else float(x.answer.strip().lower() == rand_pred.strip().lower())
         )
 
         gemini_scores.append(gemini_acc)
         rand_scores.append(rand_acc)
-
-        em_g = exact_match(x.answer, gemini_pred)
-        em_r = exact_match(x.answer, rand_pred)
-        f1_g = f1_score(x.answer, gemini_pred)
-        f1_r = f1_score(x.answer, rand_pred)
-
-        gemini_em.append(em_g)
-        rand_em.append(em_r)
-        gemini_f1.append(f1_g)
-        rand_f1.append(f1_r)
 
         examples.append(
             {
@@ -162,10 +150,7 @@ def eval_simple_remote(
                 "question": x.question,
                 "answer": x.answer,
                 "predictions": {"gemini": gemini_pred, "random": rand_pred},
-                "scores": {
-                    "gemini": {"accuracy": gemini_acc, "exact_match": em_g, "f1": f1_g},
-                    "random": {"accuracy": rand_acc, "exact_match": em_r, "f1": f1_r},
-                },
+                "scores": {"gemini": gemini_acc, "random": rand_acc},
             }
         )
 
@@ -187,16 +172,8 @@ def eval_simple_remote(
             "difficulties": sorted({x.difficulty for x in qa if x.difficulty}),
         },
         "metrics": {
-            "gemini": {
-                "accuracy": mean(gemini_scores),
-                "exact_match": mean(gemini_em),
-                "f1": mean(gemini_f1),
-            },
-            "random": {
-                "accuracy": mean(rand_scores),
-                "exact_match": mean(rand_em),
-                "f1": mean(rand_f1),
-            },
+            "gemini": {"accuracy": mean(gemini_scores)},
+            "random": {"accuracy": mean(rand_scores)},
         },
         "examples": examples,
     }
