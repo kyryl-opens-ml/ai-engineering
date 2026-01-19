@@ -1,0 +1,13 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      - SERVICES=iam,s3,ec2,rds,lambda,eks,ssm,secretsmanager,cloudtrail,cloudwatch
+      - DEBUG=1
+      - PERSISTENCE=1
+    volumes:
+      - "./localstack-data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"

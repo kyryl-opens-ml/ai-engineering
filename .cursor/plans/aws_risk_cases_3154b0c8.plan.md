@@ -4,34 +4,34 @@ overview: Generate AWS infrastructure state snapshots with embedded technical ri
 todos:
   - id: models
     content: Create models.py with CompanyProfile and RiskItem schemas
-    status: pending
+    status: completed
   - id: categories
     content: Define 15 risk categories in categories.py
-    status: pending
+    status: completed
     dependencies:
       - models
   - id: generator
     content: Build Claude Code generator in generator.py
-    status: pending
+    status: completed
     dependencies:
       - categories
   - id: deployer
     content: Build deployer.py for LocalStack deployment
-    status: pending
+    status: completed
     dependencies:
       - models
   - id: cli
     content: Create CLI with typer (generate, deploy, reset commands)
-    status: pending
+    status: completed
     dependencies:
       - generator
       - deployer
   - id: docker
     content: Create docker-compose.yaml for LocalStack
-    status: pending
+    status: completed
   - id: examples
     content: Generate 5 example cases with Mermaid diagrams
-    status: pending
+    status: completed
     dependencies:
       - cli
       - docker

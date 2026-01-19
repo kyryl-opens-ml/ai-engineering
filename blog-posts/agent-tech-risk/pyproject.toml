@@ -1,9 +1,21 @@
 [project]
 name = "agent-tech-risk"
 version = "0.1.0"
-description = "Add your description here"
+description = "AWS Risk Case Generator for PE Technical Due Diligence"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "localstack>=4.12.0",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "rich>=13.0",
+    "boto3>=1.35",
+    "python-dotenv>=1.0",
 ]
+
+[project.optional-dependencies]
+agent = ["claude-code"]
+dev = ["localstack>=4.0"]
+
+[project.scripts]
+risk-generator = "risk_generator.cli:app"
