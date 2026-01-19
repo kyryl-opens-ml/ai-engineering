@@ -4,8 +4,8 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from .models import CompanyProfile, PROFILE_PRESETS
-from .categories import RISK_CATEGORIES, get_category
+from risk_generator.models import CompanyProfile, PROFILE_PRESETS
+from risk_generator.categories import RISK_CATEGORIES, get_category
 
 load_dotenv()
 

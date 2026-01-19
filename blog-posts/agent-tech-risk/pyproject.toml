@@ -12,10 +12,21 @@ dependencies = [
     "boto3>=1.35",
     "python-dotenv>=1.0",
     "claude-agent-sdk",
+    "awscli>=1.44.20",
 ]
 
 [project.optional-dependencies]
 dev = ["localstack>=4.0"]
 
 [project.scripts]
-risk-generator = "risk_generator.cli:app"
+risk-generator = "risk_generator.cli:main"
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/risk_generator"]

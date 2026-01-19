@@ -6,10 +6,10 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from .categories import RISK_CATEGORIES, list_categories
-from .models import PROFILE_PRESETS
-from .generator import generate_case_sync
-from .deployer import deploy_case, reset_localstack, verify_deployment
+from risk_generator.categories import RISK_CATEGORIES, list_categories
+from risk_generator.models import PROFILE_PRESETS
+from risk_generator.generator import generate_case_sync
+from risk_generator.deployer import deploy_case, reset_localstack, verify_deployment
 
 app = typer.Typer(help="AWS Risk Case Generator for PE Due Diligence")
 console = Console()
