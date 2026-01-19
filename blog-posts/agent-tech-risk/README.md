@@ -1,96 +1,33 @@
-## Agent for detecting structural technical risk
+### Managing Technology Risk for Asset Managers
 
-Localstack for data generation 
-PyDantic for Agewnt
+### Non-Tech Part!
 
-agent-tech-risk
-## Intetion: 
+You buy a new company! Exciting! Numbers are good, growth is strong, but it dies and your asset is close to 0. Turns out tech risks were miscalculated. How would you catch this earlier? Hiring a full engineering team [example]? Hire an agency [example]? Ask a friendly CTO to take a look [example]?
 
-Blog post +
-  dataset on hf 
-  agent 
-  package 
-  claude code 
-  benchmark 
-  text 
-  structure 
-  gpm
-  ai sre
+In many cases - you could automatically detect it with the full power of agents! If you are a private investor - as you review the data room to build your case, the same way you should review the "technical" data room before the transaction!
 
+2 main points today:
 
-## structure 
+- If you are a private asset manager and want to do this - reach out to me!
+- If you are an engineer at a VC/PE firm - read further on how to build this!
 
-1. Selling 
-2. Tech
-3. Selling
+### Tech Part & Dimensions
 
-## Initial idea: 
-
-
-I want to write a blog post on the topic "Agent for detecting structural technical risk" that would resonate with tech leaders at VC and PE firms.
-Think of it as developing an agent application for technical due diligence of companies. 
-But to avoid boiling the ocean - I would start simple: localstack + pydantic ai. 
-One of the inspirations for this should be: https://deepmind.google/blog/introducing-codemender-an-ai-agent-for-code-security/ 
-
-The stack I want to use: 
-
-1. localstack 
-
-Let's limit to AWS and GCP, Azure, other hyperscalers would follow. I don't want to create a bunch of AWS with structure problems as my evaluation framework. 
-So I want to use localstack to generate "cases" aka dataset against which I would benchmark and test several agents. Dataset should be snapshot of AWS infra with known structure issues. 
-Make sure cases resemble real life. Ideally visualization and explanation of the tech risk embedded into each would be useful. I could review and remove ones I don't like.
-Do research on what are the most common tech risks in AWS infrastructure. 
-
-
-2. pydantic ai 
-
-Given my dataset via localstack. I want to develop an agent to find those issues. For now - just find, fix would come later. This agent should be a set of models, skills and MCP tools. I would prefer to use https://ai.pydantic.dev/#why-use-pydantic-ai and Gemini 3 as code LLM. 
-
-
-As of now - let's work on a plan for dataset with localstack. Keep all code in blog-posts/agent-tech-risk folder please
-
-I want it to be more sophisticated. Add cases about scalability, k8s issues, and more tech risks. Also, I want to generate them on the fly. Let's say we would have 10 tech risk categories [tr1, ..., tr10], and for each or combinations [tr1 + tr4] we could generate a case. Also, I want them to be realistic. Imagine companies which PE wants to buy - they might have dozens or hundreds of engineers and several AWS accounts.
-
-## Tools 
-https://github.com/NVIDIA-NeMo/DataDesigner?tab=readme-ov-file
-
-## Blog post text: 
-
-How to DD AI Startups: Spotting Overhyped Models vs. Real Scalable Tech
-
-
-### Manage Technilogy risk for asset managers
-
-### Non tech Part!
-
-You are biynd new comapny! Exiting! Number are good, GPT strong, but it's die and your asset is close to 0. Turns out tech risks are miscalculated. How would you catch this earlier? Hring full engineering team [example]? Hire agency [example]?  Aks frindly CTO to take a look [example]?
-
-In many cases - you could automatically detect it with full pover of agents! If you are private investor - as you review data room to buld your case, same way you should review "techical" data room before the transaction! 
-
-2 main points today: 
-
-- If you are private asset managerr and want to do this - reach otu to me! 
-- If you are engineerign at VC/PE firm - read furthere how to build this! 
-
-### Dimentions 
-
-First how to start? So many dimentiosn to slied tech risk, 
+First, how to start? So many dimensions to slice tech risk:
 
 - code level
-- secutiry 
-- huperscalers 
-- documentations 
+- security
+- hyperscalers
+- documentation
 
+We have to get started somewhere and what I found in practice - there is no better place to start than the actual state of infrastructure! Docs and code are stale, presentations are out of date, but actual infrastructure never lies!
 
-we have to get started somewhere and what I fund at practice - there is not better palce to start from actual state of infrastructure! Docs and code are stale, presentations are out of date, but actualt infastrucutre neven lie! 
-
-So after slician and dycing - most valuable and trust dimention is AWS account state! Let's target this for practical example! 
-
+So after slicing and dicing - the most valuable and trusted dimension is AWS account state! Let's target this for a practical example!
 
 ### Evaluation
 
-Where are we standing? Anyone can build an anget, the value is - how good is your agent? Answer - evaluation. 
-To do this we are going to generate dataset: 
+Where are we standing? Anyone can build an agent, the value is - how good is your agent? Answer - evaluation.
+To do this we are going to generate a dataset:
 
 case generator ->
 
@@ -100,121 +37,51 @@ case generator ->
 ....
 -- case 00n
 
-Each case is generated by claud code cdk (yse you can build app on top of agent skd - crezy time).
-Claud is produce 
+Each case is generated by Claude code CDK (yes you can build apps on top of agent SDK - crazy times).
+Claude produces:
 
-- prifle - company hight level descriptins 
-- aws state - actusl aws state of resoruss
-- diagram - visualizaiton of infra archutecture
-- narrative - how does comapny get into this state 
-- risks - actual strucutre technical risks.
+- profile - company high level description
+- aws state - actual AWS state of resources
+- diagram - visualization of infra architecture
+- narrative - how does the company get into this state
+- risks - actual structural technical risks
 
-After human review and filteing you get dataset to benchark against! On the side note - make sure to keep track of those in your portiflion ajd frienrly comapnies to bencharmks again! This is competitive edge nobody else has! 
+After human review and filtering you get a dataset to benchmark against! On the side note - make sure to keep track of those in your portfolio and friendly companies to benchmark against! This is a competitive edge nobody else has!
 
-So full cycle looks like this: 
+So the full cycle looks like this:
 
 1. load case
-2. run docker with active loccalstack 
-3. load case thete in AWS
-4. ask agent to review aws infra 
-5. compeare with groud truth
+2. run docker with active localstack
+3. load case there in AWS
+4. ask agent to review AWS infra
+5. compare with ground truth
 
+But what about the Agent? Glad you asked!
 
-But what about Agent? Gald you asked!
+### Agent:
 
+Is it just a for loop? Yes, as long as a database is just a file! Joke aside, for building this agent I am using
 
-### Agent: 
+Pydantic AI framework! https://ai.pydantic.dev/
 
-Is it just a for loop? Yes, as long as database is just a file! Joke aside for builidng this agent I am using 
+Why? First: Philosophy of FastAPI and Pydantic Validation are so well adopted in Python, I love the same simplicity in my agent development. Second: https://ai.pydantic.dev/evals/#data-flow - Pydantic Evals is the most straightforward way to test your agent!
 
-Pydantic AI fraimworks! https://ai.pydantic.dev/ 
+Full agent code:
 
-Why? First: Pholoopy of FastAPI and Pydantic Validation are so well adoptte in python, I lvoe same semaplecy in my agent development. Second: https://ai.pydantic.dev/evals/#data-flow - Pydantic Evals most straifowrakd way to test  your agent! 
+with just one tool - execute boto3 code against your instance of localstack. Whatever can be done from boto3 with probably pretty much everything - this agent should be capable of doing!
 
-Full agent code: 
+Is it the best way? Well - this is why we have evaluation to find out! Let's run this agent with several LLMs against our benchmarks!
 
-iwth just one tool - execute boto3 code again your instance of localstack. Whatever can be done from boto3 with proabably prettu much everntyhihg - this agent shiuld be capable to do! 
+### Outcome:
 
-Is it a best way? Well - this is why we have evaluation to find out! Let's run this agent with several LLM agains out benchamrks! 
+Technical risks are as important as go-to-market, make sure to track and find them before they find you!
 
+If you are an engineer - dataset and code are open source
+If you are a private asset owner - feel free to contact me to get help and set this up for your specific context!
 
-### Outcome: 
+Cheers!
 
-Techical risks are as importatn as go to market, make sure to track and find them fore they find you! 
-
-If you an engineerign - datatas and code are open soruse
-If you an private asset owner - feel free to conct me to get help and setup this for your specific context! 
-
-Cheers! 
-
-
-
-1. move deploy_iam. etc runner.py to "import from risk_generator"
-2. add LLM as input paramets 
-3. add braintrust for monitoring 
-4. add function to run benchamrk again: sonnet, opus, gpt5 (3x), gemini3, gemini3-flash
-
-
-PyDantic based implemnetation with 5 managed llm as a brain and 5 open weight llm as a brani! 
-
-
-export AWS_ENDPOINT_URL=http://localhost:4566
-export AWS_ACCESS_KEY_ID=test
-export AWS_SECRET_ACCESS_KEY=test
-export AWS_DEFAULT_REGION=us-east-1
-
-
-
-Good, let's go into plan mode again. Could you now implement a new Python package: risk_finder 
-
-Use ai.pydantic
-
-Here are the references:
-
-llms.txt: https://ai.pydantic.dev/llms.txt 
-llms-full.txt: https://ai.pydantic.dev/llms-full.txt 
-
-Keep code minimal and testable, easy to read.
-
-As input, you should have just AWS:
-
-export AWS_ENDPOINT_URL=http://localhost:4566
-export AWS_ACCESS_KEY_ID=test
-export AWS_SECRET_ACCESS_KEY=test
-export AWS_DEFAULT_REGION=us-east-1
-
-Goal of the agent is to find technical risks.
-
-
-Now I want you to add the most challenging feature to the plan: evaluation! 
-
-You see I have cases I generated before:
-
-ls -all ./cases
-total 0
-drwxr-xr-x@  7 kyryl  staff  224 Jan 19 11:43 .
-drwxr-xr-x  11 kyryl  staff  352 Jan 19 11:27 ..
-drwxr-xr-x@  7 kyryl  staff  224 Jan 18 21:03 case_001
-drwxr-xr-x@  7 kyryl  staff  224 Jan 18 21:09 case_002
-drwxr-xr-x@  7 kyryl  staff  224 Jan 18 21:14 case_003
-drwxr-xr-x@  7 kyryl  staff  224 Jan 18 21:20 case_004
-drwxr-xr-x@  7 kyryl  staff  224 Jan 18 21:24 case_005
-
-
-I want you to build an evaluation process for this agent! 
-
-
-- run docker container with localstack for each case (separated)
-- deploy this case 
-- use Pydantic Evals to evaluate an agent! Pydantic Evals https://ai.pydantic.dev/evals/ 
-
-
-Would be hard to do, but I believe in you! Keep code simple and maintainable.
-
-
-
-### TODO:
-
-- localstack errros - licence, etc - build in verification:run localstack -> appaly -> fix error 
-- braitrust 
-- 
+1. move deploy_iam, etc runner.py to "import from risk_generator"
+2. add LLM as input parameters
+3. add braintrust for monitoring
+4. add function to run benchmark against: sonnet, opus, gpt5 (3x), gemini3, gemini3-flash
