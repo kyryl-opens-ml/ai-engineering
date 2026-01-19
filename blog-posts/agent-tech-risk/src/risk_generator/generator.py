@@ -1,7 +1,7 @@
-import os
-import subprocess
+import asyncio
 from pathlib import Path
 
+import yaml
 from dotenv import load_dotenv
 
 from .models import CompanyProfile, PROFILE_PRESETS
@@ -110,11 +110,13 @@ def build_prompt(profile: CompanyProfile, risk_codes: list[str]) -> str:
     )
 
 
-def generate_case_sync(
+async def generate_case_async(
     profile: CompanyProfile | str,
     risk_codes: list[str],
     output_dir: Path,
 ) -> None:
+    from claude_agent_sdk import query, ClaudeAgentOptions
+
     if isinstance(profile, str):
         if profile not in PROFILE_PRESETS:
             raise ValueError(f"Unknown profile preset: {profile}")
@@ -136,71 +138,27 @@ def generate_case_sync(
         "risk_categories": risk_codes,
     }
     with open(output_dir / "profile.yaml", "w") as f:
-        import yaml
-        yaml.dump(profile_data, f, default_flow_style=False)
-
-    prompt = build_prompt(profile, risk_codes)
-
-    result = subprocess.run(
-        [
-            "claude", "-p", prompt,
-            "--dangerously-skip-permissions",
-            "--tools", "Write",
-        ],
-        cwd=str(output_dir),
-        capture_output=True,
-        text=True,
-    )
-
-    if result.returncode != 0:
-        raise RuntimeError(f"Claude Code failed: {result.stderr}")
-
-    print(result.stdout)
-
-
-async def generate_case_async(
-    profile: CompanyProfile | str,
-    risk_codes: list[str],
-    output_dir: Path,
-) -> None:
-    try:
-        from claude_code import query, ClaudeCodeOptions
-    except ImportError:
-        print("claude-code not installed, falling back to subprocess")
-        generate_case_sync(profile, risk_codes, output_dir)
-        return
-
-    if isinstance(profile, str):
-        if profile not in PROFILE_PRESETS:
-            raise ValueError(f"Unknown profile preset: {profile}")
-        profile = PROFILE_PRESETS[profile]
-
-    for code in risk_codes:
-        if code not in RISK_CATEGORIES:
-            raise ValueError(f"Unknown risk category: {code}")
-
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    profile_data = {
-        "name": profile.name,
-        "domain": profile.domain,
-        "size": profile.size,
-        "aws_accounts": profile.aws_accounts,
-        "has_kubernetes": profile.has_kubernetes,
-        "risk_categories": risk_codes,
-    }
-    with open(output_dir / "profile.yaml", "w") as f:
-        import yaml
         yaml.dump(profile_data, f, default_flow_style=False)
 
     prompt = build_prompt(profile, risk_codes)
 
     async for message in query(
         prompt=prompt,
-        options=ClaudeCodeOptions(
+        options=ClaudeAgentOptions(
             allowed_tools=["Write"],
             cwd=str(output_dir),
+            permission_mode="bypassPermissions",
         ),
     ):
-        if hasattr(message, "content"):
+        if hasattr(message, "result"):
+            print(message.result)
+        elif hasattr(message, "content"):
             print(message.content)
+
+
+def generate_case_sync(
+    profile: CompanyProfile | str,
+    risk_codes: list[str],
+    output_dir: Path,
+) -> None:
+    asyncio.run(generate_case_async(profile, risk_codes, output_dir))

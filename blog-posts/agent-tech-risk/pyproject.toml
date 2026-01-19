@@ -11,11 +11,10 @@ dependencies = [
     "rich>=13.0",
     "boto3>=1.35",
     "python-dotenv>=1.0",
-    "awscli>=1.44.20",
+    "claude-agent-sdk",
 ]
 
 [project.optional-dependencies]
-agent = ["claude-code"]
 dev = ["localstack>=4.0"]
 
 [project.scripts]

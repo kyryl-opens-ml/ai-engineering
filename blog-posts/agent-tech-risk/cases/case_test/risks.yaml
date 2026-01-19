@@ -1,0 +1,145 @@
+risks:
+  # IAM Overprivilege Risks (tr1)
+  - category: tr1
+    resource: arn:aws:iam::123456789012:policy/DevOpsFullAccess
+    issue: "IAM policy grants wildcard permissions on all actions and resources (Action: *, Resource: *)"
+    severity: critical
+    why: "Created during rapid scaling phase when DevOps team needed to quickly iterate on infrastructure. Originally meant to be temporary but became permanent as the team grew comfortable with it and didn't want to risk breaking their automation workflows."
+    details:
+      actions: ["*"]
+      resources: ["*"]
+      attached_to:
+        - "arn:aws:iam::123456789012:role/DevOpsAutomationRole"
+        - "arn:aws:iam::123456789012:user/mike.johnson"
+        - "arn:aws:iam::123456789012:user/ci-cd-user"
+    remediation: "Implement least-privilege policies based on actual usage patterns. Use IAM Access Analyzer to identify required permissions."
+
+  - category: tr1
+    resource: arn:aws:iam::123456789012:role/DevOpsAutomationRole
+    issue: "Cross-account trust policy allows ANY AWS principal to assume role with only ExternalId validation (Principal: *)"
+    severity: high
+    why: "Set up to allow third-party CI/CD tools and contractors to deploy infrastructure. The wildcard principal was used because the team wasn't sure which AWS accounts vendors would use, and wanted to avoid blocking legitimate deployments."
+    details:
+      trust_policy:
+        principal: "*"
+        condition: "ExternalId present but principal unrestricted"
+      attached_policies:
+        - "arn:aws:iam::123456789012:policy/DevOpsFullAccess"
+    remediation: "Restrict Principal to specific AWS account IDs or use service principals. Implement MFA requirement for sensitive operations."
+
+  - category: tr1
+    resource: arn:aws:iam::123456789012:user/ci-cd-user
+    issue: "CI/CD user has full administrative access via DevOpsFullAccess policy"
+    severity: high
+    why: "GitHub Actions workflows needed to deploy to production. Team took the 'easiest path' to unblock deployments, granting full access rather than scoping permissions to specific deployment tasks."
+    details:
+      access_key_age_days: 620
+      last_used: "2024-01-14T23:45:00Z"
+      attached_policies:
+        - "arn:aws:iam::123456789012:policy/DevOpsFullAccess"
+    remediation: "Use OIDC federation for GitHub Actions. Scope permissions to only required deployment actions (e.g., ECS updates, S3 uploads, Lambda deployments)."
+
+  - category: tr1
+    resource: arn:aws:iam::123456789012:user/emergency-access
+    issue: "Break-glass emergency account with AdministratorAccess and long-lived access key"
+    severity: medium
+    why: "Created as a 'break glass' account for emergencies when SSO might be down. The access key was created for disaster recovery scenarios but hasn't been rotated in nearly 2 years."
+    details:
+      access_key_age_days: 665
+      last_used: "2023-08-15T03:20:00Z"
+      attached_policies:
+        - "arn:aws:iam::aws:policy/AdministratorAccess"
+    remediation: "Store credentials in secure vault with break-glass procedures. Implement CloudTrail alerts for usage. Rotate access keys quarterly at minimum."
+
+  # Network Exposure Risks (tr4)
+  - category: tr4
+    resource: sg-0i9j8h7g6f5e4d3c
+    issue: "Security group allows SSH (port 22) and RDP (port 3389) from 0.0.0.0/0"
+    severity: critical
+    why: "Created during an outage when the DevOps lead needed to SSH into servers urgently from home. The office IP whitelist was causing issues, so they opened it to 0.0.0.0/0 temporarily. After resolving the incident, no one remembered to restrict it back."
+    details:
+      group_name: "payflow-admin-access"
+      vpc_id: "vpc-0a1b2c3d4e5f6g7h8"
+      open_ports:
+        - port: 22
+          protocol: tcp
+          cidr: "0.0.0.0/0"
+        - port: 3389
+          protocol: tcp
+          cidr: "0.0.0.0/0"
+      attached_to:
+        - instance_id: "i-0u9v8w7x6y5z4a3b"
+          instance_name: "payflow-bastion-host"
+          public_ip: "54.123.45.67"
+    remediation: "Restrict SSH/RDP access to specific office and VPN IP addresses. Implement AWS Systems Manager Session Manager for bastion-less access."
+
+  - category: tr4
+    resource: sg-0m2n3o4p5q6r7s8t
+    issue: "Database security group allows PostgreSQL access (port 5432) from 0.0.0.0/0"
+    severity: critical
+    why: "Opened up for the data analytics team who were working remotely and needed direct database access for BI tools like Tableau. They were facing connection issues through the VPN, so engineering opened it globally 'temporarily' to unblock urgent reporting for board meetings."
+    details:
+      group_name: "payflow-database"
+      vpc_id: "vpc-0a1b2c3d4e5f6g7h8"
+      open_ports:
+        - port: 5432
+          protocol: tcp
+          cidr: "0.0.0.0/0"
+          description: "PostgreSQL from anywhere for analytics"
+      associated_databases:
+        - "payflow-prod-main"
+        - "payflow-analytics-db"
+    remediation: "Remove public database access. Set up VPN or AWS Client VPN for remote access. Use IAM database authentication. Consider read replicas with restricted access for analytics."
+
+  - category: tr4
+    resource: payflow-analytics-db
+    issue: "RDS instance is publicly accessible with wide-open security group"
+    severity: critical
+    why: "Analytics database was made public so data scientists could connect from their laptops using Jupyter notebooks and run queries. The team argued it was just analytics data (not real-time production), so the risk was acceptable. Encryption at rest was enabled as a compromise."
+    details:
+      db_instance_identifier: "payflow-analytics-db"
+      publicly_accessible: true
+      endpoint: "payflow-analytics-db.c1a2b3c4d5e6.us-east-1.rds.amazonaws.com"
+      port: 5432
+      security_groups:
+        - sg-0m2n3o4p5q6r7s8t (allows 0.0.0.0/0)
+      multi_az: false
+      contains_data: "Replicated production transaction data for analytics"
+    remediation: "Disable public accessibility. Use VPN, AWS Client VPN, or bastion host for remote access. Consider AWS PrivateLink or SSH tunneling."
+
+  - category: tr4
+    resource: i-0u9v8w7x6y5z4a3b
+    issue: "Bastion host in public subnet with overly permissive security group"
+    severity: high
+    why: "Bastion host was placed in public subnet for admin access, but the security group was never properly locked down. Different team members added rules over time as they needed access from various locations (home, coffee shops, etc.)."
+    details:
+      instance_id: "i-0u9v8w7x6y5z4a3b"
+      instance_name: "payflow-bastion-host"
+      public_ip: "54.123.45.67"
+      subnet: "subnet-0i9j0k1l (public)"
+      security_groups:
+        - sg-0i9j8h7g6f5e4d3c (SSH from 0.0.0.0/0)
+    remediation: "Use AWS Systems Manager Session Manager instead of bastion hosts. If bastion is required, restrict source IPs to known office/VPN ranges and implement MFA."
+
+  # Additional Context Risks (informational)
+  - category: operational
+    resource: arn:aws:iam::123456789012:user/sarah.chen
+    issue: "CTO user account with AdministratorAccess for day-to-day operations"
+    severity: low
+    why: "CTO needs broad access for technical oversight and emergency response. Uses this account for both routine and emergency operations rather than separate accounts for different privilege levels."
+    details:
+      attached_policies:
+        - "arn:aws:iam::aws:policy/AdministratorAccess"
+    remediation: "Implement separate daily-use account with limited permissions and elevated-privilege account for admin tasks."
+
+  - category: operational
+    resource: arn:aws:iam::123456789012:policy/DeveloperAccess
+    issue: "Developer policy uses wildcards for some actions (logs:*, cloudwatch:*)"
+    severity: low
+    why: "Developers need flexible access to logs and metrics for debugging production issues. Specific permissions would be too restrictive and require constant updates."
+    details:
+      wildcard_actions:
+        - "logs:*"
+        - "cloudwatch:*"
+      scoped_properly: true
+    remediation: "Consider whether developers need write access to CloudWatch/Logs or only read access. Scope actions more specifically if possible."
