@@ -1,0 +1,9 @@
+aws_accounts: 3
+domain: fintech
+has_kubernetes: false
+name: PayFlow
+risk_categories:
+- tr5
+- tr12
+- tr15
+size: small

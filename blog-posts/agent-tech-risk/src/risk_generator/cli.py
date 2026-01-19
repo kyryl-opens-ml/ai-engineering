@@ -98,19 +98,23 @@ def deploy(
     console.print(f"[blue]Deploying {case} to LocalStack...[/blue]")
 
     try:
-        deployed = deploy_case(case_path)
-        console.print(f"[green]✓ Deployed {len(deployed)} resources[/green]")
-        for resource in deployed:
-            console.print(f"  - {resource}")
+        results = deploy_case(case_path)
+        
+        console.print(f"[green]✓ Deployed {len(results['deployed'])} resources[/green]")
+        for resource in results["deployed"]:
+            console.print(f"  [green]✓[/green] {resource}")
+        
+        if results["failed"]:
+            console.print(f"[yellow]⚠ {len(results['failed'])} failed[/yellow]")
+            for resource in results["failed"][:5]:
+                console.print(f"  [yellow]✗[/yellow] {resource}")
 
         if verify:
-            result = verify_deployment(case_path)
-            if result["match"]:
-                console.print("[green]✓ Verification passed[/green]")
-            else:
-                console.print("[yellow]⚠ Verification mismatch[/yellow]")
-                console.print(f"  Expected: {result['expected']}")
-                console.print(f"  Actual: {result['actual']}")
+            from .deployer import verify_deployment as verify_fn
+            counts = verify_fn()
+            console.print(f"[blue]LocalStack state:[/blue]")
+            for k, v in counts.items():
+                console.print(f"  {k}: {v}")
     except Exception as e:
         console.print(f"[red]Error: {e}[/red]")
         raise typer.Exit(1)
@@ -146,6 +150,41 @@ def categories():
         )
 
     console.print(table)
+
+
+@app.command("list")
+def list_resources():
+    """List all resources in LocalStack."""
+    from .deployer import get_client
+    
+    console.print("[blue]LocalStack Resources:[/blue]\n")
+    
+    try:
+        s3 = get_client("s3")
+        buckets = s3.list_buckets()["Buckets"]
+        console.print(f"[green]S3 Buckets ({len(buckets)}):[/green]")
+        for b in buckets:
+            console.print(f"  - {b['Name']}")
+    except Exception as e:
+        console.print(f"[red]S3 error: {e}[/red]")
+    
+    try:
+        iam = get_client("iam")
+        roles = iam.list_roles()["Roles"]
+        console.print(f"\n[green]IAM Roles ({len(roles)}):[/green]")
+        for r in roles:
+            console.print(f"  - {r['RoleName']}")
+    except Exception as e:
+        console.print(f"[red]IAM error: {e}[/red]")
+    
+    try:
+        ec2 = get_client("ec2")
+        sgs = ec2.describe_security_groups()["SecurityGroups"]
+        console.print(f"\n[green]Security Groups ({len(sgs)}):[/green]")
+        for sg in sgs:
+            console.print(f"  - {sg['GroupName']}")
+    except Exception as e:
+        console.print(f"[red]EC2 error: {e}[/red]")
 
 
 @app.command()

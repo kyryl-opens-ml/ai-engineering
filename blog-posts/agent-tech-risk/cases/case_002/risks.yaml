@@ -1,0 +1,145 @@
+- category: tr3
+  resource: arn:aws:s3:::cloudsync-customer-exports
+  issue: "S3 bucket publicly accessible with unrestricted read permissions"
+  severity: critical
+  why: "Feature team needed to give customers direct download links for data exports. Initially planned to use presigned URLs but the temp solution with public bucket was 'good enough' and shipped to production. The 7-day lifecycle policy was supposed to mitigate risk but public exposure remains."
+  details:
+    - "Bucket policy allows s3:GetObject from Principal '*'"
+    - "Public access block is completely disabled"
+    - "Contains customer data exports including PII"
+    - "Objects expire after 7 days but window of exposure exists"
+
+- category: tr3
+  resource: arn:aws:s3:::cloudsync-analytics-data
+  issue: "Unencrypted S3 bucket storing sensitive analytics data"
+  severity: high
+  why: "Analytics team spun this up quickly to handle growing data volumes. They copied the setup from dev environment where encryption wasn't configured. Since this is 'internal only' data, encryption was deprioritized. Team has been small and focused on building pipelines rather than hardening infrastructure."
+  details:
+    - "No encryption at rest configured"
+    - "Contains aggregated customer usage data and behavioral analytics"
+    - "Accessed by multiple ETL jobs and data scientists"
+    - "No logging enabled for access monitoring"
+
+- category: tr3
+  resource: arn:aws:ec2:us-east-1:456789012345:snapshot/snap-0fedcba9876543210
+  issue: "EBS snapshot shared publicly"
+  severity: critical
+  why: "Analytics team needed to share a large dataset with external research partner. Developer didn't know how to use AWS DataSync or transfer services, so they made the snapshot public temporarily. Forgot to revoke access after the transfer completed 2 months ago."
+  details:
+    - "CreateVolumePermission set to 'all' (public)"
+    - "Unencrypted snapshot of 1TB analytics volume"
+    - "Created November 2025, still public in January 2026"
+    - "Contains processed customer behavioral data"
+
+- category: tr3
+  resource: arn:aws:rds:us-west-2:456789012345:db:cloudsync-analytics-replica
+  issue: "RDS instance with no encryption and minimal backups"
+  severity: high
+  why: "This read replica was created by data team to offload analytics queries from production. Created quickly during a performance incident. No encryption because source was already running and enabling it would require downtime. Backup retention set to 1 day because 'it's just a replica and we can rebuild it'."
+  details:
+    - "Storage encryption disabled"
+    - "Backup retention only 1 day"
+    - "No CloudWatch logs exports enabled"
+    - "Performance Insights disabled"
+    - "Contains full production database replica"
+
+- category: tr4
+  resource: arn:aws:ec2:us-east-1:123456789012:security-group/sg-0a1b2c3d4e5f6g7h8
+  issue: "Security group allows SSH from 0.0.0.0/0"
+  severity: high
+  why: "Bastion host security group opened to the world. Originally restricted to office IP but company went remote-first during COVID. Multiple developers work from different locations/travel frequently, and VPN setup kept getting delayed. 'Temporary' solution has been in place for 18 months. Team uses SSH keys for auth so saw it as acceptable risk."
+  details:
+    - "Port 22 open to 0.0.0.0/0"
+    - "Used by ~30 engineers for production access"
+    - "No MFA required for SSH"
+    - "No IP-based rate limiting or fail2ban configured"
+
+- category: tr4
+  resource: arn:aws:ec2:us-east-1:123456789012:security-group/sg-0123456789abcdefg
+  issue: "RDS security group allows PostgreSQL access from 0.0.0.0/0"
+  severity: critical
+  why: "Database was made publicly accessible when mobile team needed to test API from their local machines during a critical launch deadline. Required because VPN kept having connection issues and engineers were in different timezones. Plan was to lock it down after launch but task got lost in backlog. Database is in public subnet as well."
+  details:
+    - "Port 5432 open to 0.0.0.0/0"
+    - "RDS instance publicly_accessible = true"
+    - "Production database with customer data"
+    - "Database credentials stored in LastPass, rotated quarterly"
+
+- category: tr4
+  resource: arn:aws:rds:us-east-1:123456789012:db:cloudsync-prod-main
+  issue: "Production RDS instance publicly accessible"
+  severity: critical
+  why: "Same as security group issue - needed for mobile team development access. Also some third-party integrations connect directly to database (legacy architecture decision). Subnets were changed to public during network migration and never changed back. Three teams depend on this access pattern now."
+  details:
+    - "Deployed in public subnets (10.0.10.0/24, 10.0.11.0/24)"
+    - "map_public_ip_on_launch = true for DB subnets"
+    - "Has public DNS endpoint accessible from internet"
+    - "Combined with overly permissive security group"
+
+- category: tr14
+  resource: arn:aws:cloudtrail:us-west-2:456789012345:trail/analytics-account-trail
+  issue: "CloudTrail disabled in analytics account"
+  severity: high
+  why: "CloudTrail was disabled 8 months ago when analytics team was troubleshooting massive S3 costs. They identified CloudTrail logging as contributing to the bill (~$2k/month) and disabled it to 'temporarily' reduce costs. Re-enabling kept getting deprioritized because there was no immediate business need and account was considered 'low risk' since it's not customer-facing."
+  details:
+    - "is_logging = false"
+    - "Only covers us-west-2, not multi-region"
+    - "No CloudWatch Logs integration"
+    - "8 months of audit gap for analytics account"
+    - "Account has access to production data via cross-account roles"
+
+- category: tr14
+  resource: arn:aws:account::456789012345
+  issue: "Analytics account has no CloudWatch alarms configured"
+  severity: medium
+  why: "Analytics account was set up by data team who primarily monitors through their own dashboards (Grafana, Datadog for some services). AWS CloudWatch was seen as redundant and nobody set up baseline alarms. Team is small (5 people) and focused on data pipeline development, not infrastructure monitoring."
+  details:
+    - "Zero CloudWatch alarms in entire account"
+    - "Contains RDS instance, S3 buckets, Glue jobs"
+    - "No alerting on infrastructure failures or anomalies"
+    - "No cost anomaly detection configured"
+
+- category: tr14
+  resource: arn:aws:account::234567890123
+  issue: "Staging account missing critical CloudWatch logging"
+  severity: medium
+  why: "Staging environment is treated as pre-production but monitoring was never set up comprehensively. Team philosophy is 'catch issues in prod where we have full observability'. CloudWatch logs seen as unnecessary cost for non-prod environment. Staging is used for integration testing and demos but not monitored proactively."
+  details:
+    - "EKS cluster has minimal logging (only API logs, missing audit/authenticator)"
+    - "RDS CloudWatch logs exports configured but limited"
+    - "Many Lambda functions with PassThrough tracing instead of Active"
+    - "No centralized log aggregation"
+
+- category: tr14
+  resource: arn:aws:s3:::cloudsync-customer-exports
+  issue: "No access logging enabled on public bucket"
+  severity: high
+  why: "Logging was overlooked when bucket was created during sprint deadline. Feature shipped with basic functionality. Since objects auto-delete after 7 days, team assumed risk was low. Nobody advocated for logging because 'it's temporary downloads anyway'. Compliance team never reviewed this bucket because it wasn't part of core infrastructure."
+  details:
+    - "Public bucket with no server access logging"
+    - "No way to audit who accessed customer data exports"
+    - "No CloudTrail data events enabled for this bucket"
+    - "Compliance gap for customer data access tracking"
+
+- category: tr14
+  resource: arn:aws:s3:::cloudsync-analytics-data
+  issue: "Critical analytics bucket with no logging or monitoring"
+  severity: medium
+  why: "Created quickly to solve immediate data volume problems. Logging adds cost and was seen as unnecessary for 'internal' data. Team monitors their ETL jobs but not infrastructure access patterns. Since bucket is private and accessed by trusted services, seemed low priority. No security review process for new analytics infrastructure."
+  details:
+    - "3.5TB of analytics data with no access logging"
+    - "No CloudWatch metrics or alarms"
+    - "No lifecycle policies to manage costs"
+    - "No data events in CloudTrail"
+    - "Used by multiple teams with varying access patterns"
+
+- category: tr3
+  resource: arn:aws:s3:::cloudsync-dev-scratch
+  issue: "Development bucket with no encryption at rest"
+  severity: low
+  why: "Development bucket for testing, explicitly created without encryption to match some legacy systems being tested. Team's reasoning was 'no prod data should ever be here' but in practice, developers sometimes copy production data samples for debugging. No enforcement preventing prod data from being uploaded."
+  details:
+    - "AES256 encryption enabled, but should use KMS for consistency"
+    - "30-day deletion policy doesn't prevent exposure window"
+    - "No data classification or scanning"
+    - "No policy preventing production data uploads"

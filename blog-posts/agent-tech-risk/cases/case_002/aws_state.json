@@ -1,0 +1,1373 @@
+{
+  "metadata": {
+    "company": "CloudSync",
+    "domain": "saas",
+    "size": "medium",
+    "engineer_count": 150,
+    "account_count": 8,
+    "snapshot_date": "2026-01-18T10:30:00Z",
+    "accounts": [
+      {"id": "123456789012", "name": "production", "alias": "cloudsync-prod"},
+      {"id": "234567890123", "name": "staging", "alias": "cloudsync-staging"},
+      {"id": "345678901234", "name": "development", "alias": "cloudsync-dev"},
+      {"id": "456789012345", "name": "analytics", "alias": "cloudsync-analytics"},
+      {"id": "567890123456", "name": "data-platform", "alias": "cloudsync-data"},
+      {"id": "678901234567", "name": "security", "alias": "cloudsync-security"},
+      {"id": "789012345678", "name": "sandbox", "alias": "cloudsync-sandbox"},
+      {"id": "890123456789", "name": "legacy", "alias": "cloudsync-legacy"}
+    ]
+  },
+  "iam": {
+    "roles": [
+      {
+        "arn": "arn:aws:iam::123456789012:role/EKSClusterRole",
+        "name": "EKSClusterRole",
+        "account_id": "123456789012",
+        "assume_role_policy": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "eks.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+          }]
+        },
+        "managed_policies": [
+          "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+          "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+        ],
+        "created_date": "2024-03-15T08:22:00Z",
+        "last_used": "2026-01-18T09:45:00Z"
+      },
+      {
+        "arn": "arn:aws:iam::123456789012:role/EKSNodeRole",
+        "name": "EKSNodeRole",
+        "account_id": "123456789012",
+        "assume_role_policy": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "ec2.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+          }]
+        },
+        "managed_policies": [
+          "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+          "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+        ],
+        "created_date": "2024-03-15T08:30:00Z",
+        "last_used": "2026-01-18T09:50:00Z"
+      },
+      {
+        "arn": "arn:aws:iam::123456789012:role/LambdaExecutionRole",
+        "name": "LambdaExecutionRole",
+        "account_id": "123456789012",
+        "assume_role_policy": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "lambda.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+          }]
+        },
+        "managed_policies": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "inline_policies": {
+          "S3Access": {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": ["s3:GetObject", "s3:PutObject"],
+              "Resource": "arn:aws:s3:::cloudsync-uploads-prod/*"
+            }]
+          }
+        },
+        "created_date": "2023-11-10T14:20:00Z",
+        "last_used": "2026-01-18T09:30:00Z"
+      },
+      {
+        "arn": "arn:aws:iam::234567890123:role/DataScienceNotebookRole",
+        "name": "DataScienceNotebookRole",
+        "account_id": "234567890123",
+        "assume_role_policy": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "sagemaker.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+          }]
+        },
+        "managed_policies": [
+          "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
+        ],
+        "created_date": "2024-08-22T11:15:00Z",
+        "last_used": "2026-01-17T16:20:00Z"
+      },
+      {
+        "arn": "arn:aws:iam::456789012345:role/AnalyticsETLRole",
+        "name": "AnalyticsETLRole",
+        "account_id": "456789012345",
+        "assume_role_policy": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "glue.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+          }]
+        },
+        "managed_policies": [
+          "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+        ],
+        "inline_policies": {
+          "DataAccess": {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Effect": "Allow",
+              "Action": ["s3:*"],
+              "Resource": [
+                "arn:aws:s3:::cloudsync-analytics-data/*",
+                "arn:aws:s3:::cloudsync-customer-exports/*"
+              ]
+            }]
+          }
+        },
+        "created_date": "2024-05-18T09:00:00Z",
+        "last_used": "2026-01-18T02:00:00Z"
+      }
+    ],
+    "policies": [
+      {
+        "arn": "arn:aws:iam::123456789012:policy/DeveloperAccess",
+        "name": "DeveloperAccess",
+        "account_id": "123456789012",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:*",
+                "s3:*",
+                "lambda:*",
+                "logs:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "created_date": "2023-06-12T10:30:00Z",
+        "attachment_count": 12
+      },
+      {
+        "arn": "arn:aws:iam::123456789012:policy/ReadOnlyAccess",
+        "name": "ReadOnlyAccess",
+        "account_id": "123456789012",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:Describe*",
+                "s3:Get*",
+                "s3:List*",
+                "rds:Describe*",
+                "lambda:Get*",
+                "lambda:List*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "created_date": "2023-07-20T14:15:00Z",
+        "attachment_count": 25
+      }
+    ],
+    "users": [
+      {
+        "arn": "arn:aws:iam::123456789012:user/john.smith",
+        "name": "john.smith",
+        "account_id": "123456789012",
+        "created_date": "2023-05-10T08:00:00Z",
+        "password_last_used": "2026-01-18T08:30:00Z",
+        "mfa_enabled": true,
+        "access_keys": [
+          {
+            "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+            "status": "Active",
+            "created_date": "2023-05-10T08:05:00Z",
+            "last_used": "2026-01-18T08:30:00Z"
+          }
+        ],
+        "attached_policies": [
+          "arn:aws:iam::aws:policy/AdministratorAccess"
+        ]
+      },
+      {
+        "arn": "arn:aws:iam::123456789012:user/sarah.connor",
+        "name": "sarah.connor",
+        "account_id": "123456789012",
+        "created_date": "2023-08-15T09:20:00Z",
+        "password_last_used": "2026-01-17T17:45:00Z",
+        "mfa_enabled": true,
+        "access_keys": [
+          {
+            "access_key_id": "AKIAI44QH8DHBEXAMPLE",
+            "status": "Active",
+            "created_date": "2023-08-15T09:25:00Z",
+            "last_used": "2026-01-17T17:45:00Z"
+          }
+        ],
+        "attached_policies": [
+          "arn:aws:iam::123456789012:policy/DeveloperAccess"
+        ]
+      },
+      {
+        "arn": "arn:aws:iam::789012345678:user/legacy-deployment",
+        "name": "legacy-deployment",
+        "account_id": "789012345678",
+        "created_date": "2021-03-22T14:30:00Z",
+        "password_last_used": null,
+        "mfa_enabled": false,
+        "access_keys": [
+          {
+            "access_key_id": "AKIAJQ7M5OLDEXAMPLE",
+            "status": "Active",
+            "created_date": "2021-03-22T14:35:00Z",
+            "last_used": "2025-12-10T03:15:00Z"
+          }
+        ],
+        "attached_policies": [
+          "arn:aws:iam::aws:policy/PowerUserAccess"
+        ]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "name": "cloudsync-uploads-prod",
+        "arn": "arn:aws:s3:::cloudsync-uploads-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "created_date": "2023-04-15T10:00:00Z",
+        "versioning": "Enabled",
+        "encryption": {
+          "type": "AES256",
+          "kms_key_id": null
+        },
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        },
+        "logging": {
+          "enabled": true,
+          "target_bucket": "cloudsync-logs-prod",
+          "target_prefix": "s3-access-logs/uploads/"
+        },
+        "lifecycle_rules": [
+          {
+            "id": "TransitionToIA",
+            "status": "Enabled",
+            "transitions": [
+              {
+                "days": 90,
+                "storage_class": "STANDARD_IA"
+              }
+            ]
+          }
+        ],
+        "object_count": 1247893,
+        "size_bytes": 5438902374000
+      },
+      {
+        "name": "cloudsync-customer-exports",
+        "arn": "arn:aws:s3:::cloudsync-customer-exports",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "created_date": "2024-02-10T15:30:00Z",
+        "versioning": "Disabled",
+        "encryption": {
+          "type": null,
+          "kms_key_id": null
+        },
+        "public_access_block": {
+          "block_public_acls": false,
+          "ignore_public_acls": false,
+          "block_public_policy": false,
+          "restrict_public_buckets": false
+        },
+        "bucket_policy": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "PublicReadGetObject",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::cloudsync-customer-exports/*"
+            }
+          ]
+        },
+        "logging": {
+          "enabled": false
+        },
+        "lifecycle_rules": [
+          {
+            "id": "DeleteAfter7Days",
+            "status": "Enabled",
+            "expiration": {
+              "days": 7
+            }
+          }
+        ],
+        "object_count": 4521,
+        "size_bytes": 18934567890
+      },
+      {
+        "name": "cloudsync-backups-prod",
+        "arn": "arn:aws:s3:::cloudsync-backups-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "created_date": "2023-05-01T08:00:00Z",
+        "versioning": "Enabled",
+        "encryption": {
+          "type": "aws:kms",
+          "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+        },
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        },
+        "logging": {
+          "enabled": true,
+          "target_bucket": "cloudsync-logs-prod",
+          "target_prefix": "s3-access-logs/backups/"
+        },
+        "lifecycle_rules": [
+          {
+            "id": "TransitionToGlacier",
+            "status": "Enabled",
+            "transitions": [
+              {
+                "days": 30,
+                "storage_class": "GLACIER"
+              }
+            ]
+          }
+        ],
+        "object_count": 89234,
+        "size_bytes": 8923478923400
+      },
+      {
+        "name": "cloudsync-analytics-data",
+        "arn": "arn:aws:s3:::cloudsync-analytics-data",
+        "account_id": "456789012345",
+        "region": "us-west-2",
+        "created_date": "2024-05-15T12:00:00Z",
+        "versioning": "Disabled",
+        "encryption": {
+          "type": null,
+          "kms_key_id": null
+        },
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        },
+        "logging": {
+          "enabled": false
+        },
+        "lifecycle_rules": [],
+        "object_count": 234567,
+        "size_bytes": 3456789012345
+      },
+      {
+        "name": "cloudsync-terraform-state",
+        "arn": "arn:aws:s3:::cloudsync-terraform-state",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "created_date": "2023-06-20T09:15:00Z",
+        "versioning": "Enabled",
+        "encryption": {
+          "type": "aws:kms",
+          "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/87654321-4321-4321-4321-210987654321"
+        },
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        },
+        "logging": {
+          "enabled": true,
+          "target_bucket": "cloudsync-logs-prod",
+          "target_prefix": "s3-access-logs/terraform/"
+        },
+        "object_count": 156,
+        "size_bytes": 45678901
+      },
+      {
+        "name": "cloudsync-dev-scratch",
+        "arn": "arn:aws:s3:::cloudsync-dev-scratch",
+        "account_id": "345678901234",
+        "region": "us-east-1",
+        "created_date": "2023-09-10T11:00:00Z",
+        "versioning": "Disabled",
+        "encryption": {
+          "type": "AES256",
+          "kms_key_id": null
+        },
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        },
+        "logging": {
+          "enabled": false
+        },
+        "lifecycle_rules": [
+          {
+            "id": "DeleteOldObjects",
+            "status": "Enabled",
+            "expiration": {
+              "days": 30
+            }
+          }
+        ],
+        "object_count": 8934,
+        "size_bytes": 123456789012
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "instance_id": "i-0abc1234567890def",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:instance/i-0abc1234567890def",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "instance_type": "t3.medium",
+        "state": "running",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "subnet_id": "subnet-0123456789abcdef0",
+        "private_ip": "10.0.1.45",
+        "public_ip": "54.123.45.67",
+        "security_groups": ["sg-0a1b2c3d4e5f6g7h8"],
+        "iam_instance_profile": "EC2-SSM-Role",
+        "tags": {
+          "Name": "bastion-host-prod",
+          "Environment": "production",
+          "ManagedBy": "manual"
+        },
+        "launch_time": "2024-11-20T08:15:00Z",
+        "monitoring": {
+          "state": "disabled"
+        },
+        "ebs_optimized": false
+      },
+      {
+        "instance_id": "i-0def5678901234abc",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:instance/i-0def5678901234abc",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "instance_type": "t3.small",
+        "state": "running",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "subnet_id": "subnet-0fedcba9876543210",
+        "private_ip": "10.0.2.78",
+        "public_ip": null,
+        "security_groups": ["sg-0fedcba9876543210"],
+        "iam_instance_profile": "EC2-SSM-Role",
+        "tags": {
+          "Name": "jenkins-controller",
+          "Environment": "production",
+          "ManagedBy": "terraform"
+        },
+        "launch_time": "2024-09-15T14:30:00Z",
+        "monitoring": {
+          "state": "enabled"
+        },
+        "ebs_optimized": true
+      },
+      {
+        "instance_id": "i-0123abc456def7890",
+        "arn": "arn:aws:ec2:us-west-2:234567890123:instance/i-0123abc456def7890",
+        "account_id": "234567890123",
+        "region": "us-west-2",
+        "instance_type": "m5.large",
+        "state": "running",
+        "vpc_id": "vpc-9876543210fedcba",
+        "subnet_id": "subnet-abcdef0123456789",
+        "private_ip": "10.1.3.22",
+        "public_ip": null,
+        "security_groups": ["sg-staging-app"],
+        "iam_instance_profile": null,
+        "tags": {
+          "Name": "staging-app-server-01",
+          "Environment": "staging",
+          "ManagedBy": "terraform"
+        },
+        "launch_time": "2025-12-05T10:00:00Z",
+        "monitoring": {
+          "state": "disabled"
+        },
+        "ebs_optimized": true
+      }
+    ],
+    "security_groups": [
+      {
+        "group_id": "sg-0a1b2c3d4e5f6g7h8",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-0a1b2c3d4e5f6g7h8",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "group_name": "bastion-sg",
+        "description": "Security group for bastion host",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 22,
+            "to_port": 22,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "SSH access from anywhere"
+          }
+        ],
+        "egress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "Allow all outbound"
+          }
+        ],
+        "tags": {
+          "Name": "bastion-sg",
+          "Environment": "production"
+        }
+      },
+      {
+        "group_id": "sg-0fedcba9876543210",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-0fedcba9876543210",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "group_name": "jenkins-sg",
+        "description": "Security group for Jenkins",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 8080,
+            "to_port": 8080,
+            "cidr_ipv4": "10.0.0.0/16",
+            "description": "Jenkins web UI from VPC"
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 22,
+            "to_port": 22,
+            "source_security_group_id": "sg-0a1b2c3d4e5f6g7h8",
+            "description": "SSH from bastion"
+          }
+        ],
+        "egress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "Allow all outbound"
+          }
+        ],
+        "tags": {
+          "Name": "jenkins-sg",
+          "Environment": "production"
+        }
+      },
+      {
+        "group_id": "sg-0123456789abcdefg",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-0123456789abcdefg",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "group_name": "rds-postgres-sg",
+        "description": "Security group for RDS PostgreSQL",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 5432,
+            "to_port": 5432,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "PostgreSQL access"
+          }
+        ],
+        "egress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "Allow all outbound"
+          }
+        ],
+        "tags": {
+          "Name": "rds-postgres-sg",
+          "Environment": "production"
+        }
+      },
+      {
+        "group_id": "sg-eks-cluster-prod",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-eks-cluster-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "group_name": "eks-cluster-sg-prod",
+        "description": "EKS cluster security group",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 443,
+            "to_port": 443,
+            "cidr_ipv4": "10.0.0.0/16",
+            "description": "API server from VPC"
+          }
+        ],
+        "egress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "Allow all outbound"
+          }
+        ],
+        "tags": {
+          "Name": "eks-cluster-sg-prod",
+          "Environment": "production",
+          "kubernetes.io/cluster/cloudsync-prod": "owned"
+        }
+      },
+      {
+        "group_id": "sg-eks-nodes-prod",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-eks-nodes-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "group_name": "eks-nodes-sg-prod",
+        "description": "EKS node security group",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "ingress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "source_security_group_id": "sg-eks-nodes-prod",
+            "description": "Node to node communication"
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 1025,
+            "to_port": 65535,
+            "source_security_group_id": "sg-eks-cluster-prod",
+            "description": "Cluster to node communication"
+          }
+        ],
+        "egress_rules": [
+          {
+            "ip_protocol": "-1",
+            "from_port": -1,
+            "to_port": -1,
+            "cidr_ipv4": "0.0.0.0/0",
+            "description": "Allow all outbound"
+          }
+        ],
+        "tags": {
+          "Name": "eks-nodes-sg-prod",
+          "Environment": "production",
+          "kubernetes.io/cluster/cloudsync-prod": "owned"
+        }
+      }
+    ],
+    "vpcs": [
+      {
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:vpc/vpc-0a1b2c3d4e5f6g7h8",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "cidr_block": "10.0.0.0/16",
+        "state": "available",
+        "tags": {
+          "Name": "production-vpc",
+          "Environment": "production"
+        },
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true
+      },
+      {
+        "vpc_id": "vpc-9876543210fedcba",
+        "arn": "arn:aws:ec2:us-west-2:234567890123:vpc/vpc-9876543210fedcba",
+        "account_id": "234567890123",
+        "region": "us-west-2",
+        "cidr_block": "10.1.0.0/16",
+        "state": "available",
+        "tags": {
+          "Name": "staging-vpc",
+          "Environment": "staging"
+        },
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true
+      },
+      {
+        "vpc_id": "vpc-abcdef0123456789",
+        "arn": "arn:aws:ec2:us-east-1:345678901234:vpc/vpc-abcdef0123456789",
+        "account_id": "345678901234",
+        "region": "us-east-1",
+        "cidr_block": "10.2.0.0/16",
+        "state": "available",
+        "tags": {
+          "Name": "dev-vpc",
+          "Environment": "development"
+        },
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true
+      }
+    ],
+    "subnets": [
+      {
+        "subnet_id": "subnet-0123456789abcdef0",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-0123456789abcdef0",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "cidr_block": "10.0.1.0/24",
+        "availability_zone": "us-east-1a",
+        "map_public_ip_on_launch": true,
+        "tags": {
+          "Name": "public-subnet-1a",
+          "Type": "public"
+        }
+      },
+      {
+        "subnet_id": "subnet-0fedcba9876543210",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-0fedcba9876543210",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "cidr_block": "10.0.2.0/24",
+        "availability_zone": "us-east-1b",
+        "map_public_ip_on_launch": false,
+        "tags": {
+          "Name": "private-subnet-1b",
+          "Type": "private"
+        }
+      },
+      {
+        "subnet_id": "subnet-0db123456789abcde",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-0db123456789abcde",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "cidr_block": "10.0.10.0/24",
+        "availability_zone": "us-east-1a",
+        "map_public_ip_on_launch": true,
+        "tags": {
+          "Name": "database-subnet-1a",
+          "Type": "public"
+        }
+      },
+      {
+        "subnet_id": "subnet-0db987654321fedcb",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:subnet/subnet-0db987654321fedcb",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "cidr_block": "10.0.11.0/24",
+        "availability_zone": "us-east-1b",
+        "map_public_ip_on_launch": true,
+        "tags": {
+          "Name": "database-subnet-1b",
+          "Type": "public"
+        }
+      }
+    ],
+    "volumes": [
+      {
+        "volume_id": "vol-0abc123def456789a",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:volume/vol-0abc123def456789a",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "size": 100,
+        "volume_type": "gp3",
+        "state": "in-use",
+        "encrypted": true,
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+        "attachments": [
+          {
+            "instance_id": "i-0abc1234567890def",
+            "device": "/dev/sda1",
+            "state": "attached"
+          }
+        ],
+        "tags": {
+          "Name": "bastion-root-volume"
+        }
+      }
+    ],
+    "snapshots": [
+      {
+        "snapshot_id": "snap-0123456789abcdef0",
+        "arn": "arn:aws:ec2:us-east-1:123456789012:snapshot/snap-0123456789abcdef0",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "volume_id": "vol-0fedcba987654321b",
+        "description": "Weekly backup of production database volume",
+        "start_time": "2026-01-11T02:00:00Z",
+        "state": "completed",
+        "encrypted": true,
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+        "volume_size": 500,
+        "create_volume_permissions": [],
+        "tags": {
+          "Name": "prod-db-weekly-backup",
+          "Automated": "true"
+        }
+      },
+      {
+        "snapshot_id": "snap-0fedcba9876543210",
+        "arn": "arn:aws:ec2:us-east-1:456789012345:snapshot/snap-0fedcba9876543210",
+        "account_id": "456789012345",
+        "region": "us-east-1",
+        "volume_id": "vol-analytics-data-01",
+        "description": "Analytics data snapshot for migration",
+        "start_time": "2025-11-15T14:30:00Z",
+        "state": "completed",
+        "encrypted": false,
+        "kms_key_id": null,
+        "volume_size": 1000,
+        "create_volume_permissions": [
+          {
+            "group": "all"
+          }
+        ],
+        "tags": {
+          "Name": "analytics-migration-snapshot",
+          "Purpose": "data-migration"
+        }
+      }
+    ]
+  },
+  "rds": {
+    "instances": [
+      {
+        "db_instance_identifier": "cloudsync-prod-main",
+        "arn": "arn:aws:rds:us-east-1:123456789012:db:cloudsync-prod-main",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "engine": "postgres",
+        "engine_version": "14.9",
+        "db_instance_class": "db.r5.xlarge",
+        "allocated_storage": 500,
+        "storage_type": "gp3",
+        "storage_encrypted": true,
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+        "master_username": "postgres",
+        "db_name": "cloudsync",
+        "endpoint": {
+          "address": "cloudsync-prod-main.c9akxz1x2y3z.us-east-1.rds.amazonaws.com",
+          "port": 5432
+        },
+        "vpc_id": "vpc-0a1b2c3d4e5f6g7h8",
+        "subnet_group": "default-vpc-0a1b2c3d4e5f6g7h8",
+        "publicly_accessible": true,
+        "vpc_security_groups": ["sg-0123456789abcdefg"],
+        "multi_az": true,
+        "backup_retention_period": 7,
+        "preferred_backup_window": "03:00-04:00",
+        "preferred_maintenance_window": "mon:04:00-mon:05:00",
+        "deletion_protection": true,
+        "cloudwatch_logs_exports": ["postgresql"],
+        "performance_insights_enabled": true,
+        "tags": {
+          "Name": "cloudsync-prod-main",
+          "Environment": "production",
+          "Application": "cloudsync-core"
+        },
+        "created_time": "2023-08-10T09:00:00Z"
+      },
+      {
+        "db_instance_identifier": "cloudsync-analytics-replica",
+        "arn": "arn:aws:rds:us-west-2:456789012345:db:cloudsync-analytics-replica",
+        "account_id": "456789012345",
+        "region": "us-west-2",
+        "engine": "postgres",
+        "engine_version": "14.9",
+        "db_instance_class": "db.r5.large",
+        "allocated_storage": 500,
+        "storage_type": "gp3",
+        "storage_encrypted": false,
+        "kms_key_id": null,
+        "master_username": "postgres",
+        "db_name": "analytics",
+        "endpoint": {
+          "address": "cloudsync-analytics-replica.x1y2z3a4b5c6.us-west-2.rds.amazonaws.com",
+          "port": 5432
+        },
+        "vpc_id": "vpc-analytics-west2",
+        "subnet_group": "analytics-subnet-group",
+        "publicly_accessible": false,
+        "vpc_security_groups": ["sg-analytics-db"],
+        "multi_az": false,
+        "backup_retention_period": 1,
+        "preferred_backup_window": "07:00-08:00",
+        "preferred_maintenance_window": "sun:08:00-sun:09:00",
+        "deletion_protection": false,
+        "cloudwatch_logs_exports": [],
+        "performance_insights_enabled": false,
+        "tags": {
+          "Name": "analytics-read-replica",
+          "Environment": "analytics",
+          "ManagedBy": "manual"
+        },
+        "created_time": "2024-06-20T11:30:00Z"
+      },
+      {
+        "db_instance_identifier": "cloudsync-staging-db",
+        "arn": "arn:aws:rds:us-west-2:234567890123:db:cloudsync-staging-db",
+        "account_id": "234567890123",
+        "region": "us-west-2",
+        "engine": "postgres",
+        "engine_version": "14.9",
+        "db_instance_class": "db.t3.large",
+        "allocated_storage": 100,
+        "storage_type": "gp2",
+        "storage_encrypted": true,
+        "kms_key_id": "arn:aws:kms:us-west-2:234567890123:key/staging-key-12345",
+        "master_username": "postgres",
+        "db_name": "cloudsync_staging",
+        "endpoint": {
+          "address": "cloudsync-staging-db.staging123.us-west-2.rds.amazonaws.com",
+          "port": 5432
+        },
+        "vpc_id": "vpc-9876543210fedcba",
+        "subnet_group": "staging-db-subnet-group",
+        "publicly_accessible": false,
+        "vpc_security_groups": ["sg-staging-db"],
+        "multi_az": false,
+        "backup_retention_period": 3,
+        "preferred_backup_window": "05:00-06:00",
+        "preferred_maintenance_window": "sat:06:00-sat:07:00",
+        "deletion_protection": false,
+        "cloudwatch_logs_exports": ["postgresql"],
+        "performance_insights_enabled": false,
+        "tags": {
+          "Name": "staging-database",
+          "Environment": "staging"
+        },
+        "created_time": "2024-01-15T10:00:00Z"
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "function_name": "cloudsync-image-processor",
+        "arn": "arn:aws:lambda:us-east-1:123456789012:function:cloudsync-image-processor",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "runtime": "python3.11",
+        "handler": "lambda_function.lambda_handler",
+        "code_size": 15234567,
+        "description": "Processes uploaded images - thumbnails and optimization",
+        "timeout": 300,
+        "memory_size": 1024,
+        "role": "arn:aws:iam::123456789012:role/LambdaExecutionRole",
+        "vpc_config": {
+          "subnet_ids": ["subnet-0fedcba9876543210"],
+          "security_group_ids": ["sg-lambda-vpc"]
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME": "cloudsync-uploads-prod",
+            "THUMBNAIL_SIZE": "256"
+          }
+        },
+        "last_modified": "2025-11-22T14:30:00Z",
+        "version": "$LATEST",
+        "tracing_config": {
+          "mode": "PassThrough"
+        },
+        "layers": [],
+        "tags": {
+          "Environment": "production",
+          "Application": "image-processing"
+        }
+      },
+      {
+        "function_name": "cloudsync-export-generator",
+        "arn": "arn:aws:lambda:us-east-1:123456789012:function:cloudsync-export-generator",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "runtime": "nodejs18.x",
+        "handler": "index.handler",
+        "code_size": 3456789,
+        "description": "Generates customer data exports",
+        "timeout": 900,
+        "memory_size": 2048,
+        "role": "arn:aws:iam::123456789012:role/LambdaExecutionRole",
+        "vpc_config": {},
+        "environment": {
+          "variables": {
+            "EXPORT_BUCKET": "cloudsync-customer-exports",
+            "DB_HOST": "cloudsync-prod-main.c9akxz1x2y3z.us-east-1.rds.amazonaws.com"
+          }
+        },
+        "last_modified": "2026-01-10T09:15:00Z",
+        "version": "$LATEST",
+        "tracing_config": {
+          "mode": "PassThrough"
+        },
+        "layers": [],
+        "tags": {
+          "Environment": "production",
+          "Application": "data-export"
+        }
+      },
+      {
+        "function_name": "cloudsync-webhook-processor",
+        "arn": "arn:aws:lambda:us-east-1:123456789012:function:cloudsync-webhook-processor",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "runtime": "python3.11",
+        "handler": "webhook.handler",
+        "code_size": 2345678,
+        "description": "Processes incoming webhooks from external services",
+        "timeout": 60,
+        "memory_size": 512,
+        "role": "arn:aws:iam::123456789012:role/LambdaExecutionRole",
+        "vpc_config": {},
+        "environment": {
+          "variables": {
+            "QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123456789012/webhook-queue"
+          }
+        },
+        "last_modified": "2025-12-18T16:20:00Z",
+        "version": "$LATEST",
+        "tracing_config": {
+          "mode": "Active"
+        },
+        "layers": [
+          "arn:aws:lambda:us-east-1:123456789012:layer:datadog-python:45"
+        ],
+        "tags": {
+          "Environment": "production",
+          "Application": "integrations"
+        }
+      }
+    ]
+  },
+  "eks": {
+    "clusters": [
+      {
+        "name": "cloudsync-prod",
+        "arn": "arn:aws:eks:us-east-1:123456789012:cluster/cloudsync-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "version": "1.28",
+        "endpoint": "https://A1B2C3D4E5F6G7H8.gr7.us-east-1.eks.amazonaws.com",
+        "role_arn": "arn:aws:iam::123456789012:role/EKSClusterRole",
+        "resources_vpc_config": {
+          "subnet_ids": [
+            "subnet-0fedcba9876543210",
+            "subnet-0123456789abcdef1",
+            "subnet-0123456789abcdef2"
+          ],
+          "security_group_ids": ["sg-eks-cluster-prod"],
+          "endpoint_public_access": true,
+          "endpoint_private_access": true,
+          "public_access_cidrs": ["0.0.0.0/0"]
+        },
+        "logging": {
+          "cluster_logging": [
+            {
+              "types": ["api", "audit", "authenticator"],
+              "enabled": true
+            }
+          ]
+        },
+        "identity": {
+          "oidc": {
+            "issuer": "https://oidc.eks.us-east-1.amazonaws.com/id/A1B2C3D4E5F6G7H8"
+          }
+        },
+        "status": "ACTIVE",
+        "created_at": "2024-03-15T08:00:00Z",
+        "tags": {
+          "Environment": "production",
+          "ManagedBy": "terraform"
+        },
+        "encryption_config": [
+          {
+            "resources": ["secrets"],
+            "provider": {
+              "key_arn": "arn:aws:kms:us-east-1:123456789012:key/eks-secrets-key"
+            }
+          }
+        ]
+      },
+      {
+        "name": "cloudsync-staging",
+        "arn": "arn:aws:eks:us-west-2:234567890123:cluster/cloudsync-staging",
+        "account_id": "234567890123",
+        "region": "us-west-2",
+        "version": "1.27",
+        "endpoint": "https://X9Y8Z7W6V5U4.sk9.us-west-2.eks.amazonaws.com",
+        "role_arn": "arn:aws:iam::234567890123:role/EKSClusterRole",
+        "resources_vpc_config": {
+          "subnet_ids": [
+            "subnet-staging-1a",
+            "subnet-staging-1b"
+          ],
+          "security_group_ids": ["sg-eks-cluster-staging"],
+          "endpoint_public_access": true,
+          "endpoint_private_access": false,
+          "public_access_cidrs": ["0.0.0.0/0"]
+        },
+        "logging": {
+          "cluster_logging": [
+            {
+              "types": ["api"],
+              "enabled": true
+            }
+          ]
+        },
+        "identity": {
+          "oidc": {
+            "issuer": "https://oidc.eks.us-west-2.amazonaws.com/id/X9Y8Z7W6V5U4"
+          }
+        },
+        "status": "ACTIVE",
+        "created_at": "2024-07-10T12:00:00Z",
+        "tags": {
+          "Environment": "staging",
+          "ManagedBy": "terraform"
+        },
+        "encryption_config": []
+      }
+    ],
+    "node_groups": [
+      {
+        "nodegroup_name": "prod-workers-general",
+        "arn": "arn:aws:eks:us-east-1:123456789012:nodegroup/cloudsync-prod/prod-workers-general",
+        "cluster_name": "cloudsync-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "version": "1.28",
+        "scaling_config": {
+          "min_size": 3,
+          "max_size": 10,
+          "desired_size": 5
+        },
+        "instance_types": ["m5.xlarge"],
+        "subnets": [
+          "subnet-0fedcba9876543210",
+          "subnet-0123456789abcdef1"
+        ],
+        "ami_type": "AL2_x86_64",
+        "node_role": "arn:aws:iam::123456789012:role/EKSNodeRole",
+        "disk_size": 100,
+        "status": "ACTIVE",
+        "created_at": "2024-03-15T09:00:00Z",
+        "tags": {
+          "Environment": "production",
+          "NodeType": "general"
+        }
+      },
+      {
+        "nodegroup_name": "prod-workers-compute",
+        "arn": "arn:aws:eks:us-east-1:123456789012:nodegroup/cloudsync-prod/prod-workers-compute",
+        "cluster_name": "cloudsync-prod",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "version": "1.28",
+        "scaling_config": {
+          "min_size": 2,
+          "max_size": 8,
+          "desired_size": 3
+        },
+        "instance_types": ["c5.2xlarge"],
+        "subnets": [
+          "subnet-0fedcba9876543210",
+          "subnet-0123456789abcdef2"
+        ],
+        "ami_type": "AL2_x86_64",
+        "node_role": "arn:aws:iam::123456789012:role/EKSNodeRole",
+        "disk_size": 100,
+        "status": "ACTIVE",
+        "created_at": "2024-09-20T10:30:00Z",
+        "tags": {
+          "Environment": "production",
+          "NodeType": "compute-intensive"
+        }
+      }
+    ]
+  },
+  "cloudtrail": {
+    "trails": [
+      {
+        "name": "cloudsync-org-trail",
+        "arn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/cloudsync-org-trail",
+        "account_id": "123456789012",
+        "home_region": "us-east-1",
+        "s3_bucket_name": "cloudsync-cloudtrail-logs",
+        "include_global_service_events": true,
+        "is_multi_region_trail": true,
+        "is_organization_trail": false,
+        "log_file_validation_enabled": true,
+        "cloud_watch_logs_log_group_arn": "arn:aws:logs:us-east-1:123456789012:log-group:cloudtrail-logs:*",
+        "cloud_watch_logs_role_arn": "arn:aws:iam::123456789012:role/CloudTrailLogsRole",
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/cloudtrail-key",
+        "event_selectors": [
+          {
+            "read_write_type": "All",
+            "include_management_events": true
+          }
+        ],
+        "is_logging": true,
+        "created_time": "2023-05-01T10:00:00Z"
+      },
+      {
+        "name": "analytics-account-trail",
+        "arn": "arn:aws:cloudtrail:us-west-2:456789012345:trail/analytics-account-trail",
+        "account_id": "456789012345",
+        "home_region": "us-west-2",
+        "s3_bucket_name": "analytics-cloudtrail-logs",
+        "include_global_service_events": true,
+        "is_multi_region_trail": false,
+        "is_organization_trail": false,
+        "log_file_validation_enabled": true,
+        "cloud_watch_logs_log_group_arn": null,
+        "cloud_watch_logs_role_arn": null,
+        "kms_key_id": null,
+        "event_selectors": [
+          {
+            "read_write_type": "All",
+            "include_management_events": true
+          }
+        ],
+        "is_logging": false,
+        "created_time": "2024-05-18T09:30:00Z"
+      }
+    ]
+  },
+  "cloudwatch": {
+    "alarms": [
+      {
+        "alarm_name": "EKS-HighCPU-Production",
+        "arn": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:EKS-HighCPU-Production",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "metric_name": "CPUUtilization",
+        "namespace": "AWS/EKS",
+        "statistic": "Average",
+        "period": 300,
+        "evaluation_periods": 2,
+        "threshold": 80.0,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": [
+          "arn:aws:sns:us-east-1:123456789012:production-alerts"
+        ],
+        "state_value": "OK",
+        "state_updated_timestamp": "2026-01-15T10:30:00Z"
+      },
+      {
+        "alarm_name": "RDS-HighConnections-Production",
+        "arn": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:RDS-HighConnections-Production",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "metric_name": "DatabaseConnections",
+        "namespace": "AWS/RDS",
+        "statistic": "Average",
+        "period": 300,
+        "evaluation_periods": 3,
+        "threshold": 200.0,
+        "comparison_operator": "GreaterThanThreshold",
+        "alarm_actions": [
+          "arn:aws:sns:us-east-1:123456789012:production-alerts"
+        ],
+        "state_value": "OK",
+        "state_updated_timestamp": "2026-01-17T14:20:00Z"
+      }
+    ],
+    "log_groups": [
+      {
+        "log_group_name": "/aws/eks/cloudsync-prod/cluster",
+        "arn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/eks/cloudsync-prod/cluster",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "creation_time": "2024-03-15T08:15:00Z",
+        "retention_in_days": 30,
+        "stored_bytes": 45678901234,
+        "kms_key_id": null
+      },
+      {
+        "log_group_name": "/aws/lambda/cloudsync-image-processor",
+        "arn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/lambda/cloudsync-image-processor",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "creation_time": "2023-11-10T14:30:00Z",
+        "retention_in_days": 7,
+        "stored_bytes": 12345678901,
+        "kms_key_id": null
+      },
+      {
+        "log_group_name": "cloudtrail-logs",
+        "arn": "arn:aws:logs:us-east-1:123456789012:log-group:cloudtrail-logs",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "creation_time": "2023-05-01T10:05:00Z",
+        "retention_in_days": 90,
+        "stored_bytes": 234567890123,
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/cloudtrail-key"
+      }
+    ]
+  },
+  "kms": {
+    "keys": [
+      {
+        "key_id": "12345678-1234-1234-1234-123456789012",
+        "arn": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "creation_date": "2023-04-20T09:00:00Z",
+        "enabled": true,
+        "description": "Production encryption key for S3 and EBS",
+        "key_usage": "ENCRYPT_DECRYPT",
+        "key_state": "Enabled",
+        "key_manager": "CUSTOMER",
+        "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+        "key_rotation_enabled": true
+      },
+      {
+        "key_id": "87654321-4321-4321-4321-210987654321",
+        "arn": "arn:aws:kms:us-east-1:123456789012:key/87654321-4321-4321-4321-210987654321",
+        "account_id": "123456789012",
+        "region": "us-east-1",
+        "creation_date": "2023-06-20T09:20:00Z",
+        "enabled": true,
+        "description": "Terraform state encryption",
+        "key_usage": "ENCRYPT_DECRYPT",
+        "key_state": "Enabled",
+        "key_manager": "CUSTOMER",
+        "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+        "key_rotation_enabled": true
+      }
+    ]
+  }
+}
