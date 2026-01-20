@@ -16,6 +16,8 @@ dependencies = [
     "docker>=7.0",
     "python-dotenv>=1.0",
     "claude-agent-sdk",
+    "braintrust[otel]>=0.4.3",
+    "opentelemetry-sdk>=1.39.1",
 ]
 
 [project.optional-dependencies]

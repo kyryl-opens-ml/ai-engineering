@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Callable
 
 import yaml
 from pydantic_evals import Case, Dataset
@@ -57,6 +58,8 @@ def build_dataset(cases_dir: Path) -> Dataset[dict, ScanResult, None]:
     )
 
 
-def scan_task(inputs: dict) -> ScanResult:
-    case_path = Path(inputs["case_path"])
-    return run_case_in_container(case_path)
+def create_scan_task(model: str) -> Callable[[dict], ScanResult]:
+    def scan_task(inputs: dict) -> ScanResult:
+        case_path = Path(inputs["case_path"])
+        return run_case_in_container(case_path, model)
+    return scan_task

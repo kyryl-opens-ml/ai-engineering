@@ -11,10 +11,10 @@ REGION = "us-east-1"
 console = Console()
 
 
-def get_client(service: str):
+def get_client(service: str, endpoint_url: str | None = None):
     return boto3.client(
         service,
-        endpoint_url=LOCALSTACK_ENDPOINT,
+        endpoint_url=endpoint_url or LOCALSTACK_ENDPOINT,
         region_name=REGION,
         aws_access_key_id="test",
         aws_secret_access_key="test",
@@ -29,7 +29,7 @@ def safe_get(d: dict, *keys, default=None):
     return default
 
 
-def deploy_case(case_dir: Path) -> dict:
+def deploy_case(case_dir: Path, endpoint_url: str | None = None) -> dict:
     state_file = case_dir / "aws_state.json"
     if not state_file.exists():
         raise FileNotFoundError(f"aws_state.json not found in {case_dir}")
@@ -40,25 +40,25 @@ def deploy_case(case_dir: Path) -> dict:
     results = {"deployed": [], "failed": [], "skipped": []}
 
     if "iam" in state:
-        deploy_iam_resources(state["iam"], results)
+        deploy_iam_resources(state["iam"], results, endpoint_url)
 
     if "s3" in state:
-        deploy_s3_resources(state["s3"], results)
+        deploy_s3_resources(state["s3"], results, endpoint_url)
 
     if "ec2" in state:
-        deploy_ec2_resources(state["ec2"], results)
+        deploy_ec2_resources(state["ec2"], results, endpoint_url)
 
     if "rds" in state:
-        deploy_rds_resources(state["rds"], results)
+        deploy_rds_resources(state["rds"], results, endpoint_url)
 
     if "lambda" in state:
-        deploy_lambda_resources(state["lambda"], results)
+        deploy_lambda_resources(state["lambda"], results, endpoint_url)
 
     return results
 
 
-def deploy_iam_resources(iam_state: dict, results: dict):
-    iam = get_client("iam")
+def deploy_iam_resources(iam_state: dict, results: dict, endpoint_url: str | None = None):
+    iam = get_client("iam", endpoint_url)
 
     for policy in iam_state.get("policies", []):
         name = safe_get(policy, "name", "policy_name")
@@ -93,8 +93,8 @@ def deploy_iam_resources(iam_state: dict, results: dict):
             results["failed"].append(f"iam:user:{name} - {e}")
 
 
-def deploy_s3_resources(s3_state: dict, results: dict):
-    s3 = get_client("s3")
+def deploy_s3_resources(s3_state: dict, results: dict, endpoint_url: str | None = None):
+    s3 = get_client("s3", endpoint_url)
 
     for bucket in s3_state.get("buckets", []):
         name = safe_get(bucket, "name", "bucket_name")
@@ -107,8 +107,8 @@ def deploy_s3_resources(s3_state: dict, results: dict):
             results["failed"].append(f"s3:bucket:{name} - {e}")
 
 
-def deploy_ec2_resources(ec2_state: dict, results: dict):
-    ec2 = get_client("ec2")
+def deploy_ec2_resources(ec2_state: dict, results: dict, endpoint_url: str | None = None):
+    ec2 = get_client("ec2", endpoint_url)
 
     for vpc in ec2_state.get("vpcs", []):
         cidr = safe_get(vpc, "cidr", "cidr_block", default="10.0.0.0/16")
@@ -132,8 +132,8 @@ def deploy_ec2_resources(ec2_state: dict, results: dict):
             results["failed"].append(f"ec2:sg:{name} - {e}")
 
 
-def deploy_rds_resources(rds_state: dict, results: dict):
-    rds = get_client("rds")
+def deploy_rds_resources(rds_state: dict, results: dict, endpoint_url: str | None = None):
+    rds = get_client("rds", endpoint_url)
 
     for db in rds_state.get("instances", []):
         db_id = safe_get(db, "identifier", "db_instance_identifier")
@@ -153,8 +153,8 @@ def deploy_rds_resources(rds_state: dict, results: dict):
             results["failed"].append(f"rds:db:{db_id} - {e}")
 
 
-def deploy_lambda_resources(lambda_state: dict, results: dict):
-    lam = get_client("lambda")
+def deploy_lambda_resources(lambda_state: dict, results: dict, endpoint_url: str | None = None):
+    lam = get_client("lambda", endpoint_url)
 
     for func in lambda_state.get("functions", []):
         name = safe_get(func, "name", "function_name")
