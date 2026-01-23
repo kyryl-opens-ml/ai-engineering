@@ -97,6 +97,19 @@ Is it the best way? Well - this is why we have evaluation to find out! Let's run
 
 <Table>
 
+uv run risk-finder eval -m "gateway/openai:gpt-5-mini-2025-08-07"
+
+┃ Case ID  ┃ Scores                         ┃ Metrics                    ┃ Duration ┃
+├──────────┼────────────────────────────────┼────────────────────────────┼──────────┤
+│ Averages │ CategoryRecallEvaluator: 0.267 │ requests: 4.00             │   118.0s │
+│          │ RiskCountEvaluator: 0.396      │ input_tokens: 9,674.8      │          │
+│          │                                │ output_tokens: 7,200.8     │          │
+│          │                                │ reasoning_tokens: 3,788.8  │          │
+│          │                                │ cost: 0.0159               │          │
+│          │                                │ cache_read_tokens: 4,096.0 │          │
+└──────────┴────────────────────────────────┴────────────────────────────┴──────────┘
+
+
 ### Outcome:
 
 Technical risks are as important as go-to-market, make sure to track and find them before they find you!

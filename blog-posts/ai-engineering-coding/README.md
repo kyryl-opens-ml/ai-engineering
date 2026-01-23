@@ -75,3 +75,5 @@ Part 2: Workshop
 Input: Do I have terminal running, do I have GitHub, do I have Gmail, -> 
 
 Claude Code, Cursor, Codex, Roo Code, Lovable, Bolt, Replit, 
+
+
