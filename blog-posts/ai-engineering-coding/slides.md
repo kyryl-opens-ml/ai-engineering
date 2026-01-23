@@ -177,15 +177,27 @@ generate()
 
 - **Agent = LLM + Actions + Loop**
 - Reasoning and multi-step capabilities are so good
-- Coding Agent = tools are editing files and running programs
 
----
+<div v-click>
 
-# Actions
-
+**Actions:**
 - **Tools** - built-in capabilities (read, write, execute)
 - <a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank">MCP</a> - Model Context Protocol for external integrations
-- <a href="https://code.claude.com/docs/en/skills" target="_blank">Skills</a> - reusable task-specific instructions
+- <a href="https://code.claude.com/docs/en/skills" target="_blank">Skills</a> - reliable business processes you already have
+
+</div>
+
+<div v-click>
+
+**Coding Agent** = most tools are about writing, editing and executing code
+
+</div>
+
+<div v-click>
+
+**We are only at the beginning and might change weekly!**
+
+</div>
 
 ---
 
