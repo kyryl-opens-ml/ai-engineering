@@ -7,6 +7,23 @@ transition: fade
 mdc: true
 ---
 
+<style>
+h1 mark,
+h1::before,
+h1::after,
+.slidev-layout h1 mark,
+.slidev-layout h1::before,
+[class*="highlight"],
+mark {
+  background-color: #86efac !important;
+  background: #86efac !important;
+}
+.slide-img {
+  border-radius: 8px;
+  object-fit: contain;
+}
+</style>
+
 # Everyone Can Build
 
 ---
@@ -17,27 +34,22 @@ mdc: true
 - Part 2: Workshop
 
 ---
-layout: section
----
-
-# Part 1: Overview
-
----
 
 # Everyone Can Build
 
 <div class="grid grid-cols-2 gap-8">
 <div>
 
-- **283 PRs from non-engineers** shipped at Alan (€700M ARR)
-- Before: spotted issue → opened ticket → fell behind priorities → shipped sprints later
-- Now: non-tech person just ships the PR
+- Goal: enable every \[put your company here\] to build autonomously
+- 283 PRs \[atomic task\] from non-engineers shipped in 2 quarters
+- Replace slow cycle: issue → ticket → not priority → next sprint
+- €700M ARR - not a startup
 
-<a href="https://alan.com/en/blog/discover-alan/a/everyone-can-build" target="_blank">alan.com/blog</a>
+<a href="https://alan.com/en/blog/discover-alan/a/everyone-can-build" target="_blank">reference</a>
 
 </div>
 <div>
-  <img src="/images/alan-1.png" class="h-80" />
+  <img src="/images/alan-1.png" class="h-80 slide-img" />
 </div>
 </div>
 
@@ -52,11 +64,11 @@ layout: section
 - AI capability for software tasks is growing exponentially
 - Claude Opus 4.5 can complete 5-hour human tasks
 
-<a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">metr.org/blog</a>
+<a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">reference</a>
 
 </div>
 <div>
-  <img src="/images/metr-1.png" class="h-80" />
+  <img src="/images/metr-1.png" class="h-80 slide-img" />
 </div>
 </div>
 
@@ -71,11 +83,11 @@ layout: section
 - They're having trouble designing take-home tests
 - Claude keeps beating their technical evaluations
 
-<a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations" target="_blank">anthropic.com/engineering</a>
+<a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations" target="_blank">reference</a>
 
 </div>
 <div>
-  <img src="/images/anth-1.png" class="h-80" />
+  <img src="/images/anth-1.png" class="h-80 slide-img" />
 </div>
 </div>
 
@@ -85,11 +97,11 @@ layout: section
 
 <div class="grid grid-cols-2 gap-4">
 <div class="flex flex-col gap-2">
-  <img src="/images/gb-1.png" class="h-36" />
-  <img src="/images/nodejs-1.png" class="h-36" />
+  <img src="/images/gb-1.png" class="h-36 slide-img" />
+  <img src="/images/nodejs-1.png" class="h-36 slide-img" />
 </div>
 <div>
-  <img src="/images/gh-1.png" class="h-80" />
+  <img src="/images/gh-1.png" class="h-80 slide-img" />
 </div>
 </div>
 
@@ -190,7 +202,7 @@ generate()
 
 The skill: knowing what to ask and when to course-correct
 
-<a href="https://newsletter.pragmaticengineer.com/p/when-ai-writes-almost-all-code-what" target="_blank">pragmaticengineer.com</a>
+<a href="https://newsletter.pragmaticengineer.com/p/when-ai-writes-almost-all-code-what" target="_blank">reference</a>
 
 ---
 
@@ -204,11 +216,11 @@ The skill: knowing what to ask and when to course-correct
 - Self-driving SaaS - software that builds itself
 - Product building = RTS game
 
-<a href="https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/" target="_blank">kyrylai.com/agent-tech-lead</a>
+<a href="https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/" target="_blank">reference</a>
 
 </div>
 <div>
-  <img src="/images/sc-1.png" class="h-72" />
+  <img src="/images/sc-1.png" class="h-72 slide-img" />
 </div>
 </div>
 
@@ -262,7 +274,11 @@ layout: section
 
 # AI Studio Demo
 
-<a href="https://aistudio.google.com/apps?source=showcase&showcaseTag=gemini-3" target="_blank">aistudio.google.com/apps</a>
+<div class="text-center mt-8">
+
+**→ <a href="https://aistudio.google.com/apps?source=showcase&showcaseTag=gemini-3" target="_blank">Open AI Studio</a> ←**
+
+</div>
 
 ---
 
@@ -279,7 +295,7 @@ Based on Claude Opus 4.5
 
 </div>
 <div>
-  <img src="/images/claude-1.png" class="h-80" />
+  <img src="/images/claude-1.png" class="h-80 slide-img" />
 </div>
 </div>
 
