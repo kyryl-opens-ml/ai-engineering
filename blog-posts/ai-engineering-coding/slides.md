@@ -291,13 +291,61 @@ layout: section
 
 ---
 
-# Start from the Problem
+# Let's Build!
 
-- Have a good description of what you want to do
-- It's okay to change it during the process
-- **Good description = 80% there**
+<div class="text-sm">
 
-Example: AXL runs catalyst sessions - most descriptions there are something that could be done easily
+**Start from the Problem** - Good description = 80% there
+
+If you ever have an idea and are part of a catalyst session with AXL, you may be able to vibe code it to communicate the idea/vision
+
+</div>
+
+<div class="grid grid-cols-3 gap-3 text-xs mt-4">
+
+<div class="border-4 border-green-500 rounded-lg p-3 bg-green-50">
+
+**1. Prototype + Vision** ← Today
+
+- <a href="https://aistudio.google.com/" target="_blank">AI Studio</a>
+- <a href="https://lovable.dev/" target="_blank">Lovable</a>
+- <a href="https://bolt.new/" target="_blank">Bolt</a>
+
+*No setup required*
+
+</div>
+
+<div class="border rounded-lg p-3 bg-blue-50 opacity-60">
+
+**2. More Impact**
+
+- <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a>
+- <a href="https://openai.com/codex/" target="_blank">Codex</a>
+- <a href="https://github.com/google-gemini/gemini-cli" target="_blank">Gemini CLI</a>
+
+*Requires: Terminal, GitHub*
+
+</div>
+
+<div class="border rounded-lg p-3 bg-purple-50 opacity-60">
+
+**3. Direct Contribution**
+
+- Slack integrations
+- Web integrations
+- Task tracker integrations
+
+*Requires: Custom setup*
+
+</div>
+
+</div>
+
+<div class="mt-4 text-center">
+
+**→ Go to <a href="https://aistudio.google.com/" target="_blank">aistudio.google.com</a> and build! ←**
+
+</div>
 
 ---
 

@@ -77,3 +77,12 @@ Input: Do I have terminal running, do I have GitHub, do I have Gmail, ->
 Claude Code, Cursor, Codex, Roo Code, Lovable, Bolt, Replit, 
 
 
+
+
+also - should we just hook it with AWS Bedrock Claude
+
+Hey Tove, sure. 
+
+
+1. I would not disclose any catalyst session details - just make a reference to it and explain that if you have an idea and presentation about it - it has no cost to have a vibe coded prototype.
+2. Will skip Monday, 100% my blame - but I believe it would not be focused and useful with current pressure.
