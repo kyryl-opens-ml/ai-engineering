@@ -43,7 +43,7 @@ mark {
 - Goal: enable every \[put your company here\] to build autonomously
 - 283 PRs \[atomic task\] from non-engineers shipped in 2 quarters
 - Replace slow cycle: issue → ticket → not priority → next sprint
-- €700M ARR - not a startup
+- €700M ARR
 
 <a href="https://alan.com/en/blog/discover-alan/a/everyone-can-build" target="_blank">reference</a>
 
@@ -55,20 +55,24 @@ mark {
 
 ---
 
-# Where We're Going
+# It's clear where we are going
 
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-- It's clear where we are going
-- AI capability for software tasks is growing exponentially
-- Claude Opus 4.5 can complete 5-hour human tasks
+<img src="/images/metr-1.png" class="w-full max-h-96 slide-img" />
 
 <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">reference</a>
 
+---
+
+# It's clear where we are going
+
+...and at the same time
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+  <img src="/images/metr-1.png" class="h-64 slide-img" />
 </div>
 <div>
-  <img src="/images/metr-1.png" class="h-80 slide-img" />
+  <img src="/images/metr-2.png" class="h-64 slide-img" />
 </div>
 </div>
 
@@ -76,20 +80,11 @@ mark {
 
 # AI-Resistant Evaluations
 
-<div class="grid grid-cols-2 gap-8">
-<div>
+Nobody can beat Claude on narrow engineering tasks
 
-- Anthropic - best research lab for coding LLMs
-- They're having trouble designing take-home tests
-- Claude keeps beating their technical evaluations
+<img src="/images/anth-1.png" class="w-full max-h-80 slide-img" />
 
 <a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations" target="_blank">reference</a>
-
-</div>
-<div>
-  <img src="/images/anth-1.png" class="h-80 slide-img" />
-</div>
-</div>
 
 ---
 
@@ -114,22 +109,6 @@ mark {
 - <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> - Anthropic's terminal agent
 - <a href="https://roocode.com/" target="_blank">Roo Code</a> - Open-source VS Code extension
 - <a href="https://ampcode.com/" target="_blank">Amp</a> - Frontier coding agent
-
----
-
-# What is an Agent?
-
-- **Agent = LLM + Actions + Loop**
-- Reasoning and multi-step capabilities are so good
-- Coding Agent = tools are editing files and running programs
-
----
-
-# Actions
-
-- **Tools** - built-in capabilities (read, write, execute)
-- <a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank">MCP</a> - Model Context Protocol for external integrations
-- <a href="https://code.claude.com/docs/en/skills" target="_blank">Skills</a> - reusable task-specific instructions
 
 ---
 
@@ -191,6 +170,22 @@ generate()
 
 </div>
 </div>
+
+---
+
+# What is an Agent?
+
+- **Agent = LLM + Actions + Loop**
+- Reasoning and multi-step capabilities are so good
+- Coding Agent = tools are editing files and running programs
+
+---
+
+# Actions
+
+- **Tools** - built-in capabilities (read, write, execute)
+- <a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank">MCP</a> - Model Context Protocol for external integrations
+- <a href="https://code.claude.com/docs/en/skills" target="_blank">Skills</a> - reusable task-specific instructions
 
 ---
 
