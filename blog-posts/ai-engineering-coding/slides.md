@@ -214,25 +214,6 @@ The skill: knowing what to ask and when to course-correct
 
 ---
 
-# Claude Trio
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-Based on Claude Opus 4.5
-
-- <a href="https://claude.ai/" target="_blank">Claude Chat</a> - conversational AI
-- <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> - terminal coding agent
-- <a href="https://support.claude.com/en/articles/13345190-getting-started-with-cowork" target="_blank">Claude Cowork</a> - collaborative workspace
-
-</div>
-<div>
-  <img src="/images/claude-1.png" class="h-80" />
-</div>
-</div>
-
----
-
 # Where to Start?
 
 <div class="grid grid-cols-3 gap-4 text-sm">
@@ -241,11 +222,11 @@ Based on Claude Opus 4.5
 
 **1. Prototype + Vision**
 
+- <a href="https://aistudio.google.com/" target="_blank">AI Studio</a>
 - <a href="https://lovable.dev/" target="_blank">Lovable</a>
 - <a href="https://bolt.new/" target="_blank">Bolt</a>
-- <a href="https://aistudio.google.com/" target="_blank">AI Studio</a>
 
-*No setup required*
+*No setup required, only account*
 
 </div>
 
@@ -273,6 +254,33 @@ Based on Claude Opus 4.5
 
 </div>
 
+</div>
+
+---
+layout: section
+---
+
+# AI Studio Demo
+
+<a href="https://aistudio.google.com/apps?source=showcase&showcaseTag=gemini-3" target="_blank">aistudio.google.com/apps</a>
+
+---
+
+# Claude Trio Demo
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+Based on Claude Opus 4.5
+
+- <a href="https://claude.ai/" target="_blank">Claude Chat</a> - conversational AI
+- <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a> - terminal coding agent
+- <a href="https://support.claude.com/en/articles/13345190-getting-started-with-cowork" target="_blank">Claude Cowork</a> - collaborative workspace
+
+</div>
+<div>
+  <img src="/images/claude-1.png" class="h-80" />
+</div>
 </div>
 
 ---
