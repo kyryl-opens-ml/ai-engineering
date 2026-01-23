@@ -100,6 +100,20 @@ layout: section
 
 ---
 
+# Same Shift as Compilers
+
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+  <img src="/images/gb-1.png" class="h-36" />
+  <img src="/images/nodejs-1.png" class="h-36" />
+</div>
+<div>
+  <img src="/images/gh-1.png" class="h-80" />
+</div>
+</div>
+
+---
+
 # Why? Agents!
 
 - <a href="https://cursor.com/" target="_blank">Cursor</a> - AI-first code editor
