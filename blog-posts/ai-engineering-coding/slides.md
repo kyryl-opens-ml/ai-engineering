@@ -43,25 +43,6 @@ layout: section
 
 ---
 
-# Self-Driving SaaS
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-- Software that runs itself
-- From tickets to code to deployment
-- The future of product development
-
-<a href="https://linear.app/now/self-driving-saas" target="_blank">linear.app</a>
-
-</div>
-<div>
-  <img src="/images/linear-1.png" class="h-80" />
-</div>
-</div>
-
----
-
 # Where We're Going
 
 <div class="grid grid-cols-2 gap-8">
@@ -140,6 +121,99 @@ layout: section
 
 ---
 
+# Intuitive Way of Understanding Agents
+
+<div class="flex flex-col gap-6">
+<div>
+
+**Business Process** (static)
+
+<div class="flex items-center gap-2 text-sm">
+  <div class="border px-4 py-2 rounded">Input</div>
+  <span>→</span>
+  <div class="border px-4 py-2 rounded bg-gray-100">Step 1</div>
+  <span>→</span>
+  <div class="border px-4 py-2 rounded bg-gray-100">Step 2</div>
+  <span>→</span>
+  <div class="border px-4 py-2 rounded bg-gray-100">Step 3</div>
+  <span>→</span>
+  <div class="border px-4 py-2 rounded">Output</div>
+</div>
+
+</div>
+<div>
+
+**Agent** (dynamic)
+
+<script setup>
+import { ref } from 'vue'
+const flow = ref([])
+const generate = () => {
+  const count = Math.floor(Math.random() * 4) + 4
+  const branches = new Set()
+  const numBranches = Math.floor(Math.random() * 3) + 1
+  while (branches.size < numBranches && branches.size < count) {
+    branches.add(Math.floor(Math.random() * count))
+  }
+  flow.value = Array.from({ length: count }, (_, i) => ({
+    name: `Step ${i + 1}`,
+    branch: branches.has(i)
+  }))
+}
+generate()
+</script>
+
+<div class="flex items-center gap-1 text-xs flex-wrap">
+  <div @click="generate" class="border px-3 py-2 rounded bg-green-100 cursor-pointer hover:bg-green-200">Input</div>
+  <span>→</span>
+  <template v-for="(step, i) in flow" :key="i">
+    <div v-if="step.branch" class="flex flex-col gap-1">
+      <div class="border px-2 py-1 rounded bg-blue-100">{{ step.name }}a</div>
+      <div class="border px-2 py-1 rounded bg-purple-100">{{ step.name }}b</div>
+    </div>
+    <div v-else class="border px-3 py-2 rounded bg-blue-100">{{ step.name }}</div>
+    <span>→</span>
+  </template>
+  <div class="border px-3 py-2 rounded">Output</div>
+</div>
+
+</div>
+</div>
+
+---
+
+# Who Benefits the Most?
+
+- **Engineers** - multiply productivity, focus on architecture
+- **Prototypers** - rapid iteration, validate ideas fast
+- **Those who can steer agents best** - the new superpower
+
+The skill: knowing what to ask and when to course-correct
+
+<a href="https://newsletter.pragmaticengineer.com/p/when-ai-writes-almost-all-code-what" target="_blank">pragmaticengineer.com</a>
+
+---
+
+# Glimpses of the Future
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+- **SE, Product, ML Eng → Product Builders**
+- <a href="https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/" target="_blank">Generative UI</a> - each app becomes a platform, unique UI per user
+- Self-driving SaaS - software that builds itself
+- Product building = RTS game
+
+<a href="https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/" target="_blank">kyrylai.com/agent-tech-lead</a>
+
+</div>
+<div>
+  <img src="/images/sc-1.png" class="h-72" />
+</div>
+</div>
+
+---
+
 # Claude Trio
 
 <div class="grid grid-cols-2 gap-8">
@@ -155,6 +229,50 @@ Based on Claude Opus 4.5
 <div>
   <img src="/images/claude-1.png" class="h-80" />
 </div>
+</div>
+
+---
+
+# Where to Start?
+
+<div class="grid grid-cols-3 gap-4 text-sm">
+
+<div class="border-2 rounded-lg p-4 bg-green-50">
+
+**1. Prototype + Vision**
+
+- <a href="https://lovable.dev/" target="_blank">Lovable</a>
+- <a href="https://bolt.new/" target="_blank">Bolt</a>
+- <a href="https://aistudio.google.com/" target="_blank">AI Studio</a>
+
+*No setup required*
+
+</div>
+
+<div class="border-2 rounded-lg p-4 bg-blue-50">
+
+**2. More Impact**
+
+- <a href="https://code.claude.com/docs/en/overview" target="_blank">Claude Code</a>
+- <a href="https://openai.com/codex/" target="_blank">Codex</a>
+- <a href="https://github.com/google-gemini/gemini-cli" target="_blank">Gemini CLI</a>
+
+*Requires: Terminal, GitHub, Hosting*
+
+</div>
+
+<div class="border-2 rounded-lg p-4 bg-purple-50">
+
+**3. Direct Contribution**
+
+- Slack integrations
+- Web integrations
+- Task tracker integrations
+
+*Requires: Custom setup + Verification*
+
+</div>
+
 </div>
 
 ---
@@ -176,6 +294,3 @@ Example: AXL runs catalyst sessions - most descriptions there are something that
 ---
 
 # Questions?
-
-
-I build end-to-end ML engineering courses and run them for several multi-million ARR companies, 200+ engineers
