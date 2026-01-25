@@ -118,3 +118,11 @@ If you are an engineer - dataset and code are open source
 If you are a private asset owner - feel free to contact me to get help and set this up for your specific context!
 
 Cheers!
+
+_____________
+
+Structure:
+- Hook: Real-world failure story.
+- Non-Tech: Problem + Solutions (including your service).
+- Tech: Dimensions → AWS Focus → Dataset Gen → Agent Build → Eval Cycle → Results.
+- CTA: Open-source links + Contact page.
