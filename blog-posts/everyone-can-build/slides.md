@@ -215,20 +215,45 @@ The skill: knowing what to ask and when to course-correct
 
 # Glimpses of the Future
 
-<div class="grid grid-cols-2 gap-8">
-<div>
+<div class="grid grid-cols-2 gap-6">
 
-- **SE, Product, ML Eng → Product Builders**
-- <a href="https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/" target="_blank">Generative UI</a> - each app becomes a platform, unique UI per user
-- Self-driving SaaS - software that builds itself
-- Product building = RTS game
+<div class="text-sm">
 
-<a href="https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/" target="_blank">reference</a>
+1. **SWE, PM, ML → Agent Tech Leads** <a href="https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/" target="_blank" class="text-xs">ref</a>
+
+<div v-click>
+
+2. **Generative UI** - each app becomes a platform <a href="https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/" target="_blank" class="text-xs">ref</a>
 
 </div>
-<div>
-  <img src="/images/sc-1.png" class="h-72 slide-img" />
+
+<div v-click>
+
+3. **Self-driving SaaS** - software builds itself <a href="https://linear.app/now/self-driving-saas" target="_blank" class="text-xs">ref</a>
+
 </div>
+
+<div v-click>
+
+4. **Product building = multiplayer RTS**
+
+</div>
+
+<div v-click>
+
+**Everyone can build!**
+
+</div>
+
+</div>
+
+<div>
+  <img v-if="$slidev.nav.clicks === 0" src="/images/atl-1.png" class="h-72 slide-img" />
+  <img v-if="$slidev.nav.clicks === 1" src="/images/gui-1.png" class="h-72 slide-img" />
+  <img v-if="$slidev.nav.clicks === 2" src="/images/linear-2.png" class="h-72 slide-img" />
+  <img v-if="$slidev.nav.clicks >= 3" src="/images/sc-1.png" class="h-72 slide-img" />
+</div>
+
 </div>
 
 ---
@@ -370,6 +395,3 @@ If you ever have an idea and are part of a catalyst session with AXL, you may be
 
 </div>
 
----
-
-# Questions?
