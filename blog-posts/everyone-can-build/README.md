@@ -90,3 +90,65 @@ While an agent is a set of those static business processes where each one is uni
 - Those who can steer agents best - the new superpower
 
 The skill: knowing what to ask and when to course-correct
+
+7. Glimpses of the Future - Product Builders
+
+SWE, PM, ML → Agent Tech Leads. The role is shifting! Engineers become orchestrators of AI agents, product managers define agent behavior specs, and ML engineers tune agent capabilities. The new job title emerging: Agent Tech Lead - someone who can steer multiple coding agents to deliver features.
+
+[atl-1.png]
+
+https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/
+
+8. Glimpses of the Future - Generative UI
+
+Each app becomes a platform! Instead of static interfaces, apps will generate custom UIs on the fly based on user needs. Google's research shows how prompts can create rich, custom, visual, interactive user experiences. No more one-size-fits-all interfaces - every user gets their own tailored experience.
+
+[gui-1.png]
+
+https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/
+
+9. Glimpses of the Future - Self-Driving SaaS
+
+Software builds itself! Linear is pioneering this with their self-driving approach - the software understands what needs to be done and executes autonomously. Imagine SaaS products that don't just run your business, but improve themselves, fix bugs, and add features based on your usage patterns.
+
+[linear-2.png]
+
+https://linear.app/now/self-driving-saas
+
+10. Glimpses of the Future - Product Building = Multiplayer RTS
+
+Building products now feels like playing a real-time strategy game! You're the commander, agents are your units. You allocate resources (context, prompts), deploy agents to different fronts (features, bugs, tests), and coordinate the attack. The best builders will be those who master this multiplayer orchestration.
+
+[sc-1.png]
+
+11. Glimpses of the Future - Cloud Agent SDK Explosion
+
+Every major cloud provider is shipping agent SDKs! Anthropic's Claude Agent SDK, OpenAI's Agents API, Google's Agent Development Kit, AWS Bedrock Agents. This is the new cloud wars battleground. Just like we had the container/kubernetes explosion, we're now seeing the agent SDK explosion. The primitives are being built right now.
+
+[claude-1.png]
+
+https://www.youtube.com/watch?v=TqC1qOfiVcQ
+
+
+12. Where to Start
+
+If you are non-technical but want to build, where to start? There are 3 tiers!
+
+Tier 1. Prototype & Vision
+
+<>
+
+Tier 2. More Impact
+
+<>
+
+Tier 3. Direct Contributing
+
+<> 
+
+[tiers-1.png]
+
+And remember, everyone can build!
+
+
+13. Actual blog post! 
