@@ -17,14 +17,9 @@ Grady X: https://x.com/Grady_Booch/status/2013331606795362398
 https://claude.com/download
 
 
-
-https://simonwillison.net/2026/Jan/19/scaling-long-running-autonomous-coding/
-https://simonwillison.net/2026/Jan/12/claude-cowork/
-https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
-https://blog.silennai.com/claude-code
-https://www.oneusefulthing.org/p/claude-code-and-what-comes-next
-
 ## Blog: 
+
+### Context: 
 
 1. Everyone Can Build 
 
@@ -73,6 +68,8 @@ Animations:
 
 Which makes me 100x more bullish on software and code! 
 
+### Why is this happenng
+
 5. Intuitive Way of Understanding Agents 
 
 One of the most intuitive ways to understand agents is to visualize it in comparison to a simple business process. Everyone is familiar with those: step 1, step 2, step 3. No matter what the input is, you already run it through the same 3 steps. It's very reliable and predictable but at the same time limited, because, well, it's static. Kind of a one-size-fits-all solution. 
@@ -98,6 +95,8 @@ SWE, PM, ML → Agent Tech Leads. The role is shifting! Engineers become orchest
 [atl-1.png]
 
 https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/
+
+### Glimpses of the Future
 
 8. Glimpses of the Future - Generative UI
 
@@ -130,6 +129,8 @@ Every major cloud provider is shipping agent SDKs! Anthropic's Claude Agent SDK,
 https://www.youtube.com/watch?v=TqC1qOfiVcQ
 
 
+### Where to start!
+
 12. Where to Start
 
 If you are non-technical but want to build, where to start? There are 3 tiers!
@@ -152,3 +153,18 @@ And remember, everyone can build!
 
 
 13. Actual blog post! 
+
+
+## Reading list: 
+
+https://builders.ramp.com/post/why-we-built-our-background-agent
+https://www.benedict.dev/closing-the-software-loop
+https://www.greptile.com/blog/ai-code-review-bubble
+https://openai.com/index/unrolling-the-codex-agent-loop/
+https://zed.dev/blog/on-programming-with-agents
+
+https://simonwillison.net/2026/Jan/19/scaling-long-running-autonomous-coding/
+https://simonwillison.net/2026/Jan/12/claude-cowork/
+https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+https://blog.silennai.com/claude-code
+https://www.oneusefulthing.org/p/claude-code-and-what-comes-next
