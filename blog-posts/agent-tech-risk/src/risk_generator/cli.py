@@ -1,6 +1,6 @@
+"""Risk Generator CLI - 4 commands: generate, deploy, create, config."""
 import random
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -9,29 +9,17 @@ from rich.table import Table
 from risk_generator.categories import RISK_CATEGORIES, list_categories
 from risk_generator.models import PROFILE_PRESETS
 from risk_generator.generator import generate_case_sync
-from risk_generator.deployer import deploy_case, reset_localstack, verify_deployment
+from risk_generator.deployer import deploy_to_localstack
 
-app = typer.Typer(help="AWS Risk Case Generator for PE Due Diligence")
+app = typer.Typer(help="AWS Risk Case Generator")
 console = Console()
 
 
 @app.command()
 def generate(
-    profile: str = typer.Option(
-        "medium_saas",
-        "--profile", "-p",
-        help="Company profile preset (small_fintech, medium_saas, large_healthtech)",
-    ),
-    risks: str = typer.Option(
-        ...,
-        "--risks", "-r",
-        help="Comma-separated risk categories (e.g., tr1,tr7,tr13)",
-    ),
-    output: str = typer.Option(
-        "cases/case_001",
-        "--output", "-o",
-        help="Output directory for generated case",
-    ),
+    profile: str = typer.Option("medium_saas", "--profile", "-p", help="Company profile"),
+    risks: str = typer.Option(..., "--risks", "-r", help="Risk categories (e.g., tr1,tr7)"),
+    output: str = typer.Option("cases/case_001", "--output", "-o", help="Output directory"),
 ):
     """Generate a risk case using Claude Code."""
     if profile not in PROFILE_PRESETS:
@@ -42,173 +30,151 @@ def generate(
     risk_codes = [r.strip() for r in risks.split(",")]
     for code in risk_codes:
         if code not in RISK_CATEGORIES:
-            console.print(f"[red]Unknown risk category: {code}[/red]")
-            console.print(f"Available: {', '.join(RISK_CATEGORIES.keys())}")
+            console.print(f"[red]Unknown risk: {code}[/red]")
             raise typer.Exit(1)
 
     output_path = Path(output)
-    console.print(f"[blue]Generating case with profile={profile}, risks={risk_codes}[/blue]")
-    console.print(f"[blue]Output: {output_path}[/blue]")
+    console.print(f"[blue]Generating case: profile={profile}, risks={risk_codes}[/blue]")
 
     try:
-        generate_case_sync(profile, risk_codes, output_path)
-        console.print(f"[green]✓ Case generated at {output_path}[/green]")
+        stats = generate_case_sync(profile, risk_codes, output_path)
+        console.print(f"[green]✓ Generated at {output_path}[/green]")
+        if stats.get("duration_ms"):
+            console.print(f"  Duration: {stats['duration_ms'] / 1000:.1f}s")
+        if stats.get("cost"):
+            console.print(f"  Cost: ${stats['cost']:.4f}")
     except Exception as e:
         console.print(f"[red]Error: {e}[/red]")
         raise typer.Exit(1)
-
-
-@app.command()
-def batch(
-    count: int = typer.Option(5, "--count", "-n", help="Number of cases to generate"),
-    output_dir: str = typer.Option("cases", "--output", "-o", help="Base output directory"),
-):
-    """Generate multiple random cases."""
-    profiles = list(PROFILE_PRESETS.keys())
-    risk_codes = list(RISK_CATEGORIES.keys())
-
-    for i in range(count):
-        profile = random.choice(profiles)
-        num_risks = random.randint(2, 4)
-        risks = random.sample(risk_codes, num_risks)
-
-        case_id = f"case_{i+1:03d}"
-        output_path = Path(output_dir) / case_id
-
-        console.print(f"\n[blue]Generating {case_id}: {profile} with {risks}[/blue]")
-
-        try:
-            generate_case_sync(profile, risks, output_path)
-            console.print(f"[green]✓ {case_id} complete[/green]")
-        except Exception as e:
-            console.print(f"[red]✗ {case_id} failed: {e}[/red]")
 
 
 @app.command()
 def deploy(
     case: str = typer.Argument(..., help="Path to case directory"),
-    verify: bool = typer.Option(False, "--verify", "-v", help="Verify deployment after"),
+    port: int = typer.Option(None, "--port", "-p", help="LocalStack port (random if not set)"),
+    keep: bool = typer.Option(False, "--keep", "-k", help="Keep LocalStack running"),
 ):
     """Deploy a case to LocalStack."""
     case_path = Path(case)
     if not case_path.exists():
-        console.print(f"[red]Case directory not found: {case}[/red]")
+        console.print(f"[red]Case not found: {case}[/red]")
         raise typer.Exit(1)
 
-    console.print(f"[blue]Deploying {case} to LocalStack...[/blue]")
-
     try:
-        results = deploy_case(case_path)
+        result = deploy_to_localstack(case_path, port=port, keep_running=keep)
         
-        console.print(f"[green]✓ Deployed {len(results['deployed'])} resources[/green]")
-        for resource in results["deployed"]:
-            console.print(f"  [green]✓[/green] {resource}")
+        console.print(f"[green]✓ Deployed {result['deployed_count']} resources[/green]")
+        for r in result["deployed"][:10]:
+            console.print(f"  [green]✓[/green] {r}")
+        if result["deployed_count"] > 10:
+            console.print(f"  ... and {result['deployed_count'] - 10} more")
         
-        if results["failed"]:
-            console.print(f"[yellow]⚠ {len(results['failed'])} failed[/yellow]")
-            for resource in results["failed"][:5]:
-                console.print(f"  [yellow]✗[/yellow] {resource}")
-
-        if verify:
-            from .deployer import verify_deployment as verify_fn
-            counts = verify_fn()
-            console.print(f"[blue]LocalStack state:[/blue]")
-            for k, v in counts.items():
-                console.print(f"  {k}: {v}")
+        if result["skipped"]:
+            console.print(f"[dim]⊘ {len(result['skipped'])} resources skipped (Pro required)[/dim]")
+        
+        if result["failed"]:
+            console.print(f"[yellow]⚠ {len(result['failed'])} failed[/yellow]")
+        
+        if result.get("risks"):
+            r = result["risks"]
+            console.print(f"[blue]Risks: {r['active_count']}/{r['original_count']} active[/blue]")
+        
+        if keep:
+            console.print(f"\n[blue]Endpoint: {result['endpoint']}[/blue]")
+            console.print(f"[yellow]Stop with: docker rm -f {result['container_id']}[/yellow]")
     except Exception as e:
         console.print(f"[red]Error: {e}[/red]")
         raise typer.Exit(1)
 
 
 @app.command()
-def reset():
-    """Reset LocalStack (remove all resources)."""
-    console.print("[yellow]Resetting LocalStack...[/yellow]")
+def create(
+    profile: str = typer.Option(None, "--profile", "-p", help="Company profile (random if not set)"),
+    risks: str = typer.Option(None, "--risks", "-r", help="Risk categories (random if not set)"),
+    output: str = typer.Option(None, "--output", "-o", help="Output directory (auto-generated if not set)"),
+):
+    """Generate a case and validate deployment."""
+    # Defaults
+    if profile is None:
+        profile = random.choice(list(PROFILE_PRESETS.keys()))
+    
+    # Filter to LocalStack-supported risks (exclude RDS-dependent ones)
+    supported_risks = ["tr1", "tr2", "tr3", "tr4", "tr5", "tr6", "tr11", "tr12", "tr13", "tr14", "tr15"]
+    
+    if risks is None:
+        risk_codes = random.sample(supported_risks, random.randint(2, 4))
+    else:
+        risk_codes = [r.strip() for r in risks.split(",")]
+        unsupported = [r for r in risk_codes if r not in supported_risks]
+        if unsupported:
+            console.print(f"[yellow]Note: {unsupported} may not fully deploy (need LocalStack Pro)[/yellow]")
+    
+    if output is None:
+        import time
+        output = f"cases/case_{int(time.time())}"
+    
+    output_path = Path(output)
+    
+    # Step 1: Generate
+    console.print(f"\n[bold]Step 1: Generate[/bold]")
+    console.print(f"  Profile: {profile}, Risks: {risk_codes}")
+    
     try:
-        reset_localstack()
-        console.print("[green]✓ LocalStack reset[/green]")
+        generate_case_sync(profile, risk_codes, output_path)
+        console.print(f"[green]✓ Generated at {output_path}[/green]")
     except Exception as e:
-        console.print(f"[red]Error: {e}[/red]")
+        console.print(f"[red]Generation failed: {e}[/red]")
+        raise typer.Exit(1)
+    
+    # Step 2: Deploy (to validate and update risks.yaml)
+    console.print(f"\n[bold]Step 2: Validate & Update Risks[/bold]")
+    
+    try:
+        result = deploy_to_localstack(output_path, keep_running=False)
+        console.print(f"[green]✓ Validated {result['deployed_count']} resources[/green]")
+        
+        if result["skipped"]:
+            console.print(f"[dim]⊘ {len(result['skipped'])} skipped (Pro required)[/dim]")
+        
+        if result.get("risks"):
+            r = result["risks"]
+            console.print(f"[green]✓ Risks updated: {r['active_count']}/{r['original_count']} active[/green]")
+        
+        console.print(f"\n[bold]Case ready at: {output_path}[/bold]")
+    except Exception as e:
+        console.print(f"[red]Validation failed: {e}[/red]")
         raise typer.Exit(1)
 
 
 @app.command()
-def categories():
-    """List all risk categories."""
-    table = Table(title="Risk Categories")
-    table.add_column("Code", style="cyan")
-    table.add_column("Name", style="green")
-    table.add_column("Description")
-    table.add_column("AWS Resources", style="dim")
-
-    for cat in list_categories():
-        table.add_row(
-            cat.code,
-            cat.name,
-            cat.description,
-            ", ".join(cat.aws_resources[:3]),
-        )
-
-    console.print(table)
-
-
-@app.command("list")
-def list_resources():
-    """List all resources in LocalStack."""
-    from .deployer import get_client
+def config():
+    """Show current configuration."""
+    import os
+    from risk_generator.generator import USE_BEDROCK, BEDROCK_MODEL, BEDROCK_REGION
     
-    console.print("[blue]LocalStack Resources:[/blue]\n")
+    console.print("[bold]Configuration[/bold]\n")
     
-    try:
-        s3 = get_client("s3")
-        buckets = s3.list_buckets()["Buckets"]
-        console.print(f"[green]S3 Buckets ({len(buckets)}):[/green]")
-        for b in buckets:
-            console.print(f"  - {b['Name']}")
-    except Exception as e:
-        console.print(f"[red]S3 error: {e}[/red]")
+    # Bedrock status
+    if USE_BEDROCK:
+        console.print("[green]✓ Bedrock enabled[/green]")
+        console.print(f"  Model: {BEDROCK_MODEL}")
+        console.print(f"  Region: {BEDROCK_REGION}")
+        token = os.getenv("AWS_BEARER_TOKEN_BEDROCK", "")
+        if token:
+            console.print(f"  Token: {token[:20]}...{token[-10:]}")
+    else:
+        console.print("[yellow]⚠ Using Anthropic API[/yellow]")
     
-    try:
-        iam = get_client("iam")
-        roles = iam.list_roles()["Roles"]
-        console.print(f"\n[green]IAM Roles ({len(roles)}):[/green]")
-        for r in roles:
-            console.print(f"  - {r['RoleName']}")
-    except Exception as e:
-        console.print(f"[red]IAM error: {e}[/red]")
+    # Profiles
+    console.print("\n[bold]Profiles[/bold]")
+    for name, p in PROFILE_PRESETS.items():
+        console.print(f"  {name}: {p.name} ({p.size}, {p.domain})")
     
-    try:
-        ec2 = get_client("ec2")
-        sgs = ec2.describe_security_groups()["SecurityGroups"]
-        console.print(f"\n[green]Security Groups ({len(sgs)}):[/green]")
-        for sg in sgs:
-            console.print(f"  - {sg['GroupName']}")
-    except Exception as e:
-        console.print(f"[red]EC2 error: {e}[/red]")
-
-
-@app.command()
-def profiles():
-    """List available company profiles."""
-    table = Table(title="Company Profiles")
-    table.add_column("Preset", style="cyan")
-    table.add_column("Name", style="green")
-    table.add_column("Domain")
-    table.add_column("Size")
-    table.add_column("AWS Accounts")
-    table.add_column("K8s")
-
-    for preset, profile in PROFILE_PRESETS.items():
-        table.add_row(
-            preset,
-            profile.name,
-            profile.domain,
-            profile.size,
-            str(profile.aws_accounts),
-            "✓" if profile.has_kubernetes else "✗",
-        )
-
-    console.print(table)
+    # Risk categories
+    console.print(f"\n[bold]Risk Categories[/bold] ({len(RISK_CATEGORIES)} total)")
+    for code, cat in list(RISK_CATEGORIES.items())[:5]:
+        console.print(f"  {code}: {cat.name}")
+    console.print("  ...")
 
 
 def main():

@@ -76,8 +76,8 @@ So to repease the full cycle looks like this:
 To generate new cases use: 
 
 ```
-uv add risk_generator
-uv run risk_generator --case
+uv add risk-generator
+uv run risk-generator creat
 ```
 
 But what about the Agent? Glad you asked!
@@ -125,3 +125,11 @@ Structure:
 - Non-Tech: Problem + Solutions (including your service).
 - Tech: Dimensions → AWS Focus → Dataset Gen → Agent Build → Eval Cycle → Results.
 - CTA: Open-source links + Contact page.
+
+
+### List of small posts: 
+
+
+- Agent to find risks 
+- Localstack
+- ClaudCDK

@@ -1,0 +1,438 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "arn": "arn:aws:iam::567890123456:role/PayFlowAPIRole",
+        "name": "PayFlowAPIRole",
+        "assume_role_policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "attached_policies": ["arn:aws:iam::567890123456:policy/PayFlowAPIPolicy"]
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:role/PayFlowDevRole",
+        "name": "PayFlowDevRole",
+        "assume_role_policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "attached_policies": ["arn:aws:iam::567890123456:policy/DeveloperFullAccess"]
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:role/PayFlowLambdaRole",
+        "name": "PayFlowLambdaRole",
+        "assume_role_policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "attached_policies": ["arn:aws:iam::567890123456:policy/LambdaExecutionPolicy"]
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:role/PayFlowDataRole",
+        "name": "PayFlowDataRole",
+        "assume_role_policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "attached_policies": ["arn:aws:iam::567890123456:policy/DataProcessingPolicy"]
+      }
+    ],
+    "policies": [
+      {
+        "arn": "arn:aws:iam::567890123456:policy/PayFlowAPIPolicy",
+        "name": "PayFlowAPIPolicy",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::payflow-api-data/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "rds:DescribeDBInstances",
+                "rds:Connect"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:policy/DeveloperFullAccess",
+        "name": "DeveloperFullAccess",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:policy/LambdaExecutionPolicy",
+        "name": "LambdaExecutionPolicy",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:policy/DataProcessingPolicy",
+        "name": "DataProcessingPolicy",
+        "policy_document": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*",
+                "rds:*",
+                "dynamodb:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "arn": "arn:aws:iam::567890123456:user/john.doe",
+        "name": "john.doe",
+        "attached_policies": ["arn:aws:iam::aws:policy/PowerUserAccess"]
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:user/sarah.chen",
+        "name": "sarah.chen",
+        "attached_policies": ["arn:aws:iam::567890123456:policy/DeveloperFullAccess"]
+      },
+      {
+        "arn": "arn:aws:iam::567890123456:user/mike.wilson",
+        "name": "mike.wilson",
+        "attached_policies": ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "name": "payflow-api-data",
+        "region": "us-east-1",
+        "versioning": "Enabled",
+        "encryption": "AES256",
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        }
+      },
+      {
+        "name": "payflow-backups",
+        "region": "us-east-1",
+        "versioning": "Enabled",
+        "encryption": "SSE-S3",
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        }
+      },
+      {
+        "name": "payflow-logs",
+        "region": "us-east-1",
+        "versioning": "Suspended",
+        "encryption": "None",
+        "public_access_block": {
+          "block_public_acls": true,
+          "ignore_public_acls": true,
+          "block_public_policy": true,
+          "restrict_public_buckets": true
+        }
+      },
+      {
+        "name": "payflow-static-assets",
+        "region": "us-east-1",
+        "versioning": "Suspended",
+        "encryption": "None",
+        "public_access_block": {
+          "block_public_acls": false,
+          "ignore_public_acls": false,
+          "block_public_policy": false,
+          "restrict_public_buckets": false
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "instance_id": "i-0123456789abcdef0",
+        "instance_type": "t3.large",
+        "state": "running",
+        "vpc_id": "vpc-12345678",
+        "subnet_id": "subnet-12345678",
+        "security_groups": ["sg-12345678"],
+        "tags": {
+          "Name": "PayFlow-API-Server",
+          "Environment": "production",
+          "Team": "backend"
+        }
+      },
+      {
+        "instance_id": "i-0fedcba987654321",
+        "instance_type": "t3.medium",
+        "state": "running",
+        "vpc_id": "vpc-12345678",
+        "subnet_id": "subnet-87654321",
+        "security_groups": ["sg-87654321"],
+        "tags": {
+          "Name": "PayFlow-Web-Server",
+          "Environment": "production",
+          "Team": "frontend"
+        }
+      },
+      {
+        "instance_id": "i-0abcd1234efgh567",
+        "instance_type": "t3.small",
+        "state": "running",
+        "vpc_id": "vpc-87654321",
+        "subnet_id": "subnet-dev12345",
+        "security_groups": ["sg-dev12345"],
+        "tags": {
+          "Name": "PayFlow-Dev-Server",
+          "Environment": "development",
+          "Team": "engineering"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "group_id": "sg-12345678",
+        "group_name": "payflow-api-sg",
+        "vpc_id": "vpc-12345678",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 443,
+            "to_port": 443,
+            "cidr_blocks": ["0.0.0.0/0"]
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 80,
+            "to_port": 80,
+            "cidr_blocks": ["0.0.0.0/0"]
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 22,
+            "to_port": 22,
+            "cidr_blocks": ["10.0.0.0/8"]
+          }
+        ]
+      },
+      {
+        "group_id": "sg-87654321",
+        "group_name": "payflow-web-sg",
+        "vpc_id": "vpc-12345678",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 443,
+            "to_port": 443,
+            "cidr_blocks": ["0.0.0.0/0"]
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 80,
+            "to_port": 80,
+            "cidr_blocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "group_id": "sg-dev12345",
+        "group_name": "payflow-dev-sg",
+        "vpc_id": "vpc-87654321",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 22,
+            "to_port": 22,
+            "cidr_blocks": ["0.0.0.0/0"]
+          },
+          {
+            "ip_protocol": "tcp",
+            "from_port": 8080,
+            "to_port": 8080,
+            "cidr_blocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "group_id": "sg-rds12345",
+        "group_name": "payflow-rds-sg",
+        "vpc_id": "vpc-12345678",
+        "ingress_rules": [
+          {
+            "ip_protocol": "tcp",
+            "from_port": 5432,
+            "to_port": 5432,
+            "cidr_blocks": ["0.0.0.0/0"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "vpc_id": "vpc-12345678",
+        "cidr_block": "10.0.0.0/16",
+        "state": "available",
+        "tags": {
+          "Name": "PayFlow-Production-VPC"
+        }
+      },
+      {
+        "vpc_id": "vpc-87654321",
+        "cidr_block": "10.1.0.0/16",
+        "state": "available",
+        "tags": {
+          "Name": "PayFlow-Development-VPC"
+        }
+      }
+    ]
+  },
+  "rds": {
+    "instances": [
+      {
+        "db_instance_identifier": "payflow-prod-db",
+        "db_instance_class": "db.t3.medium",
+        "engine": "postgres",
+        "engine_version": "13.7",
+        "publicly_accessible": true,
+        "vpc_id": "vpc-12345678",
+        "db_subnet_group_name": "payflow-prod-subnet-group",
+        "vpc_security_groups": ["sg-rds12345"],
+        "tags": {
+          "Name": "PayFlow-Production-DB",
+          "Environment": "production"
+        }
+      },
+      {
+        "db_instance_identifier": "payflow-dev-db",
+        "db_instance_class": "db.t3.small",
+        "engine": "postgres",
+        "engine_version": "13.7",
+        "publicly_accessible": false,
+        "vpc_id": "vpc-87654321",
+        "db_subnet_group_name": "payflow-dev-subnet-group",
+        "vpc_security_groups": ["sg-rds12345"],
+        "tags": {
+          "Name": "PayFlow-Development-DB",
+          "Environment": "development"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "function_name": "payflow-payment-processor",
+        "runtime": "python3.9",
+        "role": "arn:aws:iam::567890123456:role/PayFlowLambdaRole",
+        "timeout": 30,
+        "memory_size": 256,
+        "environment_variables": {
+          "DB_HOST": "payflow-prod-db.cluster-xyz.us-east-1.rds.amazonaws.com",
+          "S3_BUCKET": "payflow-api-data"
+        }
+      },
+      {
+        "function_name": "payflow-data-sync",
+        "runtime": "python3.9",
+        "role": "arn:aws:iam::567890123456:role/PayFlowDataRole",
+        "timeout": 300,
+        "memory_size": 512,
+        "environment_variables": {
+          "SOURCE_BUCKET": "payflow-api-data",
+          "DEST_BUCKET": "payflow-backups"
+        }
+      },
+      {
+        "function_name": "payflow-webhook-handler",
+        "runtime": "nodejs18.x",
+        "role": "arn:aws:iam::567890123456:role/PayFlowLambdaRole",
+        "timeout": 15,
+        "memory_size": 128,
+        "environment_variables": {
+          "API_ENDPOINT": "https://api.payflow.com"
+        }
+      }
+    ]
+  },
+  "eks": {
+    "clusters": [],
+    "node_groups": []
+  }
+}

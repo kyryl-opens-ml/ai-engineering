@@ -1,4 +1,6 @@
+"""Generate risk cases using Claude Agent SDK."""
 import asyncio
+import os
 from pathlib import Path
 
 import yaml
@@ -8,6 +10,11 @@ from risk_generator.models import CompanyProfile, PROFILE_PRESETS
 from risk_generator.categories import RISK_CATEGORIES, get_category
 
 load_dotenv()
+
+# Bedrock configuration
+BEDROCK_MODEL = "us.anthropic.claude-sonnet-4-20250514-v1:0"
+BEDROCK_REGION = "us-east-2"
+USE_BEDROCK = bool(os.getenv("AWS_BEARER_TOKEN_BEDROCK"))
 
 
 PROMPT_TEMPLATE = """
@@ -25,7 +32,7 @@ Include the specified risks but make them look organic - things that happen
 in real companies, not obviously broken. Each risk should have a plausible 
 business reason for existing.
 
-Write these files in the current directory:
+Write exactly these 4 files (use these exact filenames, no directory prefix):
 
 1. **aws_state.json** - Full AWS state snapshot with this structure:
 ```json
@@ -79,10 +86,13 @@ Write these files in the current directory:
 - Include a table at the bottom listing all risks
 
 Make it realistic for a {size} company with {engineers} engineers.
+
+IMPORTANT: Write files as "aws_state.json", "risks.yaml", "narrative.md", "diagram.md" (no path prefix).
 """
 
 
 def build_prompt(profile: CompanyProfile, risk_codes: list[str]) -> str:
+    """Build the generation prompt."""
     size_map = {"small": "50", "medium": "150", "large": "300+"}
     engineers = size_map[profile.size]
 
@@ -114,51 +124,74 @@ async def generate_case_async(
     profile: CompanyProfile | str,
     risk_codes: list[str],
     output_dir: Path,
-) -> None:
-    from claude_agent_sdk import query, ClaudeAgentOptions
+) -> dict:
+    """Generate a risk case using Claude Agent SDK."""
+    from claude_agent_sdk import query, ClaudeAgentOptions, ResultMessage, AssistantMessage, ToolUseBlock
 
+    # Resolve profile
     if isinstance(profile, str):
         if profile not in PROFILE_PRESETS:
-            raise ValueError(f"Unknown profile preset: {profile}")
+            raise ValueError(f"Unknown profile: {profile}")
         profile = PROFILE_PRESETS[profile]
 
+    # Validate risks
     for code in risk_codes:
         if code not in RISK_CATEGORIES:
-            raise ValueError(f"Unknown risk category: {code}")
+            raise ValueError(f"Unknown risk: {code}")
 
     output_dir = output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    profile_data = {
-        "name": profile.name,
-        "domain": profile.domain,
-        "size": profile.size,
-        "aws_accounts": profile.aws_accounts,
-        "has_kubernetes": profile.has_kubernetes,
-        "risk_categories": risk_codes,
-    }
+    # Save profile metadata
     with open(output_dir / "profile.yaml", "w") as f:
-        yaml.dump(profile_data, f, default_flow_style=False)
+        yaml.dump({
+            "name": profile.name,
+            "domain": profile.domain,
+            "size": profile.size,
+            "aws_accounts": profile.aws_accounts,
+            "has_kubernetes": profile.has_kubernetes,
+            "risk_categories": risk_codes,
+        }, f, default_flow_style=False)
 
-    prompt = build_prompt(profile, risk_codes)
+    # Configure SDK options
+    options_kwargs = {
+        "allowed_tools": ["Write"],
+        "cwd": str(output_dir),
+        "permission_mode": "bypassPermissions",
+        "max_turns": 20,
+    }
+    
+    if USE_BEDROCK:
+        os.environ["CLAUDE_CODE_USE_BEDROCK"] = "1"
+        os.environ["AWS_REGION"] = BEDROCK_REGION
+        options_kwargs["model"] = BEDROCK_MODEL
+        print(f"[bedrock] model={BEDROCK_MODEL}, region={BEDROCK_REGION}")
 
-    async for message in query(
-        prompt=prompt,
-        options=ClaudeAgentOptions(
-            allowed_tools=["Write"],
-            cwd=str(output_dir),
-            permission_mode="bypassPermissions",
-        ),
-    ):
-        if hasattr(message, "result"):
-            print(message.result)
-        elif hasattr(message, "content"):
-            print(message.content)
+    # Track stats
+    stats = {"files_written": [], "cost": None, "tokens": None, "duration_ms": None}
+
+    async for message in query(prompt=build_prompt(profile, risk_codes), options=ClaudeAgentOptions(**options_kwargs)):
+        if isinstance(message, AssistantMessage):
+            for block in message.content:
+                if isinstance(block, ToolUseBlock) and block.name == "Write":
+                    path = block.input.get("file_path", "")
+                    stats["files_written"].append(path)
+                    print(f"[write] {path}")
+        
+        if isinstance(message, ResultMessage):
+            stats["cost"] = message.total_cost_usd
+            stats["tokens"] = message.usage
+            stats["duration_ms"] = message.duration_ms
+            if message.is_error:
+                print(f"[error] {message.result}")
+    
+    return stats
 
 
 def generate_case_sync(
     profile: CompanyProfile | str,
     risk_codes: list[str],
     output_dir: Path,
-) -> None:
-    asyncio.run(generate_case_async(profile, risk_codes, output_dir))
+) -> dict:
+    """Sync wrapper for generate_case_async."""
+    return asyncio.run(generate_case_async(profile, risk_codes, output_dir))
