@@ -1,5 +1,7 @@
+"""Risk Discovery CLI - Find technical risks in AWS infrastructure."""
 from pathlib import Path
 
+import yaml
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
@@ -7,228 +9,171 @@ from rich.table import Table
 
 load_dotenv()
 
-app = typer.Typer(help="AWS Risk Finder - Detect technical risks in AWS infrastructure")
+app = typer.Typer(help="AWS Risk Discovery - Detect technical risks")
 console = Console()
 
-DEFAULT_MODEL = "gateway/anthropic:claude-sonnet-4-5-20250929"
-
-BENCHMARK_MODELS = [
-    "gateway/openai:gpt-5.2-2025-12-11",
-    "gateway/openai:gpt-5-mini-2025-08-07",
-    "gateway/openai:gpt-5-nano-2025-08-07",
-    "gateway/anthropic:claude-haiku-4-5-20251001",
-    "gateway/anthropic:claude-sonnet-4-5-20250929",
-    "gateway/google-vertex:gemini-3-pro-preview",
-    "gateway/google-vertex:gemini-3-flash-preview",
-    "gateway/groq:openai/gpt-oss-120b",
-    "gateway/groq:openai/gpt-oss-20b",
-]
+DEFAULT_MODEL = "anthropic:claude-sonnet-4-20250514"
 
 
-@app.command()
-def scan(
-    model: str = typer.Option(DEFAULT_MODEL, "--model", "-m", help="LLM model to use"),
-):
-    """Scan the current AWS environment for technical risks.
-
-    Uses AWS_ENDPOINT_URL environment variable for LocalStack.
-    """
-    from risk_finder.agent import scan_aws
-
-    console.print(f"[blue]Scanning AWS environment with {model}...[/blue]")
-
-    try:
-        result = scan_aws(model)
-
-        console.print(f"\n[green]Scan complete![/green]")
-        console.print(f"Resources scanned: {result.resources_scanned}")
-        console.print(f"Findings: {len(result.findings)}\n")
-
-        if result.findings:
-            table = Table(title="Risk Findings")
-            table.add_column("Severity", style="bold")
-            table.add_column("Category")
-            table.add_column("Resource")
-            table.add_column("Title")
-
-            for finding in result.findings:
-                severity_style = {
-                    "critical": "bold red",
-                    "high": "bold orange3",
-                    "medium": "bold yellow",
-                    "low": "dim",
-                }.get(finding.severity, "white")
-
-                table.add_row(
-                    f"[{severity_style}]{finding.severity.upper()}[/{severity_style}]",
-                    finding.category,
-                    finding.resource_arn[:50] + "..." if len(finding.resource_arn) > 50 else finding.resource_arn,
-                    finding.title,
-                )
-
-            console.print(table)
-        else:
-            console.print("[green]No technical risks found.[/green]")
-
-    except Exception as e:
-        console.print(f"[red]Error: {e}[/red]")
-        raise typer.Exit(1)
+def load_ground_truth(case_path: Path) -> list[dict]:
+    """Load expected risks from risks.yaml."""
+    risks_file = case_path / "risks.yaml"
+    if not risks_file.exists():
+        return []
+    
+    data = yaml.safe_load(risks_file.read_text())
+    if isinstance(data, dict) and "risks" in data:
+        return [r for r in data["risks"] if r.get("_status") != "skipped"]
+    elif isinstance(data, list):
+        return data
+    return []
 
 
-@app.command("eval")
-def evaluate(
-    cases: Path = typer.Option("./cases", "--cases", "-c", help="Path to cases directory"),
-    max_concurrency: int = typer.Option(1, "--concurrency", "-n", help="Max concurrent evaluations"),
-    model: str = typer.Option(DEFAULT_MODEL, "--model", "-m", help="LLM model to use"),
-):
-    """Evaluate the risk finder agent against test cases.
-
-    Each case is run in an isolated LocalStack container.
-    """
-    from risk_finder.eval.dataset import build_dataset, create_scan_task
-
-    if not cases.exists():
-        console.print(f"[red]Cases directory not found: {cases}[/red]")
-        raise typer.Exit(1)
-
-    console.print(f"[blue]Building evaluation dataset from {cases}...[/blue]")
-    console.print(f"[blue]Using model: {model}[/blue]")
-
-    dataset = build_dataset(cases)
-    console.print(f"Found {len(dataset.cases)} cases\n")
-
-    if not dataset.cases:
-        console.print("[yellow]No valid cases found.[/yellow]")
-        raise typer.Exit(0)
-
-    console.print("[blue]Running evaluation (this may take a while)...[/blue]\n")
-
-    try:
-        scan_task = create_scan_task(model)
-        report = dataset.evaluate_sync(
-            task=scan_task,
-            name="risk_finder",
-            max_concurrency=max_concurrency,
-            progress=True,
-        )
-
-        report.print()
-
-    except Exception as e:
-        console.print(f"[red]Evaluation error: {e}[/red]")
-        raise typer.Exit(1)
+def calculate_metrics(findings: list, ground_truth: list) -> dict:
+    """Calculate recall and precision by category."""
+    # Group ground truth by category
+    expected_by_cat = {}
+    for r in ground_truth:
+        cat = r.get("category", "")
+        expected_by_cat[cat] = expected_by_cat.get(cat, 0) + 1
+    
+    # Group findings by category
+    found_by_cat = {}
+    for f in findings:
+        cat = f.category
+        found_by_cat[cat] = found_by_cat.get(cat, 0) + 1
+    
+    # Calculate matches (category-level)
+    all_categories = set(expected_by_cat.keys()) | set(found_by_cat.keys())
+    
+    true_positives = 0
+    for cat in all_categories:
+        expected = expected_by_cat.get(cat, 0)
+        found = found_by_cat.get(cat, 0)
+        true_positives += min(expected, found)
+    
+    total_expected = sum(expected_by_cat.values())
+    total_found = len(findings)
+    
+    recall = true_positives / total_expected if total_expected > 0 else 0
+    precision = true_positives / total_found if total_found > 0 else 0
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+    
+    return {
+        "expected": total_expected,
+        "found": total_found,
+        "matched": true_positives,
+        "recall": recall,
+        "precision": precision,
+        "f1": f1,
+        "expected_by_cat": expected_by_cat,
+        "found_by_cat": found_by_cat,
+    }
 
 
 @app.command()
-def run_case(
-    case_path: Path = typer.Argument(..., help="Path to a single case directory"),
-    model: str = typer.Option(DEFAULT_MODEL, "--model", "-m", help="LLM model to use"),
+def run(
+    case: Path = typer.Argument(..., help="Path to case directory"),
+    model: str = typer.Option(DEFAULT_MODEL, "--model", "-m", help="LLM model"),
+    keep: bool = typer.Option(False, "--keep", "-k", help="Keep LocalStack running"),
 ):
-    """Run risk finder on a single case with isolated LocalStack."""
-    from risk_finder.eval.runner import run_case_in_container
-
-    if not case_path.exists():
-        console.print(f"[red]Case not found: {case_path}[/red]")
+    """Run risk discovery on a case."""
+    from risk_discovery.agent import scan_aws
+    from risk_generator.deployer import deploy_to_localstack
+    
+    if not case.exists():
+        console.print(f"[red]Case not found: {case}[/red]")
         raise typer.Exit(1)
-
-    console.print(f"[blue]Running case: {case_path.name}[/blue]")
-    console.print(f"[blue]Using model: {model}[/blue]")
-
+    
+    console.print(f"[bold]Case: {case}[/bold]")
+    console.print(f"[bold]Model: {model}[/bold]\n")
+    
+    # Step 1: Deploy to LocalStack
+    console.print("[blue]Step 1: Deploy to LocalStack[/blue]")
     try:
-        result = run_case_in_container(case_path, model)
-
-        console.print(f"\n[green]Case complete![/green]")
-        console.print(f"Resources scanned: {result.resources_scanned}")
-        console.print(f"Findings: {len(result.findings)}\n")
-
-        for finding in result.findings:
-            severity_style = {
-                "critical": "bold red",
-                "high": "bold orange3",
-                "medium": "bold yellow",
-                "low": "dim",
-            }.get(finding.severity, "white")
-
-            console.print(f"[{severity_style}][{finding.severity.upper()}][/{severity_style}] {finding.category}: {finding.title}")
-            console.print(f"  Resource: {finding.resource_arn}")
-            console.print(f"  {finding.description}\n")
-
+        deploy_result = deploy_to_localstack(case, keep_running=True)
+        console.print(f"[green]✓ Deployed {deploy_result['deployed_count']} resources[/green]")
+        endpoint = deploy_result["endpoint"]
+        container_id = deploy_result["container_id"]
     except Exception as e:
-        console.print(f"[red]Error: {e}[/red]")
+        console.print(f"[red]Deploy failed: {e}[/red]")
         raise typer.Exit(1)
-
-
-@app.command()
-def benchmark(
-    cases: Path = typer.Option("./cases", "--cases", "-c", help="Path to cases directory"),
-    models: list[str] = typer.Option(None, "--model", "-m", help="Models to benchmark (can specify multiple)"),
-):
-    """Benchmark multiple models against test cases.
-
-    Runs evaluation for each model and compares results.
-    """
-    from risk_finder.eval.dataset import build_dataset, create_scan_task
-
-    if not cases.exists():
-        console.print(f"[red]Cases directory not found: {cases}[/red]")
+    
+    # Step 2: Run agent
+    console.print(f"\n[blue]Step 2: Scan for risks[/blue]")
+    try:
+        result = scan_aws(model, endpoint)
+        console.print(f"[green]✓ Scan complete[/green]")
+        console.print(f"  Resources scanned: {result.resources_scanned}")
+        console.print(f"  Findings: {len(result.findings)}")
+    except Exception as e:
+        console.print(f"[red]Scan failed: {e}[/red]")
+        # Cleanup
+        import subprocess
+        subprocess.run(["docker", "rm", "-f", container_id], capture_output=True)
         raise typer.Exit(1)
-
-    models_to_test = models if models else BENCHMARK_MODELS
-
-    console.print(f"[blue]Building evaluation dataset from {cases}...[/blue]")
-    dataset = build_dataset(cases)
-    console.print(f"Found {len(dataset.cases)} cases\n")
-
-    if not dataset.cases:
-        console.print("[yellow]No valid cases found.[/yellow]")
-        raise typer.Exit(0)
-
-    results = {}
-
-    for model in models_to_test:
-        console.print(f"\n[bold blue]{'='*60}[/bold blue]")
-        console.print(f"[bold blue]Benchmarking: {model}[/bold blue]")
-        console.print(f"[bold blue]{'='*60}[/bold blue]\n")
-
-        try:
-            scan_task = create_scan_task(model)
-            report = dataset.evaluate_sync(
-                task=scan_task,
-                name=f"risk_finder_{model.replace('/', '_').replace(':', '_')}",
-                max_concurrency=1,
-                progress=True,
+    
+    # Step 3: Show findings
+    if result.findings:
+        console.print(f"\n[bold]Findings:[/bold]")
+        table = Table()
+        table.add_column("Severity", style="bold")
+        table.add_column("Category")
+        table.add_column("Resource")
+        table.add_column("Issue")
+        
+        for f in result.findings:
+            style = {"critical": "red", "high": "orange3", "medium": "yellow", "low": "dim"}.get(f.severity, "")
+            table.add_row(
+                f"[{style}]{f.severity.upper()}[/{style}]",
+                f.category,
+                f.resource_arn[:40] + "..." if len(f.resource_arn) > 40 else f.resource_arn,
+                f.title,
             )
-            results[model] = report
-            report.print()
-        except Exception as e:
-            console.print(f"[red]Error with {model}: {e}[/red]")
-            results[model] = None
-
-    console.print(f"\n[bold green]{'='*60}[/bold green]")
-    console.print("[bold green]Benchmark Summary[/bold green]")
-    console.print(f"[bold green]{'='*60}[/bold green]\n")
-
-    summary_table = Table(title="Model Comparison")
-    summary_table.add_column("Model", style="cyan")
-    summary_table.add_column("Cases", justify="right")
-    summary_table.add_column("Avg Duration", justify="right")
-    summary_table.add_column("Status", style="bold")
-
-    for model, report in results.items():
-        if report is None:
-            summary_table.add_row(model, "-", "-", "[red]FAILED[/red]")
-        else:
-            case_count = len(report.cases)
-            total_duration = sum(c.task_duration for c in report.cases if c.task_duration)
-            avg_duration = total_duration / case_count if case_count > 0 else 0
-            summary_table.add_row(
-                model,
-                str(case_count),
-                f"{avg_duration:.1f}s",
-                "[green]OK[/green]",
-            )
-
-    console.print(summary_table)
+        console.print(table)
+    
+    # Step 4: Calculate metrics against ground truth
+    ground_truth = load_ground_truth(case)
+    if ground_truth:
+        metrics = calculate_metrics(result.findings, ground_truth)
+        
+        console.print(f"\n[bold]Evaluation:[/bold]")
+        console.print(f"  Expected risks: {metrics['expected']}")
+        console.print(f"  Found risks: {metrics['found']}")
+        console.print(f"  Matched: {metrics['matched']}")
+        
+        # Color-code metrics
+        recall_style = "green" if metrics["recall"] >= 0.7 else "yellow" if metrics["recall"] >= 0.4 else "red"
+        prec_style = "green" if metrics["precision"] >= 0.7 else "yellow" if metrics["precision"] >= 0.4 else "red"
+        f1_style = "green" if metrics["f1"] >= 0.7 else "yellow" if metrics["f1"] >= 0.4 else "red"
+        
+        console.print(f"\n  [{recall_style}]Recall: {metrics['recall']:.1%}[/{recall_style}]")
+        console.print(f"  [{prec_style}]Precision: {metrics['precision']:.1%}[/{prec_style}]")
+        console.print(f"  [{f1_style}]F1 Score: {metrics['f1']:.1%}[/{f1_style}]")
+        
+        # Show by category
+        console.print(f"\n  By Category (found/expected):")
+        all_cats = set(metrics["expected_by_cat"].keys()) | set(metrics["found_by_cat"].keys())
+        for cat in sorted(all_cats):
+            exp = metrics["expected_by_cat"].get(cat, 0)
+            fnd = metrics["found_by_cat"].get(cat, 0)
+            if exp == 0:
+                console.print(f"    {cat}: {fnd}/0 [dim](false positive)[/dim]")
+            elif fnd == 0:
+                console.print(f"    {cat}: 0/{exp} [red](missed)[/red]")
+            elif fnd >= exp:
+                console.print(f"    {cat}: {fnd}/{exp} [green]✓[/green]")
+            else:
+                console.print(f"    {cat}: {fnd}/{exp} [yellow](partial)[/yellow]")
+    
+    # Cleanup
+    if not keep:
+        import subprocess
+        subprocess.run(["docker", "rm", "-f", container_id], capture_output=True)
+        console.print(f"\n[dim]LocalStack stopped[/dim]")
+    else:
+        console.print(f"\n[yellow]LocalStack running at {endpoint}[/yellow]")
+        console.print(f"[yellow]Stop with: docker rm -f {container_id}[/yellow]")
 
 
 def main():

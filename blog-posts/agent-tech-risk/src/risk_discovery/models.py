@@ -1,3 +1,4 @@
+"""Data models for risk discovery."""
 from typing import Literal
 from pydantic import BaseModel
 
@@ -13,10 +14,3 @@ class RiskFinding(BaseModel):
 class ScanResult(BaseModel):
     findings: list[RiskFinding]
     resources_scanned: int
-
-
-class ExpectedRisk(BaseModel):
-    category: str
-    resource: str
-    issue: str
-    severity: str
