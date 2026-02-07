@@ -1,0 +1,9 @@
+aws_accounts: 8
+domain: saas
+has_kubernetes: true
+name: CloudSync
+risk_categories:
+- tr1
+- tr3
+- tr14
+size: medium

@@ -1,0 +1,9 @@
+aws_accounts: 10
+domain: devtools
+has_kubernetes: true
+name: CodeForge
+risk_categories:
+- tr1
+- tr13
+- tr15
+size: large

@@ -1,0 +1,524 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "cloudsync-legacy-admin-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["cloudsync-all-access-policy"]
+      },
+      {
+        "RoleName": "cloudsync-lambda-execution-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["cloudsync-lambda-policy"]
+      },
+      {
+        "RoleName": "cloudsync-ec2-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["cloudsync-ec2-policy"]
+      },
+      {
+        "RoleName": "cloudsync-dev-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::123456789012:root"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["cloudsync-dev-policy"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "cloudsync-all-access-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "cloudsync-lambda-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "s3:GetObject",
+                "s3:PutObject",
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "cloudsync-ec2-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "dynamodb:*",
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "cloudsync-dev-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "cloudsync-deployment-user",
+        "AttachedPolicies": ["cloudsync-all-access-policy"]
+      },
+      {
+        "UserName": "cloudsync-monitoring-user",
+        "AttachedPolicies": ["cloudsync-lambda-policy"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "cloudsync-customer-data-prod",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "cloudsync-application-logs",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "cloudsync-backup-storage",
+        "Versioning": "Suspended",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "cloudsync-static-assets",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "cloudsync-dev-sandbox",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0a1b2c3d4e5f6g7h8",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "cloudsync-api-server-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-1b2c3d4e5f6g7h8i9",
+        "InstanceType": "t3.xlarge",
+        "State": "running",
+        "Tags": {
+          "Name": "cloudsync-worker-node-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-2c3d4e5f6g7h8i9j0",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "cloudsync-monitoring-server",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-3d4e5f6g7h8i9j0k1",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "cloudsync-staging-api",
+          "Environment": "staging"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "cloudsync-web-sg",
+        "Description": "Security group for web servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "cloudsync-database-sg",
+        "Description": "Security group for database access",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "cloudsync-admin-sg",
+        "Description": "Administrative access security group",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3389,
+            "ToPort": 3389,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "cloudsync-internal-sg",
+        "Description": "Internal application security group",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {
+          "Name": "cloudsync-main-vpc"
+        }
+      },
+      {
+        "CidrBlock": "10.1.0.0/16",
+        "Tags": {
+          "Name": "cloudsync-dev-vpc"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "cloudsync-data-processor",
+        "Runtime": "python3.9",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/cloudsync-lambda-execution-role",
+        "Environment": {
+          "DATABASE_PASSWORD": "prod_db_password_123",
+          "API_KEY": "sk_live_abcd1234efgh5678",
+          "ENCRYPTION_KEY": "aes256_key_9876543210"
+        }
+      },
+      {
+        "FunctionName": "cloudsync-webhook-handler",
+        "Runtime": "nodejs18.x",
+        "Handler": "index.handler",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/cloudsync-lambda-execution-role",
+        "Environment": {
+          "WEBHOOK_SECRET": "whsec_1234567890abcdef"
+        }
+      },
+      {
+        "FunctionName": "cloudsync-sync-engine",
+        "Runtime": "python3.11",
+        "Handler": "sync.handler",
+        "MemorySize": 1024,
+        "Timeout": 900,
+        "Role": "arn:aws:iam::123456789012:role/cloudsync-lambda-execution-role",
+        "Environment": {}
+      },
+      {
+        "FunctionName": "cloudsync-report-generator",
+        "Runtime": "python3.9",
+        "Handler": "reports.handler",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "Role": "arn:aws:iam::123456789012:role/cloudsync-lambda-execution-role",
+        "Environment": {}
+      },
+      {
+        "FunctionName": "cloudsync-alert-processor",
+        "Runtime": "nodejs20.x",
+        "Handler": "alerts.handler",
+        "MemorySize": 128,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/cloudsync-lambda-execution-role",
+        "Environment": {}
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "cloudsync-user-data",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "cloudsync-sync-jobs",
+        "KeySchema": [
+          {
+            "AttributeName": "job_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "job_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "cloudsync-session-store",
+        "KeySchema": [
+          {
+            "AttributeName": "session_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "session_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "cloudsync-audit-logs",
+        "KeySchema": [
+          {
+            "AttributeName": "log_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "log_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "cloudsync/database/credentials",
+        "SecretString": "{\"username\": \"admin\", \"password\": \"SimplePassword123\", \"host\": \"db.cloudsync.internal\"}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "cloudsync/api/keys",
+        "SecretString": "{\"stripe_key\": \"sk_live_abcd1234\", \"sendgrid_key\": \"SG.xyz789\"}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "cloudsync/oauth/client-secret",
+        "SecretString": "oauth_client_secret_very_long_string_12345",
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "cloudsync-sync-queue",
+        "Attributes": {
+          "VisibilityTimeout": "30"
+        }
+      },
+      {
+        "QueueName": "cloudsync-notification-queue",
+        "Attributes": {
+          "VisibilityTimeout": "60"
+        }
+      },
+      {
+        "QueueName": "cloudsync-deadletter-queue",
+        "Attributes": {
+          "VisibilityTimeout": "300"
+        }
+      }
+    ]
+  }
+}

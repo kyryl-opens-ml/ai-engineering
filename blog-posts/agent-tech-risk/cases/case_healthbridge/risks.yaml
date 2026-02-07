@@ -1,0 +1,71 @@
+- category: tr1
+  resource: "HealthBridge-DevOps-Admin-Policy"
+  issue: "Policy grants wildcard permissions (*:*) on all AWS resources"
+  severity: critical
+  why: "Created during 2022 Series B rush when DevOps team needed to quickly migrate from on-prem. Never refined post-migration due to competing product priorities."
+
+- category: tr1
+  resource: "HealthBridge-DevOps-CrossAccount"
+  issue: "Cross-account trust policy allows any AWS principal (*) to assume this admin role"
+  severity: critical
+  why: "Implemented hastily in late 2022 to support acquired MedTech startup's existing AWS accounts. Original plan to restrict principals was deprioritized after integration challenges."
+
+- category: tr1
+  resource: "HealthBridge-Data-Processing-Policy"
+  issue: "Overly broad permissions including s3:*, dynamodb:*, secretsmanager:* on all resources"
+  severity: high
+  why: "Created by data science team lead who left in Q1 2023. Permissions kept expanding to avoid blocking ML pipeline deployments during Series C fundraising."
+
+- category: tr1
+  resource: "HealthBridge-Legacy-Admin-Policy"
+  issue: "Full admin policy still attached to unused role from pre-2022 infrastructure"
+  severity: medium
+  why: "Leftover from original CTO's infrastructure setup in 2020-2021. Tagged for removal in Q4 2022 but forgotten during engineering team restructuring and multiple security lead changes."
+
+- category: tr2
+  resource: "healthbridge-patient-processor"
+  issue: "Database credentials stored as plaintext in Lambda environment variables"
+  severity: high
+  why: "Quick fix during Black Friday 2022 patient data processing surge. Secrets Manager integration was planned for Q1 2023 but delayed by HIPAA compliance audit prep."
+
+- category: tr2
+  resource: "healthbridge-auth-handler"
+  issue: "JWT signing secret hardcoded in environment variable instead of AWS Secrets Manager"
+  severity: high
+  why: "Temporary solution during auth system migration in late 2022. Security team planned rotation strategy but got pulled into SOC 2 audit preparations for enterprise sales push."
+
+- category: tr2
+  resource: "healthbridge-notification-service"
+  issue: "Email and Slack credentials exposed in plaintext environment variables"
+  severity: medium
+  why: "Implemented by junior developer during notification system overhaul in Q3 2023. Code review missed this due to stretched security team covering multiple product launches."
+
+- category: tr2
+  resource: "healthbridge/legacy/api-keys"
+  issue: "Secret stored without rotation policy, unchanged since 2021"
+  severity: medium
+  why: "API key for legacy third-party integration that processes 15% of patient data. Rotation requires coordination with vendor's limited support team, repeatedly postponed due to product roadmap pressure."
+
+- category: tr3
+  resource: "healthbridge-patient-data-prod"
+  issue: "S3 bucket storing PHI data lacks encryption and versioning is disabled"
+  severity: critical
+  why: "Created during emergency patient data migration from failed cloud provider in Q2 2022. Encryption setup blocked by budget approval delays, versioning disabled to reduce storage costs during cash flow concerns."
+
+- category: tr3
+  resource: "healthbridge-app-assets"
+  issue: "S3 bucket has public access enabled with disabled public access blocks"
+  severity: high
+  why: "Originally configured for CDN hosting of app assets in 2021. Public access expanded during rapid mobile app rollout in early 2023 without proper review of sensitive content exclusions."
+
+- category: tr3
+  resource: "healthbridge-legacy-admin-sg"
+  issue: "Security group allows SSH and RDP access from any IP address (0.0.0.0/0)"
+  severity: high
+  why: "Created during 2020 remote work transition for emergency server access. Meant to be temporary but admin team changes and COVID-19 priorities left it unchanged through multiple security reviews."
+
+- category: tr3
+  resource: "healthbridge-patients"
+  issue: "DynamoDB table containing PHI lacks encryption at rest and point-in-time recovery"
+  severity: high
+  why: "Migrated from legacy MySQL during Series B scaling in mid-2022. Encryption configuration delayed by compatibility concerns with existing patient matching algorithms, recovery features cut due to budget constraints."

@@ -1,0 +1,688 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "MedDataDevOpsAdmin",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["MedDataFullAccess"]
+      },
+      {
+        "RoleName": "MedDataLegacyETLRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["MedDataETLPolicy", "MedDataWildcardPolicy"]
+      },
+      {
+        "RoleName": "MedDataLambdaExecution",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["MedDataBasicExecution"]
+      },
+      {
+        "RoleName": "MedDataAnalyticsRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["MedDataAnalyticsPolicy"]
+      },
+      {
+        "RoleName": "MedDataKubernetesRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["MedDataClusterAccess"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "MedDataFullAccess",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "MedDataETLPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:Scan"
+              ],
+              "Resource": [
+                "arn:aws:dynamodb:us-east-1:123456789012:table/MedDataPatients",
+                "arn:aws:dynamodb:us-east-1:123456789012:table/MedDataClaims"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "MedDataWildcardPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "MedDataBasicExecution",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "MedDataAnalyticsPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": [
+                "arn:aws:dynamodb:us-east-1:123456789012:table/MedDataAnalytics",
+                "arn:aws:s3:::meddata-analytics/*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "MedDataClusterAccess",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeSecurityGroups",
+                "s3:GetObject"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "meddata-founder",
+        "AttachedPolicies": ["MedDataFullAccess"]
+      },
+      {
+        "UserName": "meddata-ci-user",
+        "AttachedPolicies": ["MedDataFullAccess"]
+      },
+      {
+        "UserName": "meddata-analytics",
+        "AttachedPolicies": ["MedDataAnalyticsPolicy"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "meddata-patient-data-prod",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "meddata-backups",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "meddata-analytics",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "meddata-dev-testing",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "meddata-static-assets",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0a1b2c3d4e5f6g7h8",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-k8s-master-1",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0b2c3d4e5f6g7h8i9",
+        "InstanceType": "t3.xlarge",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-k8s-worker-1",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0c3d4e5f6g7h8i9j0",
+        "InstanceType": "t3.xlarge",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-k8s-worker-2",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0d4e5f6g7h8i9j0k1",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-legacy-etl",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0e5f6g7h8i9j0k1l2",
+        "InstanceType": "t3.small",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-monitoring",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0f6g7h8i9j0k1l2m3",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-staging-app",
+          "Environment": "staging"
+        }
+      },
+      {
+        "InstanceId": "i-0g7h8i9j0k1l2m3n4",
+        "InstanceType": "t2.micro",
+        "State": "running",
+        "Tags": {
+          "Name": "meddata-dev-test",
+          "Environment": "development"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "meddata-web-public",
+        "Description": "Public web traffic for MedData application",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "meddata-ssh-admin",
+        "Description": "SSH access for MedData administrators",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "meddata-k8s-cluster",
+        "Description": "Kubernetes cluster internal communication",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 6443,
+            "ToPort": 6443,
+            "CidrBlocks": ["10.0.0.0/8"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 2379,
+            "ToPort": 2380,
+            "CidrBlocks": ["10.0.0.0/8"]
+          }
+        ]
+      },
+      {
+        "GroupName": "meddata-database-legacy",
+        "Description": "Legacy database access for migration",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "meddata-dev-wide-open",
+        "Description": "Development environment - all access",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 0,
+            "ToPort": 65535,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "meddata-internal-services",
+        "Description": "Internal service communication",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["10.0.0.0/16"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 9090,
+            "ToPort": 9090,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {
+          "Name": "meddata-production-vpc"
+        }
+      },
+      {
+        "CidrBlock": "10.1.0.0/16",
+        "Tags": {
+          "Name": "meddata-staging-vpc"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "meddata-patient-processor",
+        "Runtime": "python3.11",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/MedDataLambdaExecution",
+        "Environment": {
+          "DB_HOST": "prod-db.meddata.local",
+          "DB_USER": "meddata_user",
+          "DB_PASS": "MedD4ta$ecur3!2019",
+          "API_KEY": "sk-1234567890abcdef",
+          "ENVIRONMENT": "production"
+        }
+      },
+      {
+        "FunctionName": "meddata-claims-etl",
+        "Runtime": "python3.9",
+        "Handler": "etl.process_claims",
+        "MemorySize": 1024,
+        "Timeout": 900,
+        "Role": "arn:aws:iam::123456789012:role/MedDataLegacyETLRole",
+        "Environment": {
+          "DATABASE_URL": "postgresql://admin:P@ssw0rd123@legacy-db.meddata.com:5432/claims",
+          "S3_BUCKET": "meddata-patient-data-prod",
+          "ENCRYPTION_KEY": "supersecretkey2018"
+        }
+      },
+      {
+        "FunctionName": "meddata-analytics-aggregator",
+        "Runtime": "nodejs18.x",
+        "Handler": "analytics.aggregate",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "Role": "arn:aws:iam::123456789012:role/MedDataAnalyticsRole",
+        "Environment": {
+          "NODE_ENV": "production"
+        }
+      },
+      {
+        "FunctionName": "meddata-webhook-handler",
+        "Runtime": "nodejs20.x",
+        "Handler": "webhook.handle",
+        "MemorySize": 128,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/MedDataLambdaExecution",
+        "Environment": {
+          "WEBHOOK_SECRET": "whsec_1234567890abcdef",
+          "PARTNER_API_KEY": "pk_live_abcdef1234567890"
+        }
+      },
+      {
+        "FunctionName": "meddata-backup-scheduler",
+        "Runtime": "python3.11",
+        "Handler": "backup.schedule",
+        "MemorySize": 256,
+        "Timeout": 120,
+        "Role": "arn:aws:iam::123456789012:role/MedDataLegacyETLRole",
+        "Environment": {
+          "BACKUP_BUCKET": "meddata-backups"
+        }
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "MedDataPatients",
+        "KeySchema": [
+          {
+            "AttributeName": "patient_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "patient_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production",
+          "DataClassification": "PHI"
+        }
+      },
+      {
+        "TableName": "MedDataClaims",
+        "KeySchema": [
+          {
+            "AttributeName": "claim_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "claim_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production",
+          "DataClassification": "PHI"
+        }
+      },
+      {
+        "TableName": "MedDataAnalytics",
+        "KeySchema": [
+          {
+            "AttributeName": "metric_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "metric_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "MedDataSessions",
+        "KeySchema": [
+          {
+            "AttributeName": "session_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "session_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "MedDataAuditLogs",
+        "KeySchema": [
+          {
+            "AttributeName": "log_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "log_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "meddata/prod/database",
+        "SecretString": "{\"username\":\"root\",\"password\":\"AdminPass123!\",\"host\":\"prod-cluster.meddata.local\",\"port\":5432}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "meddata/legacy/api-keys",
+        "SecretString": "legacy-partner-key-from-2018-never-rotated",
+        "Tags": {
+          "Environment": "production",
+          "Legacy": "true"
+        }
+      },
+      {
+        "Name": "meddata/prod/jwt-secret",
+        "SecretString": "jwt-super-secret-key-2019",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "meddata/third-party/stripe",
+        "SecretString": "{\"publishable_key\":\"pk_live_xyz\",\"secret_key\":\"sk_live_abc123\"}",
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "meddata-patient-updates",
+        "Attributes": {
+          "VisibilityTimeout": "30",
+          "MessageRetentionPeriod": "1209600"
+        }
+      },
+      {
+        "QueueName": "meddata-claims-processing",
+        "Attributes": {
+          "VisibilityTimeout": "300",
+          "MessageRetentionPeriod": "1209600"
+        }
+      },
+      {
+        "QueueName": "meddata-analytics-events",
+        "Attributes": {
+          "VisibilityTimeout": "60"
+        }
+      },
+      {
+        "QueueName": "meddata-notifications-dlq",
+        "Attributes": {
+          "VisibilityTimeout": "30"
+        }
+      }
+    ]
+  }
+}

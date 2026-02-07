@@ -1,0 +1,442 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "HealthBridge-Lambda-Execution",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "lambda.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["HealthBridge-Lambda-Basic-Policy"]
+      },
+      {
+        "RoleName": "HealthBridge-DevOps-CrossAccount",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"AWS": "*"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["HealthBridge-DevOps-Admin-Policy"]
+      },
+      {
+        "RoleName": "HealthBridge-DataProcessing-Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "lambda.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["HealthBridge-Data-Processing-Policy"]
+      },
+      {
+        "RoleName": "HealthBridge-Legacy-Admin-Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": ["ec2.amazonaws.com", "lambda.amazonaws.com"]},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["HealthBridge-Legacy-Admin-Policy"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "HealthBridge-Lambda-Basic-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "HealthBridge-DevOps-Admin-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "HealthBridge-Data-Processing-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*",
+                "dynamodb:*",
+                "secretsmanager:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "HealthBridge-Legacy-Admin-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "healthbridge-ci-user",
+        "AttachedPolicies": ["HealthBridge-DevOps-Admin-Policy"]
+      },
+      {
+        "UserName": "healthbridge-backup-user",
+        "AttachedPolicies": ["HealthBridge-Data-Processing-Policy"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "healthbridge-patient-data-prod",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "healthbridge-app-assets",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "healthbridge-backups-secure",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "healthbridge-analytics-data",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "healthbridge-logs-archive",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0abc123def456789a",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {"Name": "healthbridge-web-prod-1", "Environment": "production"}
+      },
+      {
+        "InstanceId": "i-0def456abc789123b",
+        "InstanceType": "t3.xlarge",
+        "State": "running",
+        "Tags": {"Name": "healthbridge-api-prod-1", "Environment": "production"}
+      },
+      {
+        "InstanceId": "i-0fed789cba321456c",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {"Name": "healthbridge-worker-prod-1", "Environment": "production"}
+      },
+      {
+        "InstanceId": "i-0123abc456def789d",
+        "InstanceType": "t3.small",
+        "State": "running",
+        "Tags": {"Name": "healthbridge-staging-web", "Environment": "staging"}
+      },
+      {
+        "InstanceId": "i-0456def789abc123e",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {"Name": "healthbridge-dev-server", "Environment": "development"}
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "healthbridge-web-sg",
+        "Description": "Security group for HealthBridge web servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "healthbridge-api-sg",
+        "Description": "Security group for HealthBridge API servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["10.0.0.0/16"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "healthbridge-legacy-admin-sg",
+        "Description": "Legacy admin access for HealthBridge infrastructure",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3389,
+            "ToPort": 3389,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "healthbridge-database-sg",
+        "Description": "Security group for HealthBridge database access",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {"Name": "healthbridge-main-vpc"}
+      },
+      {
+        "CidrBlock": "10.1.0.0/16",
+        "Tags": {"Name": "healthbridge-staging-vpc"}
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "healthbridge-patient-processor",
+        "Runtime": "python3.11",
+        "Handler": "lambda_function.lambda_handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/HealthBridge-Lambda-Execution",
+        "Environment": {
+          "DB_HOST": "prod-cluster.xyz.amazonaws.com",
+          "DB_USER": "healthbridge_admin",
+          "DB_PASSWORD": "HB_2023_Prod!@#",
+          "API_KEY": "sk-hb-1234567890abcdef",
+          "ENCRYPTION_KEY": "aes256-key-prod-2023"
+        }
+      },
+      {
+        "FunctionName": "healthbridge-data-sync",
+        "Runtime": "nodejs18.x",
+        "Handler": "index.handler",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "Role": "arn:aws:iam::123456789012:role/HealthBridge-DataProcessing-Role",
+        "Environment": {
+          "NODE_ENV": "production",
+          "SYNC_INTERVAL": "300"
+        }
+      },
+      {
+        "FunctionName": "healthbridge-auth-handler",
+        "Runtime": "python3.9",
+        "Handler": "auth.handler",
+        "MemorySize": 128,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/HealthBridge-Lambda-Execution",
+        "Environment": {
+          "JWT_SECRET": "super-secret-jwt-key-2023",
+          "AUTH_PROVIDER": "cognito"
+        }
+      },
+      {
+        "FunctionName": "healthbridge-notification-service",
+        "Runtime": "python3.11",
+        "Handler": "notify.lambda_handler",
+        "MemorySize": 256,
+        "Timeout": 120,
+        "Role": "arn:aws:iam::123456789012:role/HealthBridge-Lambda-Execution",
+        "Environment": {
+          "SMTP_HOST": "smtp.healthbridge.com",
+          "SMTP_USER": "notifications@healthbridge.com",
+          "SMTP_PASS": "EmailPass2023!",
+          "SLACK_WEBHOOK": "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
+        }
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "healthbridge-patients",
+        "KeySchema": [{"AttributeName": "patient_id", "KeyType": "HASH"}],
+        "AttributeDefinitions": [{"AttributeName": "patient_id", "AttributeType": "S"}],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {"Enabled": false},
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {"Environment": "production", "DataType": "PHI"}
+      },
+      {
+        "TableName": "healthbridge-sessions",
+        "KeySchema": [{"AttributeName": "session_id", "KeyType": "HASH"}],
+        "AttributeDefinitions": [{"AttributeName": "session_id", "AttributeType": "S"}],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {"Enabled": true},
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {"Environment": "production"}
+      },
+      {
+        "TableName": "healthbridge-analytics",
+        "KeySchema": [{"AttributeName": "event_id", "KeyType": "HASH"}],
+        "AttributeDefinitions": [{"AttributeName": "event_id", "AttributeType": "S"}],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {"Enabled": true},
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {"Environment": "production"}
+      },
+      {
+        "TableName": "healthbridge-audit-logs",
+        "KeySchema": [{"AttributeName": "log_id", "KeyType": "HASH"}],
+        "AttributeDefinitions": [{"AttributeName": "log_id", "AttributeType": "S"}],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {"Enabled": true},
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {"Environment": "production", "Compliance": "HIPAA"}
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "healthbridge/prod/database",
+        "SecretString": "{\"username\":\"healthbridge_admin\",\"password\":\"HB_2023_Prod!@#\",\"host\":\"prod-cluster.xyz.amazonaws.com\"}",
+        "Tags": {"Environment": "production"}
+      },
+      {
+        "Name": "healthbridge/legacy/api-keys",
+        "SecretString": "sk-legacy-api-key-no-rotation-since-2021",
+        "Tags": {"Environment": "production", "Legacy": "true"}
+      },
+      {
+        "Name": "healthbridge/prod/third-party-integrations",
+        "SecretString": "{\"stripe_key\":\"sk_live_xxxxxxxx\",\"sendgrid_key\":\"SG.xxxxxxxx\",\"datadog_key\":\"xxxxxxxx\"}",
+        "Tags": {"Environment": "production"}
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "healthbridge-patient-processing-queue",
+        "Attributes": {"VisibilityTimeout": "300"}
+      },
+      {
+        "QueueName": "healthbridge-notifications-queue",
+        "Attributes": {"VisibilityTimeout": "120"}
+      },
+      {
+        "QueueName": "healthbridge-audit-queue",
+        "Attributes": {"VisibilityTimeout": "60"}
+      }
+    ]
+  }
+}

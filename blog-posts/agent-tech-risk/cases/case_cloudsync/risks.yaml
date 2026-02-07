@@ -1,0 +1,71 @@
+- category: tr1
+  resource: "cloudsync-legacy-admin-role"
+  issue: "IAM role has overly broad trust policy allowing any AWS account (*) to assume the role"
+  severity: critical
+  why: "Created during the 2021 emergency migration from another cloud provider when the team needed to get systems online quickly. Never reviewed or restricted after the crisis."
+
+- category: tr1
+  resource: "cloudsync-all-access-policy"
+  issue: "IAM policy grants full administrative access (*:*) to all AWS resources"
+  severity: critical
+  why: "Originally created by the founding CTO in 2019 for rapid prototyping. Still used by deployment systems and emergency access despite multiple security reviews flagging it."
+
+- category: tr1
+  resource: "cloudsync-dev-policy"
+  issue: "Development IAM policy grants full administrative access (*:*) which violates least privilege"
+  severity: high
+  why: "Created when the engineering team tripled in size during 2022 Series B funding. DevOps team was overwhelmed and chose broad permissions to avoid blocking developer productivity."
+
+- category: tr1
+  resource: "cloudsync-deployment-user"
+  issue: "IAM user has administrative privileges attached for CI/CD deployments"
+  severity: high
+  why: "Legacy from early startup days when they used Jenkins with hardcoded credentials. Never migrated to role-based deployment despite adopting GitHub Actions in 2023."
+
+- category: tr3
+  resource: "cloudsync-customer-data-prod"
+  issue: "S3 bucket containing customer data has public access enabled and no encryption"
+  severity: critical
+  why: "Made public during a 2022 customer demo crisis when files weren't loading. Engineering forgot to revert the change, and it wasn't caught because security scanning was disabled for performance reasons."
+
+- category: tr3
+  resource: "cloudsync-dev-sandbox"
+  issue: "Development S3 bucket has public access enabled with no encryption"
+  severity: medium
+  why: "Created by junior developers for testing file uploads during a hackathon. Never properly secured because it was considered 'just development data' even though it occasionally contains production data copies."
+
+- category: tr3
+  resource: "cloudsync-backup-storage"
+  issue: "Critical backup S3 bucket has versioning disabled"
+  severity: high
+  why: "Versioning was disabled in 2023 to reduce storage costs during the economic downturn. The CFO pushed for cost optimization without understanding the security implications."
+
+- category: tr3
+  resource: "cloudsync-user-data"
+  issue: "DynamoDB table storing user data has encryption disabled"
+  severity: high
+  why: "Table created in early 2020 before encryption-by-default was company policy. Migration to encrypted table was scheduled but delayed due to the Kubernetes migration project taking priority."
+
+- category: tr3
+  resource: "cloudsync-audit-logs"
+  issue: "Audit log DynamoDB table lacks encryption and point-in-time recovery"
+  severity: medium
+  why: "Built during the SOC 2 compliance rush in late 2022. Team focused on meeting audit requirements for log collection but missed the encryption requirements in the implementation rush."
+
+- category: tr14
+  resource: "cloudsync-data-processor"
+  issue: "Critical Lambda function has no CloudWatch alarms or error monitoring configured"
+  severity: high
+  why: "Function processes 80% of customer data but was developed by the AI team who focused on ML models rather than operational monitoring. Multiple production incidents went undetected for hours."
+
+- category: tr14
+  resource: "cloudsync-sync-engine"
+  issue: "Core synchronization Lambda function lacks error alerting and structured logging"
+  severity: high
+  why: "Built during the rapid scaling period in 2022 when the team was shipping features weekly. Monitoring was considered a 'nice-to-have' that would be added later but never prioritized."
+
+- category: tr14
+  resource: "cloudsync-alert-processor"
+  issue: "Alerting Lambda function has no monitoring or error handling, creating a monitoring blind spot"
+  severity: medium
+  why: "Ironically, the function responsible for processing alerts has no alerts configured for itself. Built by a contractor who left before documentation or monitoring was completed."

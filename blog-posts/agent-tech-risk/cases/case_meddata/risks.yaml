@@ -1,0 +1,83 @@
+- category: tr1
+  resource: "MedDataFullAccess"
+  issue: "IAM policy grants unrestricted access to all AWS services and resources (*:*)"
+  severity: critical
+  why: "Created in 2017 by founding team for rapid development. Never refined as company grew from 3 to 300+ engineers."
+
+- category: tr1
+  resource: "MedDataDevOpsAdmin"
+  issue: "Role allows assumption by any AWS principal (*) without restrictions"
+  severity: critical
+  why: "Emergency fix during 2019 Black Friday outage when normal access was broken. Never reverted after incident."
+
+- category: tr1
+  resource: "meddata-founder"
+  issue: "Founder user account has full admin access but is no longer actively used"
+  severity: high
+  why: "CEO account from startup days. Still has admin rights despite transitioning to business role in 2020."
+
+- category: tr1
+  resource: "meddata-ci-user"
+  issue: "CI/CD service user has full admin access instead of scoped deployment permissions"
+  severity: high
+  why: "Quick fix during Series B crunch when deployment pipeline kept failing. DevOps team was overwhelmed with scaling issues."
+
+- category: tr1
+  resource: "MedDataWildcardPolicy"
+  issue: "Policy grants unrestricted S3 access (s3:* on *) to ETL processes"
+  severity: high
+  why: "Legacy ETL system built during rapid expansion in 2018. Team prioritized getting claims processing working over security."
+
+- category: tr2
+  resource: "meddata-patient-processor"
+  issue: "Database credentials stored in plaintext environment variables"
+  severity: critical
+  why: "Migrated from on-premises in 2019 under tight deadline. Security team wasn't established yet to review Lambda configs."
+
+- category: tr2
+  resource: "meddata-claims-etl"
+  issue: "Multiple hardcoded secrets including database password and encryption keys in environment"
+  severity: high
+  why: "Built by contractor team during 2018 acquisition of claims processor startup. Handoff was rushed when contract ended."
+
+- category: tr2
+  resource: "meddata/legacy/api-keys"
+  issue: "Secret contains plaintext API key without rotation enabled"
+  severity: high
+  why: "Partner integration from 2018 that was never updated. Original engineer left company and knowledge was lost."
+
+- category: tr2
+  resource: "meddata-webhook-handler"
+  issue: "Third-party API keys stored in Lambda environment variables as plaintext"
+  severity: medium
+  why: "Stripe integration built quickly for payment processing launch. Security review was bypassed due to revenue pressure."
+
+- category: tr4
+  resource: "meddata-ssh-admin"
+  issue: "Security group allows SSH access from any IP address (0.0.0.0/0)"
+  severity: high
+  why: "Opened during COVID remote work transition in March 2020. Temporary fix that became permanent as team stayed distributed."
+
+- category: tr4
+  resource: "meddata-database-legacy"
+  issue: "Database port 5432 exposed to the internet (0.0.0.0/0)"
+  severity: high
+  why: "Legacy PostgreSQL migration from data center. Port was opened for external ETL vendor and never closed after project."
+
+- category: tr4
+  resource: "meddata-dev-wide-open"
+  issue: "Development security group allows all ports from any IP (0-65535 from 0.0.0.0/0)"
+  severity: medium
+  why: "Created by junior developer frustrated with networking issues. Senior team was focused on production scaling problems."
+
+- category: tr2
+  resource: "MedDataAnalytics"
+  issue: "DynamoDB table storing analytics data without encryption at rest enabled"
+  severity: medium
+  why: "Analytics system built during Series A fundraising to impress investors. Encryption was skipped to meet demo deadline."
+
+- category: tr1
+  resource: "MedDataLegacyETLRole"
+  issue: "ETL role has both specific DynamoDB permissions and wildcard S3 policy attached"
+  severity: medium
+  why: "Role evolved over time as ETL requirements changed. Multiple policies were attached instead of creating new role."

@@ -1,0 +1,47 @@
+- category: tr3
+  resource: "shipfast-product-images"
+  issue: "S3 bucket has public access enabled and no encryption, exposing product catalog to unauthorized access"
+  severity: critical
+  why: "During Black Friday 2023 rush, marketing team needed immediate CDN setup for product images. CTO temporarily disabled public access blocks to troubleshoot CloudFront issues but never re-enabled them post-incident."
+
+- category: tr3
+  resource: "shipfast-users"
+  issue: "DynamoDB table containing PII lacks encryption at rest, violating data protection requirements"
+  severity: high
+  why: "Table was migrated from MySQL during Series A scaling rush in early 2024. Engineering team prioritized performance over security settings to meet investor demo deadline, planning to 'fix security later' after funding closed."
+
+- category: tr3
+  resource: "shipfast-backups"
+  issue: "Critical backup bucket has versioning disabled, creating single point of failure for disaster recovery"
+  severity: high
+  why: "CFO mandated cost reduction in Q3 2024 after missing revenue targets. Platform team disabled versioning on backup bucket to reduce storage costs by 40%, assuming daily backups were sufficient redundancy."
+
+- category: tr4
+  resource: "shipfast-database-sg"
+  issue: "Security group allows PostgreSQL access from entire internet (0.0.0.0/0), exposing database to attack"
+  severity: critical
+  why: "During weekend production outage in March 2024, on-call engineer opened database access globally to troubleshoot from home. Incident was resolved Monday but security group change was forgotten in post-mortem chaos."
+
+- category: tr4
+  resource: "shipfast-dev-sg"
+  issue: "Development security group allows unrestricted access on all ports from internet"
+  severity: medium
+  why: "Created during remote work transition in 2023 when developers needed flexible access from various locations. DevOps lead intended it as temporary but it became standard practice as team grew from 20 to 50 engineers."
+
+- category: tr4
+  resource: "shipfast-ssh-sg"
+  issue: "SSH access allowed from 0.0.0.0/0 instead of restricted IP ranges or bastion host"
+  severity: high
+  why: "Emergency SSH access was opened during payment processor integration deadline in Q4 2024. Lead engineer was traveling internationally and needed immediate server access to fix Stripe webhook failures affecting customer payments."
+
+- category: tr15
+  resource: "shipfast-legacy-migrator"
+  issue: "Lambda function has not been invoked in over 90 days but continues to incur costs"
+  severity: medium
+  why: "Function was built to migrate data from old Shopify integration in Q2 2024. Migration completed successfully but function was never cleaned up as original developer left company and knowledge transfer was incomplete."
+
+- category: tr15
+  resource: "i-0789012abc345def6"
+  issue: "EC2 instance has been stopped for 90+ days with associated EBS volumes still incurring charges"
+  severity: low
+  why: "Development instance was stopped when contractor finished performance testing project in September 2024. Instance owner left company but no process exists for resource cleanup when employees depart, leading to forgotten resources."

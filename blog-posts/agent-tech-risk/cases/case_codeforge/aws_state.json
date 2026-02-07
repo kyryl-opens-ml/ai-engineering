@@ -1,0 +1,598 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "CodeForge-Lambda-ExecutionRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["CodeForge-Lambda-BasePolicy"]
+      },
+      {
+        "RoleName": "CodeForge-EC2-InstanceRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["CodeForge-EC2-BasePolicy"]
+      },
+      {
+        "RoleName": "CodeForge-DevOps-AdminRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["CodeForge-DevOps-AdminPolicy"]
+      },
+      {
+        "RoleName": "CodeForge-BuildAgent-Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["CodeForge-BuildAgent-Policy"]
+      },
+      {
+        "RoleName": "CodeForge-Analytics-ProcessorRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["CodeForge-Analytics-Policy"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "CodeForge-Lambda-BasePolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem"
+              ],
+              "Resource": "arn:aws:dynamodb:*:*:table/CodeForge-*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "CodeForge-EC2-BasePolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": "arn:aws:s3:::codeforge-*/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "CodeForge-DevOps-AdminPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "CodeForge-BuildAgent-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*",
+                "lambda:*",
+                "dynamodb:*",
+                "secretsmanager:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "CodeForge-Analytics-Policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:GetItem"
+              ],
+              "Resource": "*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "codeforge-service-account",
+        "AttachedPolicies": ["CodeForge-DevOps-AdminPolicy"]
+      },
+      {
+        "UserName": "legacy-deploy-user",
+        "AttachedPolicies": ["CodeForge-BuildAgent-Policy"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "codeforge-artifacts-prod",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "codeforge-user-uploads",
+        "Versioning": "Suspended",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "codeforge-logs-archive",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "codeforge-backup-staging",
+        "Versioning": "Enabled",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "codeforge-analytics-data",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0a1b2c3d4e5f67890",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "codeforge-web-prod-1",
+          "Environment": "production",
+          "Owner": "platform-team"
+        }
+      },
+      {
+        "InstanceId": "i-0b2c3d4e5f6789012",
+        "InstanceType": "m5.xlarge",
+        "State": "running",
+        "Tags": {
+          "Name": "codeforge-api-prod-1",
+          "Environment": "production",
+          "Owner": "backend-team"
+        }
+      },
+      {
+        "InstanceId": "i-0c3d4e5f678901234",
+        "InstanceType": "c5.2xlarge",
+        "State": "running",
+        "Tags": {
+          "Name": "codeforge-build-agent-1",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0d4e5f67890123456",
+        "InstanceType": "t3.medium",
+        "State": "stopped",
+        "Tags": {
+          "Name": "codeforge-staging-legacy"
+        }
+      },
+      {
+        "InstanceId": "i-0e5f678901234567",
+        "InstanceType": "t2.micro",
+        "State": "stopped",
+        "Tags": {
+          "Name": "temp-debug-instance"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "codeforge-web-sg",
+        "Description": "Security group for web servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "codeforge-api-sg",
+        "Description": "Security group for API servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "codeforge-build-sg",
+        "Description": "Security group for build agents",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["10.0.0.0/8"]
+          }
+        ]
+      },
+      {
+        "GroupName": "codeforge-debug-sg",
+        "Description": "Temporary debug access",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 0,
+            "ToPort": 65535,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {
+          "Name": "codeforge-vpc-prod"
+        }
+      },
+      {
+        "CidrBlock": "10.1.0.0/16",
+        "Tags": {
+          "Name": "codeforge-vpc-staging"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "codeforge-auth-handler",
+        "Runtime": "python3.11",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/CodeForge-Lambda-ExecutionRole",
+        "Environment": {
+          "DB_HOST": "codeforge-prod.cluster-xyz.us-east-1.rds.amazonaws.com",
+          "DB_PASSWORD": "SuperSecret123!",
+          "JWT_SECRET": "jwt-secret-key-2023",
+          "API_KEY": "sk-1234567890abcdef"
+        }
+      },
+      {
+        "FunctionName": "codeforge-webhook-processor",
+        "Runtime": "nodejs18.x",
+        "Handler": "index.handler",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "Role": "arn:aws:iam::123456789012:role/CodeForge-Lambda-ExecutionRole",
+        "Environment": {
+          "ENVIRONMENT": "production"
+        }
+      },
+      {
+        "FunctionName": "codeforge-analytics-etl",
+        "Runtime": "python3.8",
+        "Handler": "etl.handler",
+        "MemorySize": 1024,
+        "Timeout": 900,
+        "Role": "arn:aws:iam::123456789012:role/CodeForge-Analytics-ProcessorRole",
+        "Environment": {
+          "S3_BUCKET": "codeforge-analytics-data"
+        }
+      },
+      {
+        "FunctionName": "codeforge-legacy-migrator",
+        "Runtime": "nodejs14.x",
+        "Handler": "migrate.handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/CodeForge-Lambda-ExecutionRole",
+        "Environment": {
+          "LEGACY_DB": "mysql://admin:password123@legacy-db.internal:3306/app"
+        }
+      },
+      {
+        "FunctionName": "codeforge-unused-function",
+        "Runtime": "python3.9",
+        "Handler": "index.handler",
+        "MemorySize": 128,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/CodeForge-Lambda-ExecutionRole",
+        "Environment": {}
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "CodeForge-Users",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production",
+          "Owner": "platform-team"
+        }
+      },
+      {
+        "TableName": "CodeForge-Sessions",
+        "KeySchema": [
+          {
+            "AttributeName": "session_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "session_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "CodeForge-Analytics",
+        "KeySchema": [
+          {
+            "AttributeName": "event_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "event_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production",
+          "Owner": "analytics-team"
+        }
+      },
+      {
+        "TableName": "CodeForge-TempData",
+        "KeySchema": [
+          {
+            "AttributeName": "temp_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "temp_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {}
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "codeforge/prod/database",
+        "SecretString": "{\"username\": \"dbadmin\", \"password\": \"ComplexPassword123!\", \"host\": \"codeforge-prod.cluster-xyz.us-east-1.rds.amazonaws.com\"}",
+        "Tags": {
+          "Environment": "production",
+          "Owner": "platform-team"
+        }
+      },
+      {
+        "Name": "codeforge/prod/api-keys",
+        "SecretString": "{\"github_token\": \"ghp_1234567890abcdef\", \"stripe_key\": \"sk_live_1234567890abcdef\", \"sendgrid_key\": \"SG.1234567890abcdef\"}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "codeforge/legacy/credentials",
+        "SecretString": "admin:legacy-password-2019",
+        "Tags": {}
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "codeforge-webhook-queue",
+        "Attributes": {
+          "VisibilityTimeout": "300"
+        }
+      },
+      {
+        "QueueName": "codeforge-analytics-queue",
+        "Attributes": {
+          "VisibilityTimeout": "60"
+        }
+      },
+      {
+        "QueueName": "codeforge-deadletter-queue",
+        "Attributes": {
+          "VisibilityTimeout": "900"
+        }
+      }
+    ]
+  }
+}

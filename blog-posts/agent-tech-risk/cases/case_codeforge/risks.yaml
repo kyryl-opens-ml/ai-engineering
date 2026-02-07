@@ -1,0 +1,89 @@
+- category: tr1
+  resource: "CodeForge-DevOps-AdminPolicy"
+  issue: "Policy grants wildcard permissions (*:*) on all AWS resources"
+  severity: critical
+  why: "Created during 2021 rapid scaling when the 3-person DevOps team needed to deploy 50+ microservices quickly. Never refined after hiring security team in 2023."
+
+- category: tr1
+  resource: "CodeForge-DevOps-AdminRole"
+  issue: "Role allows cross-account access from any AWS principal (*) without MFA requirement"
+  severity: critical
+  why: "Originally configured for emergency access during the 2022 acquisition of DevSecure Inc. Temporary '*' principal was never restricted to specific accounts."
+
+- category: tr1
+  resource: "CodeForge-BuildAgent-Policy"
+  issue: "Build agents have excessive permissions including lambda:*, dynamodb:*, secretsmanager:* on all resources"
+  severity: high
+  why: "Build pipeline broke during Black Friday 2022 due to permission errors. Engineering VP granted broad permissions for 'temporary fix' that became permanent."
+
+- category: tr1
+  resource: "codeforge-service-account"
+  issue: "Service account user has full admin policy attached for programmatic access"
+  severity: high
+  why: "Created by founding CTO in 2020 for CI/CD automation. Credentials shared across 15+ repositories and never rotated due to fear of breaking builds."
+
+- category: tr1
+  resource: "CodeForge-Analytics-Policy"
+  issue: "Analytics role has s3:*, dynamodb:* permissions on all resources instead of scoped access"
+  severity: medium
+  why: "Data science team complained about access issues in Q3 2023. Platform team granted broad permissions to unblock $2M customer analytics contract."
+
+- category: tr13
+  resource: "codeforge-analytics-etl"
+  issue: "Lambda function uses Python 3.8 runtime which reached end-of-life"
+  severity: high
+  why: "ETL pipeline built by contractor in early 2023 using Python 3.8. Upgrade blocked by dependency on deprecated pandas version used by legacy ML models."
+
+- category: tr13
+  resource: "codeforge-legacy-migrator"
+  issue: "Lambda function uses Node.js 14.x runtime which is deprecated and unsupported"
+  severity: high
+  why: "Migration function written during 2022 acquisition of legacy customer base. Contains hardcoded business logic for 200+ enterprise customers, too risky to modify."
+
+- category: tr13
+  resource: "i-0d4e5f67890123456"
+  issue: "EC2 instance running outdated AMI from 12+ months ago with unpatched vulnerabilities"
+  severity: medium
+  why: "Staging environment instance forgotten after team moved to Kubernetes in Q2 2023. Contains legacy customer demo environments that sales team still references."
+
+- category: tr13
+  resource: "i-0e5f678901234567"
+  issue: "EC2 instance with legacy t2.micro type running old OS without security updates"
+  severity: medium
+  why: "Debug instance created during production outage in January 2023. Left running 'just in case' but contains forensic data from the incident."
+
+- category: tr15
+  resource: "codeforge-unused-function"
+  issue: "Lambda function has not been invoked in 90+ days but continues to incur costs"
+  severity: low
+  why: "Part of experiment for real-time code analysis feature that was deprioritized in Q4 2023. Team forgot to clean up when pivoting to AI-powered features."
+
+- category: tr15
+  resource: "i-0c3d4e5f678901234"
+  issue: "EC2 build agent instance missing Owner tag required by governance policy"
+  severity: medium
+  why: "Spun up during weekend hotfix in November 2023 when primary build infrastructure was overloaded. Emergency deployment bypassed tagging automation."
+
+- category: tr15
+  resource: "CodeForge-TempData"
+  issue: "DynamoDB table lacks Owner tag and has encryption disabled for cost optimization"
+  severity: medium
+  why: "Created for A/B testing framework in Q1 2023. Temporary table became permanent when tests showed 15% conversion improvement, but tags never added."
+
+- category: tr15
+  resource: "i-0d4e5f67890123456"
+  issue: "EC2 instance stopped for 90+ days but still incurring EBS storage costs"
+  severity: medium
+  why: "Staging environment shut down when team moved to containerized deployments but EBS volumes retained for 'compliance reasons' per legal team request."
+
+- category: tr15
+  resource: "codeforge-backup-staging"
+  issue: "S3 bucket lacks encryption and has been unused for 6+ months based on access patterns"
+  severity: low
+  why: "Created for database backup testing in Q2 2023 but replaced by automated RDS snapshots. Bucket forgotten during infrastructure consolidation project."
+
+- category: tr1
+  resource: "codeforge-auth-handler"
+  issue: "Lambda function contains hardcoded database passwords and API keys in environment variables"
+  severity: critical
+  why: "Authentication service rebuilt hastily after security breach in Q1 2023. Secrets moved to environment variables as 'temporary' solution but never migrated to AWS Secrets Manager."

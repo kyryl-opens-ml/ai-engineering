@@ -1,0 +1,9 @@
+aws_accounts: 2
+domain: devtools
+has_kubernetes: false
+name: DevPipe
+risk_categories:
+- tr1
+- tr2
+- tr13
+size: small

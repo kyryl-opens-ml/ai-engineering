@@ -1,0 +1,442 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "DevPipeLambdaExecutionRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["DevPipeComprehensivePolicy"]
+      },
+      {
+        "RoleName": "DevPipeEC2Role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["EC2BasicPolicy"]
+      },
+      {
+        "RoleName": "DevPipeLegacyAdminRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["AdminAccessPolicy"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "DevPipeComprehensivePolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "EC2BasicPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeTags",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "AdminAccessPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "DeveloperPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "lambda:InvokeFunction"
+              ],
+              "Resource": [
+                "arn:aws:s3:::devpipe-builds/*",
+                "arn:aws:dynamodb:us-east-1:123456789012:table/devpipe-*",
+                "arn:aws:lambda:us-east-1:123456789012:function:devpipe-*"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "devpipe-deploy-user",
+        "AttachedPolicies": ["DevPipeComprehensivePolicy"]
+      },
+      {
+        "UserName": "legacy-ci-user",
+        "AttachedPolicies": ["AdminAccessPolicy"]
+      },
+      {
+        "UserName": "john-developer",
+        "AttachedPolicies": ["DeveloperPolicy"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "devpipe-builds",
+        "Versioning": "Enabled",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "devpipe-artifacts-public",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "devpipe-backups",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "devpipe-logs",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0a1b2c3d4e5f6g7h8",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "devpipe-web-prod",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-9i8h7g6f5e4d3c2b1",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "devpipe-worker-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-1a2b3c4d5e6f7g8h9",
+        "InstanceType": "t3.small",
+        "State": "running",
+        "Tags": {
+          "Name": "devpipe-jenkins",
+          "Environment": "staging"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "devpipe-web-sg",
+        "Description": "Security group for DevPipe web servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "devpipe-ssh-wide-open",
+        "Description": "SSH access for emergency debugging",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "devpipe-internal",
+        "Description": "Internal communications",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      },
+      {
+        "GroupName": "devpipe-database-sg",
+        "Description": "Database security group",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {
+          "Name": "devpipe-main-vpc"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "devpipe-webhook-handler",
+        "Runtime": "python3.8",
+        "Handler": "index.handler",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": "arn:aws:iam::123456789012:role/DevPipeLambdaExecutionRole",
+        "Environment": {
+          "DB_HOST": "prod-db.internal.devpipe.com",
+          "DB_PASSWORD": "superSecretPassword123!",
+          "GITHUB_TOKEN": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "SLACK_WEBHOOK": "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
+        }
+      },
+      {
+        "FunctionName": "devpipe-build-processor",
+        "Runtime": "nodejs14.x",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/DevPipeLambdaExecutionRole",
+        "Environment": {
+          "S3_BUCKET": "devpipe-builds",
+          "QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123456789012/devpipe-builds"
+        }
+      },
+      {
+        "FunctionName": "devpipe-analytics",
+        "Runtime": "python3.11",
+        "Handler": "analytics.process",
+        "MemorySize": 1024,
+        "Timeout": 600,
+        "Role": "arn:aws:iam::123456789012:role/DevPipeLambdaExecutionRole",
+        "Environment": {
+          "ANALYTICS_DB": "analytics-cluster.cluster-xyz.us-east-1.rds.amazonaws.com"
+        }
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "devpipe-users",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "devpipe-builds",
+        "KeySchema": [
+          {
+            "AttributeName": "build_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "build_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "devpipe-analytics-events",
+        "KeySchema": [
+          {
+            "AttributeName": "event_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "event_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "devpipe/prod/database",
+        "SecretString": "{\"username\":\"devpipe_admin\",\"password\":\"prod_db_password_2023\",\"host\":\"prod-db.internal.devpipe.com\",\"port\":5432}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "devpipe/github-token",
+        "SecretString": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "devpipe/api-keys",
+        "SecretString": "stripe_sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "devpipe-builds",
+        "Attributes": {
+          "VisibilityTimeout": "300"
+        }
+      },
+      {
+        "QueueName": "devpipe-notifications",
+        "Attributes": {
+          "VisibilityTimeout": "30"
+        }
+      },
+      {
+        "QueueName": "devpipe-analytics-dlq",
+        "Attributes": {
+          "VisibilityTimeout": "60"
+        }
+      }
+    ]
+  }
+}

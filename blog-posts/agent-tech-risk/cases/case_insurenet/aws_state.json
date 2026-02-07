@@ -1,0 +1,589 @@
+{
+  "iam": {
+    "roles": [
+      {
+        "RoleName": "InsureNet-LegacyAdmin",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"AWS": "*"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["InsureNet-FullAccess"]
+      },
+      {
+        "RoleName": "InsureNet-DevOps",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "ec2.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["InsureNet-DevOpsPolicy"]
+      },
+      {
+        "RoleName": "InsureNet-LambdaExecution",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "lambda.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["InsureNet-LambdaPolicy"]
+      },
+      {
+        "RoleName": "InsureNet-CrossAccountAccess",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"AWS": "arn:aws:iam::*:root"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["InsureNet-ReadOnlyAccess"]
+      },
+      {
+        "RoleName": "InsureNet-API-Service",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {"Service": "ec2.amazonaws.com"},
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "AttachedPolicies": ["InsureNet-APIPolicy"]
+      }
+    ],
+    "policies": [
+      {
+        "PolicyName": "InsureNet-FullAccess",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "InsureNet-DevOpsPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ec2:*",
+                "s3:*",
+                "lambda:*",
+                "dynamodb:*",
+                "secretsmanager:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "InsureNet-LambdaPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "s3:GetObject",
+                "s3:PutObject"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "InsureNet-ReadOnlyAccess",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*",
+                "ec2:*",
+                "dynamodb:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      {
+        "PolicyName": "InsureNet-APIPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:Query",
+                "s3:GetObject",
+                "s3:PutObject",
+                "secretsmanager:GetSecretValue"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    ],
+    "users": [
+      {
+        "UserName": "insurenet-deployer",
+        "AttachedPolicies": ["InsureNet-FullAccess"]
+      },
+      {
+        "UserName": "legacy-admin",
+        "AttachedPolicies": ["InsureNet-FullAccess"]
+      }
+    ]
+  },
+  "s3": {
+    "buckets": [
+      {
+        "Name": "insurenet-prod-data",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "insurenet-customer-documents",
+        "Versioning": "Suspended",
+        "Encryption": "None",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      {
+        "Name": "insurenet-dev-assets",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "insurenet-backups",
+        "Versioning": "Enabled",
+        "Encryption": "AES256",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      {
+        "Name": "insurenet-analytics-raw",
+        "Versioning": "Suspended",
+        "Encryption": "SSE-S3",
+        "PublicAccessBlock": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        }
+      }
+    ]
+  },
+  "ec2": {
+    "instances": [
+      {
+        "InstanceId": "i-0abc123def456789a",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "insurenet-web-prod-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0def456abc789123b",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "insurenet-api-prod-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0fed789cba321456c",
+        "InstanceType": "t3.small",
+        "State": "running",
+        "Tags": {
+          "Name": "insurenet-worker-prod-01",
+          "Environment": "production"
+        }
+      },
+      {
+        "InstanceId": "i-0cab987def654321d",
+        "InstanceType": "t3.medium",
+        "State": "running",
+        "Tags": {
+          "Name": "insurenet-dev-sandbox",
+          "Environment": "development"
+        }
+      },
+      {
+        "InstanceId": "i-0bcd456789abc123e",
+        "InstanceType": "t3.large",
+        "State": "running",
+        "Tags": {
+          "Name": "insurenet-staging-web",
+          "Environment": "staging"
+        }
+      }
+    ],
+    "security_groups": [
+      {
+        "GroupName": "insurenet-web-sg",
+        "Description": "Security group for InsureNet web servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "insurenet-api-sg",
+        "Description": "Security group for InsureNet API servers",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      },
+      {
+        "GroupName": "insurenet-dev-all-open",
+        "Description": "Development environment - all ports open",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 0,
+            "ToPort": 65535,
+            "CidrBlocks": ["0.0.0.0/0"]
+          }
+        ]
+      },
+      {
+        "GroupName": "insurenet-database-sg",
+        "Description": "Security group for database access",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "CidrBlocks": ["0.0.0.0/0"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3306,
+            "ToPort": 3306,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      },
+      {
+        "GroupName": "insurenet-internal",
+        "Description": "Internal communication between services",
+        "IngressRules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrBlocks": ["10.0.0.0/16"]
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrBlocks": ["10.0.0.0/16"]
+          }
+        ]
+      }
+    ],
+    "vpcs": [
+      {
+        "CidrBlock": "10.0.0.0/16",
+        "Tags": {
+          "Name": "insurenet-prod-vpc"
+        }
+      },
+      {
+        "CidrBlock": "10.1.0.0/16",
+        "Tags": {
+          "Name": "insurenet-dev-vpc"
+        }
+      }
+    ]
+  },
+  "lambda": {
+    "functions": [
+      {
+        "FunctionName": "insurenet-quote-processor",
+        "Runtime": "python3.11",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Timeout": 300,
+        "Role": "arn:aws:iam::123456789012:role/InsureNet-LambdaExecution",
+        "Environment": {
+          "DB_PASSWORD": "prod_db_secret_123!",
+          "API_KEY": "sk-live-abc123def456",
+          "STRIPE_SECRET": "sk_live_51A2B3C4D5E6F7G8H9I0J1K2L3M4N5"
+        }
+      },
+      {
+        "FunctionName": "insurenet-claims-validator",
+        "Runtime": "nodejs18.x",
+        "Handler": "index.handler",
+        "MemorySize": 256,
+        "Timeout": 60,
+        "Role": "arn:aws:iam::123456789012:role/InsureNet-LambdaExecution",
+        "Environment": {
+          "NODE_ENV": "production",
+          "DATABASE_URL": "postgresql://insurenet:password123@prod-db.amazonaws.com:5432/claims"
+        }
+      },
+      {
+        "FunctionName": "insurenet-risk-calculator",
+        "Runtime": "python3.9",
+        "Handler": "main.calculate_risk",
+        "MemorySize": 1024,
+        "Timeout": 900,
+        "Role": "arn:aws:iam::123456789012:role/InsureNet-LambdaExecution",
+        "Environment": {
+          "ENVIRONMENT": "production"
+        }
+      },
+      {
+        "FunctionName": "insurenet-document-processor",
+        "Runtime": "python3.11",
+        "Handler": "processor.handle",
+        "MemorySize": 512,
+        "Timeout": 180,
+        "Role": "arn:aws:iam::123456789012:role/InsureNet-LambdaExecution",
+        "Environment": {
+          "S3_BUCKET": "insurenet-customer-documents",
+          "OCR_API_KEY": "ocr_prod_key_xyz789"
+        }
+      }
+    ]
+  },
+  "dynamodb": {
+    "tables": [
+      {
+        "TableName": "insurenet-policies",
+        "KeySchema": [
+          {
+            "AttributeName": "policy_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "policy_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "insurenet-claims",
+        "KeySchema": [
+          {
+            "AttributeName": "claim_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "claim_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "insurenet-users",
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": true
+        },
+        "PointInTimeRecoveryEnabled": true,
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "TableName": "insurenet-analytics",
+        "KeySchema": [
+          {
+            "AttributeName": "event_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "event_id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "SSESpecification": {
+          "Enabled": false
+        },
+        "PointInTimeRecoveryEnabled": false,
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "secretsmanager": {
+    "secrets": [
+      {
+        "Name": "insurenet/prod/database",
+        "SecretString": "{\"username\":\"admin\",\"password\":\"SuperSecretPassword123!\",\"host\":\"prod-db.amazonaws.com\",\"port\":5432}",
+        "Tags": {
+          "Environment": "production"
+        }
+      },
+      {
+        "Name": "insurenet/shared/api-keys",
+        "SecretString": "plain-text-api-key-shared-across-environments-abc123",
+        "Tags": {
+          "Environment": "shared"
+        }
+      },
+      {
+        "Name": "insurenet/prod/stripe",
+        "SecretString": "{\"publishable_key\":\"pk_live_xyz789\",\"secret_key\":\"sk_live_abc123\"}",
+        "Tags": {
+          "Environment": "production"
+        }
+      }
+    ]
+  },
+  "sqs": {
+    "queues": [
+      {
+        "QueueName": "insurenet-quote-processing",
+        "Attributes": {
+          "VisibilityTimeout": "300"
+        }
+      },
+      {
+        "QueueName": "insurenet-claims-queue",
+        "Attributes": {
+          "VisibilityTimeout": "60"
+        }
+      },
+      {
+        "QueueName": "insurenet-notifications",
+        "Attributes": {
+          "VisibilityTimeout": "30"
+        }
+      }
+    ]
+  }
+}
