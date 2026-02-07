@@ -276,31 +276,30 @@ def export_hf(
 
         record = {"case_id": case_dir.name}
 
-        # Profile
+        # Profile — flat scalar fields, safe for Arrow
         profile_file = case_dir / "profile.yaml"
         if profile_file.exists():
-            record["profile"] = yaml.safe_load(profile_file.read_text())
+            p = yaml.safe_load(profile_file.read_text())
+            record["company_name"] = p.get("name", "")
+            record["domain"] = p.get("domain", "")
+            record["size"] = p.get("size", "")
+            record["aws_accounts"] = p.get("aws_accounts", 0)
+            record["has_kubernetes"] = p.get("has_kubernetes", False)
+            record["risk_categories"] = ",".join(p.get("risk_categories", []))
 
-        # AWS State
+        # Complex nested structures stored as JSON strings to avoid Arrow type conflicts
         state_file = case_dir / "aws_state.json"
         if state_file.exists():
-            record["aws_state"] = json.loads(state_file.read_text())
+            record["aws_state"] = state_file.read_text()
 
-        # Risks
         risks_file = case_dir / "risks.yaml"
         if risks_file.exists():
-            risks_data = yaml.safe_load(risks_file.read_text())
-            if isinstance(risks_data, dict) and "risks" in risks_data:
-                record["risks"] = risks_data["risks"]
-            elif isinstance(risks_data, list):
-                record["risks"] = risks_data
+            record["risks"] = risks_file.read_text()
 
-        # Narrative
         narrative_file = case_dir / "narrative.md"
         if narrative_file.exists():
             record["narrative"] = narrative_file.read_text()
 
-        # Diagram
         diagram_file = case_dir / "diagram.md"
         if diagram_file.exists():
             record["diagram"] = diagram_file.read_text()

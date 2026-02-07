@@ -127,9 +127,40 @@ Structure:
 - CTA: Open-source links + Contact page.
 
 
-### List of small posts: 
+### List of small posts:
 
 
-- Agent to find risks 
+- Agent to find risks
 - Localstack
 - ClaudCDK
+
+---
+
+### Dev
+
+#### Commands
+
+```bash
+uv run risk-generator batch --count 10            # Generate 10 cases
+uv run risk-generator batch --count 10 -v         # Generate + validate on LocalStack
+uv run risk-generator deploy cases/case_payflow --keep  # Deploy single case
+uv run risk-generator export-hf cases/            # Export to HuggingFace JSONL
+uv run risk-generator config                      # Show profiles, categories, backend
+```
+
+#### Generated Cases
+
+| Case | Company | Domain | Size | Risks | Categories | Severity |
+|------|---------|--------|------|-------|------------|----------|
+| payflow | PayFlow | fintech | small | 7 | tr1, tr4 | 3C, 3H, 1M |
+| cloudsync | CloudSync | SaaS | medium | 12 | tr1, tr3, tr14 | 3C, 6H, 3M |
+| meddata | MedData | healthtech | large | 14 | tr1, tr2, tr4 | 3C, 7H, 4M |
+| shipfast | ShipFast | ecommerce | small | 8 | tr3, tr4, tr15 | 2C, 3H, 2M, 1L |
+| devpipe | DevPipe | devtools | small | 8 | tr1, tr2, tr13 | 3C, 3H, 2M |
+| insurenet | InsureNet | fintech | medium | 11 | tr1, tr4, tr5 | 2C, 6H, 3M |
+| datavault | DataVault | SaaS | medium | 11 | tr2, tr3, tr9 | 2C, 6H, 3M |
+| quickcart | QuickCart | ecommerce | large | 15 | tr1, tr4, tr8, tr15 | 2C, 6H, 5M, 2L |
+| healthbridge | HealthBridge | healthtech | medium | 12 | tr1, tr2, tr3 | 3C, 6H, 3M |
+| codeforge | CodeForge | devtools | large | 15 | tr1, tr13, tr15 | 3C, 4H, 6M, 2L |
+
+113 risks across 10 cases. All LocalStack free tier (iam, s3, ec2, lambda, dynamodb, secretsmanager, sqs). 100% risk-resource correlation.
