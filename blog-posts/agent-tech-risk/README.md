@@ -6,7 +6,13 @@
 
 ### Non-Tech Part!
 
-You buy a new company! Exciting! Numbers are good, growth is strong, but it dies and your asset is close to 0. Turns out tech risks were miscalculated. How would you catch this earlier? Hire a full engineering team [example]? Hire an agency [example]? Ask a friendly CTO to take a look [example]?
+You buy a new company! Exciting! Numbers are good, growth is strong, but it dies and your asset is close to 0. Turns out tech risks were miscalculated. How would you catch this earlier?
+
+Hire a full engineering team? Some PE/VC firms already do this: [Georgian](https://www.georgian.io/), [HG Capital](https://www.hgcapital.com/), [Insight Partners](https://www.insightpartners.com/), [Vista Equity](https://www.vistaequitypartners.com/), [SignalFire](https://www.signalfire.com/), [Primary VC](https://www.primary.vc/), [Summit Partners](https://www.summitpartners.com/)
+
+Hire an agency? Contract a specialized tech DD firm: [Crosslake](https://crosslaketech.com/), [Code & Co.](https://www.codeandco.com/), [West Monroe](https://www.westmonroe.com/industries/private-equity), [Quandary Peak](https://quandarypeak.com/software-technical-due-diligence/), [Palladium Digital](https://palladiumdigital.co.uk/), [ISG](https://isg-one.com/industries/private-equity-and-m-a)
+
+Ask a friendly CTO to take a look? Use expert networks: [AlphaSights](https://www.alphasights.com/), [GLG](https://www.glg.it/), [Guidepoint](https://www.guidepoint.com/), [Third Bridge](https://www.thirdbridge.com/), [Tegus](https://www.tegus.com/), [Toptal](https://www.toptal.com/)
 
 In many cases, you could automatically detect it with the full power of agents! If you are a private investor, as you review the data room to build your case, you should also review the "technical" data room before the transaction!
 
@@ -98,7 +104,6 @@ from risk_discovery.models import ScanResult
 
 load_dotenv()
 
-os.environ.setdefault("AWS_REGION", "us-east-2")
 
 SYSTEM_PROMPT = """\
 You are an AWS security analyst performing technical due diligence for a PE acquisition.
