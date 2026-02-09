@@ -1,9 +1,0 @@
-aws_accounts: 15
-domain: healthtech
-has_kubernetes: true
-name: MedData
-risk_categories:
-- tr1
-- tr2
-- tr4
-size: large

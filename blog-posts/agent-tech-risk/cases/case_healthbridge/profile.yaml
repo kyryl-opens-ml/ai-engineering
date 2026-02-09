@@ -1,9 +1,0 @@
-aws_accounts: 5
-domain: healthtech
-has_kubernetes: false
-name: HealthBridge
-risk_categories:
-- tr1
-- tr2
-- tr3
-size: medium

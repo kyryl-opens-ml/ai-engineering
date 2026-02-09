@@ -1,9 +1,0 @@
-aws_accounts: 6
-domain: fintech
-has_kubernetes: false
-name: InsureNet
-risk_categories:
-- tr1
-- tr4
-- tr5
-size: medium

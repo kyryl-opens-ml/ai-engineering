@@ -1,9 +1,0 @@
-aws_accounts: 7
-domain: saas
-has_kubernetes: true
-name: DataVault
-risk_categories:
-- tr2
-- tr3
-- tr9
-size: medium

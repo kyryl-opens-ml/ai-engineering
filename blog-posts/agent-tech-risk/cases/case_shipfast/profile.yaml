@@ -1,9 +1,0 @@
-aws_accounts: 2
-domain: ecommerce
-has_kubernetes: false
-name: ShipFast
-risk_categories:
-- tr3
-- tr4
-- tr15
-size: small
