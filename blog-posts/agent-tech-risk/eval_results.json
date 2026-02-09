@@ -1,0 +1,491 @@
+{
+  "timestamp": "2026-02-09T16:24:48.067224+00:00",
+  "models": [
+    "opus-4-6",
+    "opus-4-5",
+    "sonnet-4-5",
+    "haiku-4-5"
+  ],
+  "results": [
+    {
+      "model": "opus-4-6",
+      "cases": [
+        {
+          "tp": 12,
+          "fp": 32,
+          "fn": 0,
+          "precision": 0.2727272727272727,
+          "recall": 1.0,
+          "f1": 0.42857142857142855,
+          "case": "case_cloudsync",
+          "time": 120.25983095169067,
+          "found": 44,
+          "expected": 12
+        },
+        {
+          "tp": 10,
+          "fp": 35,
+          "fn": 5,
+          "precision": 0.2222222222222222,
+          "recall": 0.6666666666666666,
+          "f1": 0.3333333333333333,
+          "case": "case_codeforge",
+          "time": 99.10928606987,
+          "found": 45,
+          "expected": 15
+        },
+        {
+          "tp": 11,
+          "fp": 35,
+          "fn": 0,
+          "precision": 0.2391304347826087,
+          "recall": 1.0,
+          "f1": 0.3859649122807018,
+          "case": "case_datavault",
+          "time": 93.50996494293213,
+          "found": 46,
+          "expected": 11
+        },
+        {
+          "tp": 8,
+          "fp": 42,
+          "fn": 0,
+          "precision": 0.16,
+          "recall": 1.0,
+          "f1": 0.2758620689655173,
+          "case": "case_devpipe",
+          "time": 126.58003211021423,
+          "found": 50,
+          "expected": 8
+        },
+        {
+          "tp": 12,
+          "fp": 49,
+          "fn": 0,
+          "precision": 0.19672131147540983,
+          "recall": 1.0,
+          "f1": 0.3287671232876712,
+          "case": "case_healthbridge",
+          "time": 103.91701817512512,
+          "found": 61,
+          "expected": 12
+        },
+        {
+          "tp": 11,
+          "fp": 40,
+          "fn": 0,
+          "precision": 0.21568627450980393,
+          "recall": 1.0,
+          "f1": 0.3548387096774193,
+          "case": "case_insurenet",
+          "time": 127.19126415252686,
+          "found": 51,
+          "expected": 11
+        },
+        {
+          "tp": 13,
+          "fp": 41,
+          "fn": 1,
+          "precision": 0.24074074074074073,
+          "recall": 0.9285714285714286,
+          "f1": 0.3823529411764706,
+          "case": "case_meddata",
+          "time": 99.45228600502014,
+          "found": 54,
+          "expected": 14
+        },
+        {
+          "tp": 7,
+          "fp": 33,
+          "fn": 0,
+          "precision": 0.175,
+          "recall": 1.0,
+          "f1": 0.2978723404255319,
+          "case": "case_payflow",
+          "time": 87.6510100364685,
+          "found": 40,
+          "expected": 7
+        },
+        {
+          "tp": 15,
+          "fp": 46,
+          "fn": 0,
+          "precision": 0.2459016393442623,
+          "recall": 1.0,
+          "f1": 0.3947368421052631,
+          "case": "case_quickcart",
+          "time": 148.94207787513733,
+          "found": 61,
+          "expected": 15
+        },
+        {
+          "tp": 7,
+          "fp": 38,
+          "fn": 1,
+          "precision": 0.15555555555555556,
+          "recall": 0.875,
+          "f1": 0.26415094339622647,
+          "case": "case_shipfast",
+          "time": 114.4484589099884,
+          "found": 45,
+          "expected": 8
+        }
+      ],
+      "errors": 0,
+      "avg_precision": 0.2123685451357876,
+      "avg_recall": 0.9470238095238095,
+      "avg_f1": 0.34464506432195635,
+      "avg_time": 112.10612292289734
+    },
+    {
+      "model": "opus-4-5",
+      "cases": [
+        {
+          "tp": 12,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.3157894736842105,
+          "recall": 1.0,
+          "f1": 0.4799999999999999,
+          "case": "case_cloudsync",
+          "time": 82.90419292449951,
+          "found": 38,
+          "expected": 12
+        },
+        {
+          "tp": 11,
+          "fp": 30,
+          "fn": 4,
+          "precision": 0.2682926829268293,
+          "recall": 0.7333333333333333,
+          "f1": 0.3928571428571429,
+          "case": "case_codeforge",
+          "time": 75.47568798065186,
+          "found": 41,
+          "expected": 15
+        },
+        {
+          "tp": 11,
+          "fp": 45,
+          "fn": 0,
+          "precision": 0.19642857142857142,
+          "recall": 1.0,
+          "f1": 0.3283582089552239,
+          "case": "case_datavault",
+          "time": 92.32653284072876,
+          "found": 56,
+          "expected": 11
+        },
+        {
+          "tp": 8,
+          "fp": 29,
+          "fn": 0,
+          "precision": 0.21621621621621623,
+          "recall": 1.0,
+          "f1": 0.35555555555555557,
+          "case": "case_devpipe",
+          "time": 80.21921586990356,
+          "found": 37,
+          "expected": 8
+        },
+        {
+          "tp": 12,
+          "fp": 34,
+          "fn": 0,
+          "precision": 0.2608695652173913,
+          "recall": 1.0,
+          "f1": 0.41379310344827586,
+          "case": "case_healthbridge",
+          "time": 77.09645223617554,
+          "found": 46,
+          "expected": 12
+        },
+        {
+          "tp": 10,
+          "fp": 29,
+          "fn": 1,
+          "precision": 0.2564102564102564,
+          "recall": 0.9090909090909091,
+          "f1": 0.3999999999999999,
+          "case": "case_insurenet",
+          "time": 72.40946888923645,
+          "found": 39,
+          "expected": 11
+        },
+        {
+          "tp": 14,
+          "fp": 25,
+          "fn": 0,
+          "precision": 0.358974358974359,
+          "recall": 1.0,
+          "f1": 0.5283018867924528,
+          "case": "case_meddata",
+          "time": 77.03208231925964,
+          "found": 39,
+          "expected": 14
+        },
+        {
+          "tp": 7,
+          "fp": 18,
+          "fn": 0,
+          "precision": 0.28,
+          "recall": 1.0,
+          "f1": 0.43750000000000006,
+          "case": "case_payflow",
+          "time": 64.07552909851074,
+          "found": 25,
+          "expected": 7
+        },
+        {
+          "tp": 15,
+          "fp": 23,
+          "fn": 0,
+          "precision": 0.39473684210526316,
+          "recall": 1.0,
+          "f1": 0.5660377358490566,
+          "case": "case_quickcart",
+          "time": 78.41447901725769,
+          "found": 38,
+          "expected": 15
+        },
+        {
+          "tp": 7,
+          "fp": 25,
+          "fn": 1,
+          "precision": 0.21875,
+          "recall": 0.875,
+          "f1": 0.35,
+          "case": "case_shipfast",
+          "time": 81.21055698394775,
+          "found": 32,
+          "expected": 8
+        }
+      ],
+      "errors": 0,
+      "avg_precision": 0.2766467966963097,
+      "avg_recall": 0.9517424242424243,
+      "avg_f1": 0.42524036334577076,
+      "avg_time": 78.11641981601716
+    },
+    {
+      "model": "sonnet-4-5",
+      "cases": [
+        {
+          "tp": 12,
+          "fp": 36,
+          "fn": 0,
+          "precision": 0.25,
+          "recall": 1.0,
+          "f1": 0.4,
+          "case": "case_cloudsync",
+          "time": 160.32712697982788,
+          "found": 48,
+          "expected": 12
+        },
+        {
+          "tp": 11,
+          "fp": 34,
+          "fn": 4,
+          "precision": 0.24444444444444444,
+          "recall": 0.7333333333333333,
+          "f1": 0.36666666666666664,
+          "case": "case_codeforge",
+          "time": 2295.7160749435425,
+          "found": 45,
+          "expected": 15
+        },
+        {
+          "case": "case_datavault",
+          "error": "status_code: 400, model_name: us.anthropic.claude-sonnet-4-5-20250929-v1:0, body: {'Error': {'Message': 'The model returned the following errors: Input is too long for requested model.', 'Code': 'ValidationException'}, 'ResponseMetadata': {'RequestId': 'c662203c-fbac-4c2b-986c-3a2763478dec', 'HTTPStatusCode': 400, 'HTTPHeaders': {'date': 'Mon, 09 Feb 2026 15:48:04 GMT', 'content-type': 'application/json', 'content-length': '93', 'connection': 'keep-alive', 'x-amzn-requestid': 'c662203c-fbac-4c2b-986c-3a2763478dec', 'x-amzn-errortype': 'ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/'}, 'RetryAttempts': 0}, 'message': 'The model returned the following errors: Input is too long for requested model.'}"
+        },
+        {
+          "case": "case_devpipe",
+          "error": "status_code: 400, model_name: us.anthropic.claude-sonnet-4-5-20250929-v1:0, body: {'Error': {'Message': 'The model returned the following errors: Input is too long for requested model.', 'Code': 'ValidationException'}, 'ResponseMetadata': {'RequestId': 'cfcecc1f-18db-406c-85e5-4638aefd3e96', 'HTTPStatusCode': 400, 'HTTPHeaders': {'date': 'Mon, 09 Feb 2026 15:50:16 GMT', 'content-type': 'application/json', 'content-length': '93', 'connection': 'keep-alive', 'x-amzn-requestid': 'cfcecc1f-18db-406c-85e5-4638aefd3e96', 'x-amzn-errortype': 'ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/'}, 'RetryAttempts': 0}, 'message': 'The model returned the following errors: Input is too long for requested model.'}"
+        },
+        {
+          "case": "case_healthbridge",
+          "error": "status_code: 400, model_name: us.anthropic.claude-sonnet-4-5-20250929-v1:0, body: {'Error': {'Message': 'The model returned the following errors: Input is too long for requested model.', 'Code': 'ValidationException'}, 'ResponseMetadata': {'RequestId': '62d4ae4d-8c56-4e62-ac1a-9b98feb2fbb5', 'HTTPStatusCode': 400, 'HTTPHeaders': {'date': 'Mon, 09 Feb 2026 15:53:00 GMT', 'content-type': 'application/json', 'content-length': '93', 'connection': 'keep-alive', 'x-amzn-requestid': '62d4ae4d-8c56-4e62-ac1a-9b98feb2fbb5', 'x-amzn-errortype': 'ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/'}, 'RetryAttempts': 0}, 'message': 'The model returned the following errors: Input is too long for requested model.'}"
+        },
+        {
+          "tp": 11,
+          "fp": 35,
+          "fn": 0,
+          "precision": 0.2391304347826087,
+          "recall": 1.0,
+          "f1": 0.3859649122807018,
+          "case": "case_insurenet",
+          "time": 136.13725900650024,
+          "found": 46,
+          "expected": 11
+        },
+        {
+          "tp": 14,
+          "fp": 43,
+          "fn": 0,
+          "precision": 0.24561403508771928,
+          "recall": 1.0,
+          "f1": 0.3943661971830986,
+          "case": "case_meddata",
+          "time": 179.0750720500946,
+          "found": 57,
+          "expected": 14
+        },
+        {
+          "case": "case_payflow",
+          "error": "status_code: 400, model_name: us.anthropic.claude-sonnet-4-5-20250929-v1:0, body: {'Error': {'Message': 'The model returned the following errors: Input is too long for requested model.', 'Code': 'ValidationException'}, 'ResponseMetadata': {'RequestId': '2fe7c889-c77e-4a51-a5ac-052c62505d86', 'HTTPStatusCode': 400, 'HTTPHeaders': {'date': 'Mon, 09 Feb 2026 16:00:23 GMT', 'content-type': 'application/json', 'content-length': '93', 'connection': 'keep-alive', 'x-amzn-requestid': '2fe7c889-c77e-4a51-a5ac-052c62505d86', 'x-amzn-errortype': 'ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/'}, 'RetryAttempts': 0}, 'message': 'The model returned the following errors: Input is too long for requested model.'}"
+        },
+        {
+          "tp": 15,
+          "fp": 22,
+          "fn": 0,
+          "precision": 0.40540540540540543,
+          "recall": 1.0,
+          "f1": 0.5769230769230769,
+          "case": "case_quickcart",
+          "time": 111.54758191108704,
+          "found": 37,
+          "expected": 15
+        },
+        {
+          "tp": 7,
+          "fp": 23,
+          "fn": 1,
+          "precision": 0.23333333333333334,
+          "recall": 0.875,
+          "f1": 0.3684210526315789,
+          "case": "case_shipfast",
+          "time": 83.76968216896057,
+          "found": 30,
+          "expected": 8
+        }
+      ],
+      "errors": 4,
+      "avg_precision": 0.1617927653053511,
+      "avg_recall": 0.5608333333333333,
+      "avg_f1": 0.24923419056851231,
+      "avg_time": 296.6572797060013
+    },
+    {
+      "model": "haiku-4-5",
+      "cases": [
+        {
+          "case": "case_cloudsync",
+          "error": "The next request would exceed the request_limit of 50"
+        },
+        {
+          "tp": 11,
+          "fp": 20,
+          "fn": 4,
+          "precision": 0.3548387096774194,
+          "recall": 0.7333333333333333,
+          "f1": 0.47826086956521735,
+          "case": "case_codeforge",
+          "time": 144.80108499526978,
+          "found": 31,
+          "expected": 15
+        },
+        {
+          "tp": 11,
+          "fp": 16,
+          "fn": 0,
+          "precision": 0.4074074074074074,
+          "recall": 1.0,
+          "f1": 0.5789473684210525,
+          "case": "case_datavault",
+          "time": 111.21299386024475,
+          "found": 27,
+          "expected": 11
+        },
+        {
+          "tp": 8,
+          "fp": 20,
+          "fn": 0,
+          "precision": 0.2857142857142857,
+          "recall": 1.0,
+          "f1": 0.4444444444444445,
+          "case": "case_devpipe",
+          "time": 133.8683581352234,
+          "found": 28,
+          "expected": 8
+        },
+        {
+          "tp": 12,
+          "fp": 40,
+          "fn": 0,
+          "precision": 0.23076923076923078,
+          "recall": 1.0,
+          "f1": 0.375,
+          "case": "case_healthbridge",
+          "time": 151.10934782028198,
+          "found": 52,
+          "expected": 12
+        },
+        {
+          "tp": 11,
+          "fp": 37,
+          "fn": 0,
+          "precision": 0.22916666666666666,
+          "recall": 1.0,
+          "f1": 0.37288135593220334,
+          "case": "case_insurenet",
+          "time": 70.6663773059845,
+          "found": 48,
+          "expected": 11
+        },
+        {
+          "tp": 9,
+          "fp": 34,
+          "fn": 5,
+          "precision": 0.20930232558139536,
+          "recall": 0.6428571428571429,
+          "f1": 0.31578947368421056,
+          "case": "case_meddata",
+          "time": 209.00861811637878,
+          "found": 43,
+          "expected": 14
+        },
+        {
+          "tp": 7,
+          "fp": 15,
+          "fn": 0,
+          "precision": 0.3181818181818182,
+          "recall": 1.0,
+          "f1": 0.4827586206896552,
+          "case": "case_payflow",
+          "time": 62.26767611503601,
+          "found": 22,
+          "expected": 7
+        },
+        {
+          "tp": 15,
+          "fp": 25,
+          "fn": 0,
+          "precision": 0.375,
+          "recall": 1.0,
+          "f1": 0.5454545454545454,
+          "case": "case_quickcart",
+          "time": 105.14124798774719,
+          "found": 40,
+          "expected": 15
+        },
+        {
+          "tp": 7,
+          "fp": 31,
+          "fn": 1,
+          "precision": 0.18421052631578946,
+          "recall": 0.875,
+          "f1": 0.30434782608695654,
+          "case": "case_shipfast",
+          "time": 105.34517288208008,
+          "found": 38,
+          "expected": 8
+        }
+      ],
+      "errors": 1,
+      "avg_precision": 0.2594590970314013,
+      "avg_recall": 0.8251190476190476,
+      "avg_f1": 0.3897884504278285,
+      "avg_time": 109.34208772182464
+    }
+  ]
+}
