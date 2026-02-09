@@ -141,16 +141,43 @@ Structure:
 
 ---
 
+
+
 ### Dev
+
+#### Quick Start: Generate, Deploy, Scan
+
+```bash
+# 1. Generate a new case
+uv run risk-generator create
+
+# 2. Deploy to LocalStack (keeps container running)
+uv run risk-generator deploy cases/case_XXXX --keep
+# → Endpoint: http://localhost:PORT
+
+# 3. Run agent inference against it
+uv run risk-discovery infer http://localhost:PORT
+
+# 4. Cleanup
+docker rm -f localstack-risk-PORT
+```
 
 #### Commands
 
 ```bash
-uv run risk-generator batch --count 10            # Generate 10 cases
-uv run risk-generator batch --count 10 -v         # Generate + validate on LocalStack
-uv run risk-generator deploy cases/case_payflow --keep  # Deploy single case
-uv run risk-generator export-hf cases/            # Export to HuggingFace JSONL
-uv run risk-generator config                      # Show profiles, categories, backend
+# Generator
+uv run risk-generator create                             # Generate single case
+uv run risk-generator batch --count 10                   # Generate 10 cases
+uv run risk-generator batch --count 10 -v                # Generate + validate on LocalStack
+uv run risk-generator deploy cases/case_payflow --keep   # Deploy single case
+uv run risk-generator export-hf cases/                   # Export to HuggingFace JSONL
+uv run risk-generator config                             # Show profiles, categories, backend
+
+# Discovery
+uv run risk-discovery infer http://localhost:4566         # Scan single endpoint
+uv run risk-discovery eval                                # Eval all 4 models
+uv run risk-discovery eval -m opus-4-5                    # Eval single model
+uv run python scripts/run_eval.py --output results.json   # Reproducible eval script
 ```
 
 #### Generated Cases
