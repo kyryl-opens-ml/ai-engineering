@@ -1,16 +1,16 @@
 """Data models for risk discovery."""
+
 from typing import Literal
+
 from pydantic import BaseModel
 
 
 class RiskFinding(BaseModel):
-    category: str
-    resource_arn: str
+    category: str  # e.g. tr1, tr3, tr4
+    resource: str  # resource name (policy name, bucket name, sg name, etc.)
+    issue: str  # what's wrong
     severity: Literal["critical", "high", "medium", "low"]
-    title: str
-    description: str
 
 
 class ScanResult(BaseModel):
     findings: list[RiskFinding]
-    resources_scanned: int
