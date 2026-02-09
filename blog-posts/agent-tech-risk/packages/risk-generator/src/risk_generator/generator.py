@@ -1,4 +1,5 @@
 """Generate risk cases using Claude Agent SDK."""
+
 import asyncio
 import os
 from pathlib import Path
@@ -221,7 +222,13 @@ async def generate_case_async(
     output_dir: Path,
 ) -> dict:
     """Generate a risk case using Claude Agent SDK."""
-    from claude_agent_sdk import query, ClaudeAgentOptions, ResultMessage, AssistantMessage, ToolUseBlock
+    from claude_agent_sdk import (
+        query,
+        ClaudeAgentOptions,
+        ResultMessage,
+        AssistantMessage,
+        ToolUseBlock,
+    )
 
     # Resolve profile
     if isinstance(profile, str):
@@ -239,14 +246,18 @@ async def generate_case_async(
 
     # Save profile metadata
     with open(output_dir / "profile.yaml", "w") as f:
-        yaml.dump({
-            "name": profile.name,
-            "domain": profile.domain,
-            "size": profile.size,
-            "aws_accounts": profile.aws_accounts,
-            "has_kubernetes": profile.has_kubernetes,
-            "risk_categories": risk_codes,
-        }, f, default_flow_style=False)
+        yaml.dump(
+            {
+                "name": profile.name,
+                "domain": profile.domain,
+                "size": profile.size,
+                "aws_accounts": profile.aws_accounts,
+                "has_kubernetes": profile.has_kubernetes,
+                "risk_categories": risk_codes,
+            },
+            f,
+            default_flow_style=False,
+        )
 
     # Configure SDK options
     options_kwargs = {
@@ -265,7 +276,10 @@ async def generate_case_async(
     # Track stats
     stats = {"files_written": [], "cost": None, "tokens": None, "duration_ms": None}
 
-    async for message in query(prompt=build_prompt(profile, risk_codes), options=ClaudeAgentOptions(**options_kwargs)):
+    async for message in query(
+        prompt=build_prompt(profile, risk_codes),
+        options=ClaudeAgentOptions(**options_kwargs),
+    ):
         if isinstance(message, AssistantMessage):
             for block in message.content:
                 if isinstance(block, ToolUseBlock) and block.name == "Write":

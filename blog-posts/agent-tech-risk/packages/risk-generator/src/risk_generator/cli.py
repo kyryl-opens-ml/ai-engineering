@@ -1,4 +1,5 @@
 """Risk Generator CLI - generate, deploy, create, batch, export-hf, config."""
+
 import json
 import random
 from pathlib import Path
@@ -8,7 +9,7 @@ import yaml
 from rich.console import Console
 from rich.table import Table
 
-from risk_generator.categories import RISK_CATEGORIES, LOCALSTACK_FREE_CATEGORIES, list_categories
+from risk_generator.categories import RISK_CATEGORIES, LOCALSTACK_FREE_CATEGORIES
 from risk_generator.models import PROFILE_PRESETS
 from risk_generator.generator import generate_case_sync
 from risk_generator.deployer import deploy_to_localstack
@@ -75,8 +76,12 @@ CASE_PLANS = [
 @app.command()
 def generate(
     profile: str = typer.Option("cloudsync", "--profile", "-p", help="Company profile"),
-    risks: str = typer.Option(..., "--risks", "-r", help="Risk categories (e.g., tr1,tr4)"),
-    output: str = typer.Option("cases/case_001", "--output", "-o", help="Output directory"),
+    risks: str = typer.Option(
+        ..., "--risks", "-r", help="Risk categories (e.g., tr1,tr4)"
+    ),
+    output: str = typer.Option(
+        "cases/case_001", "--output", "-o", help="Output directory"
+    ),
 ):
     """Generate a risk case using Claude Code."""
     if profile not in PROFILE_PRESETS:
@@ -91,7 +96,9 @@ def generate(
             raise typer.Exit(1)
 
     output_path = Path(output)
-    console.print(f"[blue]Generating case: profile={profile}, risks={risk_codes}[/blue]")
+    console.print(
+        f"[blue]Generating case: profile={profile}, risks={risk_codes}[/blue]"
+    )
 
     try:
         stats = generate_case_sync(profile, risk_codes, output_path)
@@ -108,7 +115,9 @@ def generate(
 @app.command()
 def deploy(
     case: str = typer.Argument(..., help="Path to case directory"),
-    port: int = typer.Option(None, "--port", "-p", help="LocalStack port (random if not set)"),
+    port: int = typer.Option(
+        None, "--port", "-p", help="LocalStack port (random if not set)"
+    ),
     keep: bool = typer.Option(False, "--keep", "-k", help="Keep LocalStack running"),
 ):
     """Deploy a case to LocalStack."""
@@ -127,7 +136,9 @@ def deploy(
             console.print(f"  ... and {result['deployed_count'] - 10} more")
 
         if result["skipped"]:
-            console.print(f"[dim]Skipped {len(result['skipped'])} resources (Pro required)[/dim]")
+            console.print(
+                f"[dim]Skipped {len(result['skipped'])} resources (Pro required)[/dim]"
+            )
 
         if result["failed"]:
             console.print(f"[yellow]Failed {len(result['failed'])}[/yellow]")
@@ -136,11 +147,15 @@ def deploy(
 
         if result.get("risks"):
             r = result["risks"]
-            console.print(f"[blue]Risks: {r['active_count']}/{r['original_count']} active[/blue]")
+            console.print(
+                f"[blue]Risks: {r['active_count']}/{r['original_count']} active[/blue]"
+            )
 
         if keep:
             console.print(f"\n[blue]Endpoint: {result['endpoint']}[/blue]")
-            console.print(f"[yellow]Stop with: docker rm -f {result['container_id']}[/yellow]")
+            console.print(
+                f"[yellow]Stop with: docker rm -f {result['container_id']}[/yellow]"
+            )
     except Exception as e:
         console.print(f"[red]Error: {e}[/red]")
         raise typer.Exit(1)
@@ -148,9 +163,15 @@ def deploy(
 
 @app.command()
 def create(
-    profile: str = typer.Option(None, "--profile", "-p", help="Company profile (random if not set)"),
-    risks: str = typer.Option(None, "--risks", "-r", help="Risk categories (random if not set)"),
-    output: str = typer.Option(None, "--output", "-o", help="Output directory (auto if not set)"),
+    profile: str = typer.Option(
+        None, "--profile", "-p", help="Company profile (random if not set)"
+    ),
+    risks: str = typer.Option(
+        None, "--risks", "-r", help="Risk categories (random if not set)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="Output directory (auto if not set)"
+    ),
 ):
     """Generate a case and validate deployment."""
     # Defaults
@@ -163,16 +184,19 @@ def create(
         risk_codes = [r.strip() for r in risks.split(",")]
         non_free = [r for r in risk_codes if r not in LOCALSTACK_FREE_CATEGORIES]
         if non_free:
-            console.print(f"[yellow]Note: {non_free} need LocalStack Pro for full deployment[/yellow]")
+            console.print(
+                f"[yellow]Note: {non_free} need LocalStack Pro for full deployment[/yellow]"
+            )
 
     if output is None:
         import time
+
         output = f"cases/case_{int(time.time())}"
 
     output_path = Path(output)
 
     # Step 1: Generate
-    console.print(f"\n[bold]Step 1: Generate[/bold]")
+    console.print("\n[bold]Step 1: Generate[/bold]")
     console.print(f"  Profile: {profile}, Risks: {risk_codes}")
 
     try:
@@ -183,7 +207,7 @@ def create(
         raise typer.Exit(1)
 
     # Step 2: Deploy (to validate and update risks.yaml)
-    console.print(f"\n[bold]Step 2: Validate & Update Risks[/bold]")
+    console.print("\n[bold]Step 2: Validate & Update Risks[/bold]")
 
     try:
         result = deploy_to_localstack(output_path, keep_running=False)
@@ -194,7 +218,9 @@ def create(
 
         if result.get("risks"):
             r = result["risks"]
-            console.print(f"[green]Risks updated: {r['active_count']}/{r['original_count']} active[/green]")
+            console.print(
+                f"[green]Risks updated: {r['active_count']}/{r['original_count']} active[/green]"
+            )
 
         console.print(f"\n[bold]Case ready at: {output_path}[/bold]")
     except Exception as e:
@@ -206,7 +232,9 @@ def create(
 def batch(
     count: int = typer.Option(10, "--count", "-n", help="Number of cases to generate"),
     output: str = typer.Option("cases", "--output", "-o", help="Base output directory"),
-    validate: bool = typer.Option(False, "--validate", "-v", help="Deploy each case to LocalStack to validate"),
+    validate: bool = typer.Option(
+        False, "--validate", "-v", help="Deploy each case to LocalStack to validate"
+    ),
 ):
     """Generate multiple cases using predefined plans."""
     plans = CASE_PLANS[:count]
@@ -225,30 +253,48 @@ def batch(
     results = []
     for i, plan in enumerate(plans, 1):
         case_dir = base_path / f"case_{plan['profile']}"
-        console.print(f"\n[bold]--- Case {i}/{len(plans)}: {plan['profile']} ---[/bold]")
+        console.print(
+            f"\n[bold]--- Case {i}/{len(plans)}: {plan['profile']} ---[/bold]"
+        )
         console.print(f"  Risks: {plan['risks']}")
         console.print(f"  Output: {case_dir}")
 
         try:
-            stats = generate_case_sync(plan["profile"], plan["risks"], case_dir)
-            console.print(f"  [green]Generated[/green]")
+            generate_case_sync(plan["profile"], plan["risks"], case_dir)
+            console.print("  [green]Generated[/green]")
 
             if validate:
                 try:
                     deploy_result = deploy_to_localstack(case_dir, keep_running=False)
-                    console.print(f"  [green]Validated: {deploy_result['deployed_count']} deployed[/green]")
-                    results.append({"case": plan["profile"], "status": "ok", "deployed": deploy_result["deployed_count"]})
+                    console.print(
+                        f"  [green]Validated: {deploy_result['deployed_count']} deployed[/green]"
+                    )
+                    results.append(
+                        {
+                            "case": plan["profile"],
+                            "status": "ok",
+                            "deployed": deploy_result["deployed_count"],
+                        }
+                    )
                 except Exception as e:
                     console.print(f"  [yellow]Validation failed: {e}[/yellow]")
-                    results.append({"case": plan["profile"], "status": "gen_ok_validate_fail", "error": str(e)})
+                    results.append(
+                        {
+                            "case": plan["profile"],
+                            "status": "gen_ok_validate_fail",
+                            "error": str(e),
+                        }
+                    )
             else:
                 results.append({"case": plan["profile"], "status": "ok"})
         except Exception as e:
             console.print(f"  [red]Failed: {e}[/red]")
-            results.append({"case": plan["profile"], "status": "failed", "error": str(e)})
+            results.append(
+                {"case": plan["profile"], "status": "failed", "error": str(e)}
+            )
 
     # Summary
-    console.print(f"\n[bold]Summary[/bold]")
+    console.print("\n[bold]Summary[/bold]")
     ok = sum(1 for r in results if r["status"] == "ok")
     console.print(f"  Generated: {ok}/{len(plans)}")
     failed = [r for r in results if r["status"] == "failed"]
@@ -260,8 +306,12 @@ def batch(
 
 @app.command(name="export-hf")
 def export_hf(
-    cases_dir: str = typer.Argument("cases", help="Directory containing case subdirectories"),
-    output: str = typer.Option("dataset.jsonl", "--output", "-o", help="Output JSONL file"),
+    cases_dir: str = typer.Argument(
+        "cases", help="Directory containing case subdirectories"
+    ),
+    output: str = typer.Option(
+        "dataset.jsonl", "--output", "-o", help="Output JSONL file"
+    ),
 ):
     """Export cases as HuggingFace-compatible JSONL dataset."""
     cases_path = Path(cases_dir)
@@ -312,7 +362,9 @@ def export_hf(
             f.write(json.dumps(record, default=str) + "\n")
 
     console.print(f"[green]Exported {len(records)} cases to {output_path}[/green]")
-    console.print(f"Load with: datasets.load_dataset('json', data_files='{output_path}')")
+    console.print(
+        f"Load with: datasets.load_dataset('json', data_files='{output_path}')"
+    )
 
 
 @app.command()
@@ -343,11 +395,15 @@ def config():
     table.add_column("Size")
     table.add_column("K8s")
     for key, p in PROFILE_PRESETS.items():
-        table.add_row(key, p.name, p.domain, p.size, "yes" if p.has_kubernetes else "no")
+        table.add_row(
+            key, p.name, p.domain, p.size, "yes" if p.has_kubernetes else "no"
+        )
     console.print(table)
 
     # Risk categories
-    console.print(f"\n[bold]Risk Categories[/bold] ({len(RISK_CATEGORIES)} total, {len(LOCALSTACK_FREE_CATEGORIES)} free-tier)")
+    console.print(
+        f"\n[bold]Risk Categories[/bold] ({len(RISK_CATEGORIES)} total, {len(LOCALSTACK_FREE_CATEGORIES)} free-tier)"
+    )
     table = Table()
     table.add_column("Code")
     table.add_column("Name")

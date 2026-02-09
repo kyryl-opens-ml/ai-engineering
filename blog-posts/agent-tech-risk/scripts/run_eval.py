@@ -9,11 +9,8 @@ Usage:
 
 import argparse
 import json
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from risk_discovery.eval import MODELS, run_eval
 

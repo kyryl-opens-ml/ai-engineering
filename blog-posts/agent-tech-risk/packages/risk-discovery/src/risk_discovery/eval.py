@@ -40,17 +40,25 @@ def load_cases() -> list[dict]:
             row = json.loads(line)
             risks_raw = row["risks"]
             # risks stored as YAML string
-            risks = yaml.safe_load(risks_raw) if isinstance(risks_raw, str) else risks_raw
+            risks = (
+                yaml.safe_load(risks_raw) if isinstance(risks_raw, str) else risks_raw
+            )
             if isinstance(risks, dict) and "risks" in risks:
                 risks = risks["risks"]
             # filter skipped
-            risks = [r for r in (risks or []) if r.get("_status", "active") != "skipped"]
+            risks = [
+                r for r in (risks or []) if r.get("_status", "active") != "skipped"
+            ]
 
-            cases.append({
-                "name": row["case_id"],
-                "aws_state": json.loads(row["aws_state"]) if isinstance(row["aws_state"], str) else row["aws_state"],
-                "risks": risks,
-            })
+            cases.append(
+                {
+                    "name": row["case_id"],
+                    "aws_state": json.loads(row["aws_state"])
+                    if isinstance(row["aws_state"], str)
+                    else row["aws_state"],
+                    "risks": risks,
+                }
+            )
     return cases
 
 
@@ -111,7 +119,9 @@ def match_risks(findings: list[RiskFinding], ground_truth: list[dict]) -> dict:
 
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+    f1 = (
+        2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+    )
 
     return {
         "tp": tp,
@@ -234,9 +244,7 @@ def run_eval(
     # Cleanup containers
     console.print("\n[dim]Cleaning up containers...[/dim]")
     for dep in valid_deps:
-        subprocess.run(
-            ["docker", "rm", "-f", dep["container_id"]], capture_output=True
-        )
+        subprocess.run(["docker", "rm", "-f", dep["container_id"]], capture_output=True)
 
     # Summary table
     print_comparison(all_results)

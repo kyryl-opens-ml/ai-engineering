@@ -1,4 +1,5 @@
 """Deploy AWS state to LocalStack."""
+
 import io
 import json
 import socket
@@ -43,10 +44,15 @@ def start_localstack(port: int) -> str:
     # Start container
     result = subprocess.run(
         [
-            "docker", "run", "-d",
-            "--name", name,
-            "-p", f"{port}:4566",
-            "-e", f"SERVICES={LOCALSTACK_SERVICES}",
+            "docker",
+            "run",
+            "-d",
+            "--name",
+            name,
+            "-p",
+            f"{port}:4566",
+            "-e",
+            f"SERVICES={LOCALSTACK_SERVICES}",
             "localstack/localstack",
         ],
         capture_output=True,
@@ -118,10 +124,18 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
             if not doc.get("Statement"):
                 doc = {
                     "Version": "2012-10-17",
-                    "Statement": [{"Effect": "Allow", "Action": "sts:GetCallerIdentity", "Resource": "*"}],
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "sts:GetCallerIdentity",
+                            "Resource": "*",
+                        }
+                    ],
                 }
             try:
-                resp = iam.create_policy(PolicyName=name, PolicyDocument=json.dumps(doc))
+                resp = iam.create_policy(
+                    PolicyName=name, PolicyDocument=json.dumps(doc)
+                )
                 arn = resp["Policy"]["Arn"]
                 policy_arns[name] = arn
                 results["deployed"].append(f"iam:policy:{name}")
@@ -133,17 +147,30 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
             name = get_field(role, "RoleName", "name", "role_name")
             if not name:
                 continue
-            assume_doc = get_field(role, "AssumeRolePolicyDocument", "assume_role_policy_document", default={})
+            assume_doc = get_field(
+                role,
+                "AssumeRolePolicyDocument",
+                "assume_role_policy_document",
+                default={},
+            )
             if not assume_doc.get("Version"):
                 assume_doc = {"Version": "2012-10-17", "Statement": []}
             try:
-                iam.create_role(RoleName=name, AssumeRolePolicyDocument=json.dumps(assume_doc))
+                iam.create_role(
+                    RoleName=name, AssumeRolePolicyDocument=json.dumps(assume_doc)
+                )
                 results["deployed"].append(f"iam:role:{name}")
 
                 # Attach policies
-                attached = get_field(role, "AttachedPolicies", "attached_policies", default=[])
+                attached = get_field(
+                    role, "AttachedPolicies", "attached_policies", default=[]
+                )
                 for policy_ref in attached:
-                    policy_name = policy_ref.split("/")[-1] if "/" in str(policy_ref) else policy_ref
+                    policy_name = (
+                        policy_ref.split("/")[-1]
+                        if "/" in str(policy_ref)
+                        else policy_ref
+                    )
                     arn = policy_arns.get(policy_name)
                     if arn:
                         try:
@@ -162,9 +189,15 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
                 iam.create_user(UserName=name)
                 results["deployed"].append(f"iam:user:{name}")
 
-                attached = get_field(user, "AttachedPolicies", "attached_policies", default=[])
+                attached = get_field(
+                    user, "AttachedPolicies", "attached_policies", default=[]
+                )
                 for policy_ref in attached:
-                    policy_name = policy_ref.split("/")[-1] if "/" in str(policy_ref) else policy_ref
+                    policy_name = (
+                        policy_ref.split("/")[-1]
+                        if "/" in str(policy_ref)
+                        else policy_ref
+                    )
                     arn = policy_arns.get(policy_name)
                     if arn:
                         try:
@@ -192,10 +225,30 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
                         s3.put_public_access_block(
                             Bucket=name,
                             PublicAccessBlockConfiguration={
-                                "BlockPublicAcls": get_field(pab, "BlockPublicAcls", "block_public_acls", default=True),
-                                "IgnorePublicAcls": get_field(pab, "IgnorePublicAcls", "ignore_public_acls", default=True),
-                                "BlockPublicPolicy": get_field(pab, "BlockPublicPolicy", "block_public_policy", default=True),
-                                "RestrictPublicBuckets": get_field(pab, "RestrictPublicBuckets", "restrict_public_buckets", default=True),
+                                "BlockPublicAcls": get_field(
+                                    pab,
+                                    "BlockPublicAcls",
+                                    "block_public_acls",
+                                    default=True,
+                                ),
+                                "IgnorePublicAcls": get_field(
+                                    pab,
+                                    "IgnorePublicAcls",
+                                    "ignore_public_acls",
+                                    default=True,
+                                ),
+                                "BlockPublicPolicy": get_field(
+                                    pab,
+                                    "BlockPublicPolicy",
+                                    "block_public_policy",
+                                    default=True,
+                                ),
+                                "RestrictPublicBuckets": get_field(
+                                    pab,
+                                    "RestrictPublicBuckets",
+                                    "restrict_public_buckets",
+                                    default=True,
+                                ),
                             },
                         )
                     except Exception:
@@ -233,7 +286,9 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
             name = get_field(sg, "GroupName", "group_name", "name")
             if not name:
                 continue
-            desc = get_field(sg, "Description", "description", default=f"Security group {name}")
+            desc = get_field(
+                sg, "Description", "description", default=f"Security group {name}"
+            )
             try:
                 resp = ec2.create_security_group(GroupName=name, Description=desc)
                 sg_id = resp["GroupId"]
@@ -242,19 +297,30 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
                 # Deploy ingress rules
                 ingress = get_field(sg, "IngressRules", "ingress_rules", default=[])
                 for rule in ingress:
-                    cidr_blocks = get_field(rule, "CidrBlocks", "cidr_blocks", default=[])
+                    cidr_blocks = get_field(
+                        rule, "CidrBlocks", "cidr_blocks", default=[]
+                    )
                     from_port = get_field(rule, "FromPort", "from_port")
                     to_port = get_field(rule, "ToPort", "to_port")
                     if from_port is not None and to_port is not None and cidr_blocks:
                         try:
                             ec2.authorize_security_group_ingress(
                                 GroupId=sg_id,
-                                IpPermissions=[{
-                                    "IpProtocol": get_field(rule, "IpProtocol", "ip_protocol", default="tcp"),
-                                    "FromPort": int(from_port),
-                                    "ToPort": int(to_port),
-                                    "IpRanges": [{"CidrIp": cidr} for cidr in cidr_blocks],
-                                }],
+                                IpPermissions=[
+                                    {
+                                        "IpProtocol": get_field(
+                                            rule,
+                                            "IpProtocol",
+                                            "ip_protocol",
+                                            default="tcp",
+                                        ),
+                                        "FromPort": int(from_port),
+                                        "ToPort": int(to_port),
+                                        "IpRanges": [
+                                            {"CidrIp": cidr} for cidr in cidr_blocks
+                                        ],
+                                    }
+                                ],
                             )
                         except Exception:
                             pass
@@ -270,15 +336,28 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
             name = get_field(func, "FunctionName", "function_name", "name")
             if not name:
                 continue
-            env_vars = get_field(func, "Environment", "environment_variables", default={})
+            env_vars = get_field(
+                func, "Environment", "environment_variables", default={}
+            )
             try:
                 kwargs = {
                     "FunctionName": name,
-                    "Runtime": get_field(func, "Runtime", "runtime", default="python3.9"),
-                    "Role": get_field(func, "Role", "role", default="arn:aws:iam::000000000000:role/lambda-role"),
-                    "Handler": get_field(func, "Handler", "handler", default="index.handler"),
+                    "Runtime": get_field(
+                        func, "Runtime", "runtime", default="python3.9"
+                    ),
+                    "Role": get_field(
+                        func,
+                        "Role",
+                        "role",
+                        default="arn:aws:iam::000000000000:role/lambda-role",
+                    ),
+                    "Handler": get_field(
+                        func, "Handler", "handler", default="index.handler"
+                    ),
                     "Code": {"ZipFile": zip_bytes},
-                    "MemorySize": int(get_field(func, "MemorySize", "memory_size", default=128)),
+                    "MemorySize": int(
+                        get_field(func, "MemorySize", "memory_size", default=128)
+                    ),
                     "Timeout": int(get_field(func, "Timeout", "timeout", default=30)),
                 }
                 if env_vars:
@@ -296,11 +375,15 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
             if not name:
                 continue
             key_schema = get_field(
-                table, "KeySchema", "key_schema",
+                table,
+                "KeySchema",
+                "key_schema",
                 default=[{"AttributeName": "id", "KeyType": "HASH"}],
             )
             attr_defs = get_field(
-                table, "AttributeDefinitions", "attribute_definitions",
+                table,
+                "AttributeDefinitions",
+                "attribute_definitions",
                 default=[{"AttributeName": "id", "AttributeType": "S"}],
             )
             try:
@@ -308,7 +391,9 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
                     TableName=name,
                     KeySchema=key_schema,
                     AttributeDefinitions=attr_defs,
-                    BillingMode=get_field(table, "BillingMode", "billing_mode", default="PAY_PER_REQUEST"),
+                    BillingMode=get_field(
+                        table, "BillingMode", "billing_mode", default="PAY_PER_REQUEST"
+                    ),
                 )
                 results["deployed"].append(f"dynamodb:table:{name}")
             except Exception:
@@ -348,7 +433,13 @@ def deploy_resources(state: dict, endpoint: str) -> dict:
     # --- RDS (Pro only - skip) ---
     if "rds" in state:
         for db in state["rds"].get("instances", []):
-            name = get_field(db, "DBInstanceIdentifier", "db_instance_identifier", "identifier", "name")
+            name = get_field(
+                db,
+                "DBInstanceIdentifier",
+                "db_instance_identifier",
+                "identifier",
+                "name",
+            )
             if name:
                 results["skipped"].append(f"rds:db:{name}")
 

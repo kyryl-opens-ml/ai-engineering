@@ -1,39 +1,24 @@
 [project]
 name = "agent-tech-risk"
 version = "0.1.0"
-description = "AWS Risk Case Generator and Finder for PE Technical Due Diligence"
+description = "AWS Risk Case Generator and Discovery for PE Technical Due Diligence"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "pydantic>=2.0",
-    "pydantic-ai>=0.2",
-    "anthropic>=0.40",
-    "pydantic-evals>=0.2",
-    "pyyaml>=6.0",
-    "typer>=0.12",
-    "rich>=13.0",
-    "boto3>=1.35",
-    "docker>=7.0",
-    "python-dotenv>=1.0",
-    "claude-agent-sdk",
-    "braintrust[otel]>=0.4.3",
-    "opentelemetry-sdk>=1.39.1",
-    "huggingface-hub>=0.20",
-]
 
-[project.optional-dependencies]
-dev = ["localstack>=4.0"]
-
-[project.scripts]
-risk-generator = "risk_generator.cli:main"
-risk-discovery = "risk_discovery.cli:main"
+[tool.uv.workspace]
+members = ["packages/*"]
 
 [tool.uv]
-package = true
+dev-dependencies = [
+    "risk-generator",
+    "risk-discovery",
+    "pytest>=9.0",
+    "ruff>=0.15",
+]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.uv.sources]
+risk-generator = { workspace = true }
+risk-discovery = { workspace = true }
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/risk_generator", "src/risk_discovery"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]

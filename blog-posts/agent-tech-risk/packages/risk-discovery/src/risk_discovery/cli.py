@@ -36,8 +36,16 @@ def infer(
     table.add_column("Resource")
     table.add_column("Issue")
 
-    for f in sorted(result.findings, key=lambda x: ["critical", "high", "medium", "low"].index(x.severity)):
-        style = {"critical": "red", "high": "orange3", "medium": "yellow", "low": "dim"}.get(f.severity, "")
+    for f in sorted(
+        result.findings,
+        key=lambda x: ["critical", "high", "medium", "low"].index(x.severity),
+    ):
+        style = {
+            "critical": "red",
+            "high": "orange3",
+            "medium": "yellow",
+            "low": "dim",
+        }.get(f.severity, "")
         table.add_row(
             f"[{style}]{f.severity.upper()}[/{style}]",
             f.category,
@@ -52,10 +60,13 @@ def infer(
 def eval_cmd(
     models: str = typer.Option(
         "all",
-        "--models", "-m",
+        "--models",
+        "-m",
         help="Comma-separated model keys (opus-4-6,sonnet-4-5,...) or 'all'",
     ),
-    max_cases: int = typer.Option(None, "--max-cases", "-n", help="Max cases to evaluate"),
+    max_cases: int = typer.Option(
+        None, "--max-cases", "-n", help="Max cases to evaluate"
+    ),
 ):
     """Evaluate models against HF dataset cases."""
     from risk_discovery.eval import MODELS, run_eval
@@ -65,7 +76,9 @@ def eval_cmd(
     else:
         selected = {k: MODELS[k] for k in models.split(",") if k in MODELS}
         if not selected:
-            console.print(f"[red]No valid models. Choose from: {', '.join(MODELS)}[/red]")
+            console.print(
+                f"[red]No valid models. Choose from: {', '.join(MODELS)}[/red]"
+            )
             raise typer.Exit(1)
 
     console.print(f"[bold]Models:[/bold] {', '.join(selected)}")
