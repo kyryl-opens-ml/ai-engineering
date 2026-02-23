@@ -1,196 +1,209 @@
 # Everyone Can Build
 
-## Dev:
 
-```
-npm install
-npm run dev
-```
+![Everyone Can Build - Hero](images/blog-ecb-hero.png)
 
 
-Alan: https://alan.com/en/blog/discover-alan/a/everyone-can-build
-AI is the new UI: https://x.com/davemorin/status/2013109271861350677
-Claude Agent SDK: https://www.youtube.com/watch?v=TqC1qOfiVcQ
-Linus Torvalds case https://x.com/rauchg/status/2010411457880772924?s=20
-NPM X: https://x.com/rough__sea/status/2013280952370573666 
-Grady X: https://x.com/Grady_Booch/status/2013331606795362398
-https://claude.com/download
+## TL;DR
+
+- AI should write 100% of your code! 
+- Companies that let non-engineers ship safely will compound faster.
+- Sofwareer engienring has bring and exited future! 
 
 
-## Blog: 
+## Shift! 
 
-### Context: 
+### Confession: 
 
-1. Everyone Can Build 
-
-This is the time when everyone can build. Companies must move from slow and error-prone processes of "see the issue -> get a ticket -> mess with other priorities" to a new process: "see the issue -> send a fix." With coding agents and the right process, it should be almost automatically done and mostly by non-tech teams!
-
-Good case here from Alan (digital insurance service, $700M ARR+) - where they enable non-tech people to contribute to the core product via Cursor and delivered ~300 PRs to the product. See original post in the comment.
-
-If you are not enabling everyone from your company to contribute to the product - you might fall behind those who do!
-
-[alan-1.png]
-
-https://alan.com/en/blog/discover-alan/a/everyone-can-build
-
-2. It's very clear where we are going! 
-
-You can find a bunch of AI slop and silly mistakes of LLMs with counting 'r' and comparing 9.11 and 9.9, but it's very clear to see where we are going.  
-LLMs can perform long-running engineering tasks with superhuman performance.
-
-[metr-1.png]
-
-While humans are still extremely important to steer and manage them. As a small anecdote - even the website of this study ends up with a "Hiring sections"
-
-[metr-2.png]
-
-https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/
-
-3. If coding task is narrow and well specified - don't waste time - ask LLM. 
-
-[anth-1.png]
-
-Recent blog post from Anthropic where they gave up on their take-home assignment because nobody can beat LLM. Extremely fascinating! 
-
-https://www.anthropic.com/engineering/AI-resistant-technical-evaluations
-
-4. Same Shift as Compiler
-
-See this image - we don't do this anymore! Punched cards, writing machine code, etc! Compilers changed software forever same as LLMs nowadays! 
-
-[gh-1.png]
-
-Animations: 
-
-<programming language> -> [compiler] -> <machine code>
-
-<task definitions / feedback> [agent] -> <programming language> -> [compiler] -> <machine code>
-
-Which makes me 100x more bullish on software and code! 
-
-### Why is this happenng
-
-5. Intuitive Way of Understanding Agents 
-
-One of the most intuitive ways to understand agents is to visualize it in comparison to a simple business process. Everyone is familiar with those: step 1, step 2, step 3. No matter what the input is, you already run it through the same 3 steps. It's very reliable and predictable but at the same time limited, because, well, it's static. Kind of a one-size-fits-all solution. 
-
-<static agent>
-
-While an agent is a set of those static business processes where each one is unique to its input. For input of user A, it could be step 1 - step 4, for input of user B - it could be step 1 - step 10 with branching, pauses and fallback. This is why agents are way way more powerful and their applications are way more broader but the trade-off is that it's non-static.
-
-<gif of agent>
-
-6. Who Benefits the Most from Coding Agents! 
-
-- Engineers - multiply productivity, focus on architecture
-- Prototypers - rapid iteration, validate ideas fast
-- Those who can steer agents best - the new superpower
-
-The skill: knowing what to ask and when to course-correct
-
-7. Glimpses of the Future - Product Builders
-I used to believe there would be no more ML engineers, because any engineer would need to know ML just as any engineer needs to know databases. Turns out - it's way wider -> SWE, PM, ML are all going to be merged into Product Builders! Some more technical, some less technical!
-
-[atl-1.png]
-
-https://kyrylai.com/2025/12/23/becoming-an-aiagent-tech-lead/
-
-### Glimpses of the Future
-
-8. Glimpses of the Future - Generative UI
-
-Glimpses of the Future - Generative UI
-
-Each app becomes a platform! Instead of static interfaces, apps will generate custom UIs on the fly based on user needs. Core data is yours - but the interface for it is generated for each customer.
+March 10, 2025 Dario Amodei of Anthropic said - "there in three to six months, where AI is writing 90% of the code" https://www.cfr.org/event/ceo-speaker-series-dario-amodei-anthropic I was skeptical, not - it's 100% for me and best enginereirng (and not only engineers). Typing code manually - never again, thanks! 
+With next prediciton "we might be 6-12 months away from models doing all of what software engineers do end-to-end" - as evidence shows - mgiht be true as well! 
 
 
-[gui-1.png]
+We have so many actula datapoints about how effectir ai-enables engineerign become, that it's imporssialbe to ignore.
+
+
+| Claim | Status | Evidence | Notes |
+|---|---|---|---|
+| Alan case: non-engineers shipped many PRs | Confirmed | Alan post says: `283 pull requests from non-engineers were shipped` | Use exact wording from source |
+| METR long-task trend | Confirmed | METR post (March 19, 2025): doubling time around `7 months` | Good anchor chart |
+| Anthropic eval shift | Confirmed | Anthropic Engineering (January 21, 2026): Opus 4 and Opus 4.5 matching/outperforming take-home constraints | Great for “narrow tasks” argument |
+
+Add https://techcrunch.com/2026/02/12/spotify-says-its-best-developers-havent-written-a-line-of-code-since-december-thanks-to-ai/
+
+The shift is even bitget when we moved from machine code to compiles! 
+
+![Compiler shift analogy](images/gh-1.png)
+
+See this picture - whel - we dont' ddo this anymore! 
+
+If you have good and well defined taks descripoton - comsider your have a solution. 
+
+But nothing speak better than personal experience - just try it! install Clade Code, Codex, Cursros - anything and build something! 
+
+
+Who Benefits most
+
+- Engineers: less time on repetitive implementation
+- Prototypers/PM/Designers: faster idea-to-proof
+- Operators who can steer and orchestateye agents. 
+
+Core skill: ask clearly, instrument outputs, correct early.
+
+
+## Agent
+
+Why does it happen? It's very easy to state this, but only few people undenrsar code of the reasing: Agents. 
+
+What Is an Agent (Practical Definition)
+
+`Agent = LLM + Actions + Loop`
+
+- `LLM`: reasoning and planning
+- `Actions`: tools, shell, APIs, MCP, skills
+- `Loop`: iterative execution until goal or stop condition
+
+What Is an Agent (Intuitive Definition)
+
+Imaging simple process to process invoices for example  - step 1 - step 2 - step 3 - it's small it's predictable and one size fit all soltuone. agent solutioen for this use -case can be generated lsit of actions: 
+
+step 1 - step 2 - step 3
+
+but if any complicatiosn assrise 
+
+step 1 - step 2 - step 3 - step 4 - step 5
+
+and it can do branching and iteration, etc etc. 
+For each input: agent would realise examply one uniqe instance of simple busienss process, but it would be tailoer to specific input and surcumstantece. aka from "one size fit all" to " tailor-made"
+
+![Static process vs agentic process](images/blog-ecb-static-vs-agentic.png)
+
+
+and what are the most successuf agents otu there: coding! becase it way easier to vefiry code (running or now, testst are passing or not, compiled or now, does softate do wah you want or now)
+
+## Future
+
+So how does the futue would look and how to prepseser eyouself! Here are several my preducitons
+
+1. Shit team to become "agent tech leads"
+
+This is the futuref of sofare neingering: see new job descriotion [https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/JobDescription.md]. Product builikded job would be manage and suport codign agent. one who would be able to do it more efficien - would have more success.
+![Agent tech lead](images/atl-1.png)
+
+2. Make sure other agetns are first class citiceon of your product: 
+
+There is limites numver of potentil custoemrs for oyur busienss, thete are unlimited nubmer of agentic custeomr for the business. Exploadign TAM but focusong on agetn. you clearn hot goign to build every single one, but you can become their provides for data, serive, etc etc.
+
+3. Generative UI
+Stcture product as data platform - your data lauer are based and moat. Ui and presnetaiotn layer are goign to be defiendna nd write on demant and on the fly! 
 
 https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/
 
-9. Glimpses of the Future - Self-Driving SaaS
 
-Software that builds itself! I love Linear's vision there! Most tasks, bugs, and errors would be fixed even before you would see them!
+![Generative UI](images/gui-1.png)
 
-[linear-2.png]
+4. Self-Driving SaaS
 
-https://linear.app/now/self-driving-saas
+Software moves from “assist me” to “advance work proactively.”
 
-10. Glimpses of the Future - Product Building = Multiplayer RTS
+![Self-driving SaaS](images/linear-2.png)
 
-If you've ever played StarCraft or Rome Total War (my favorite game from school) you know how building with multiple agents feels like: your company becomes your map, your coding agents become units, and your job is to place them, unblock them, and intervene at a local scale when someone gets stuck! 
+`TODO: Add your rule: what can auto-merge vs what must require human approval.`
 
-[sc-1.png]
+5. Build on Top of Agent SDKs
 
-11. Glimpses of the Future - Building on top of Coding Agent SDK
+The next wave is not just using agents, but wrapping them with domain workflows, eval loops, and org-specific controls.
 
-Every major LLM provider has coding agent extension ability! If you love Claude Code & Codex - the next big thing is to build on top of those. You can run 100 terminals/sandboxes and context switch - but the future will be about your custom wrapper on top of coding agents which run at scale, automatically.
-
-[claude-1.png]
-
-https://www.youtube.com/watch?v=TqC1qOfiVcQ
+![Claude ecosystem](images/claude-1.png)
 
 
-12. Glimpses of the Future - Sandboxes
+6. Sandboxes as Infrastructure
+
+1x value -> 100x agents -> 100,000x sandbox executions
+
+Examples:
+- https://www.together.ai/code-sandbox
+- https://modal.com/docs/guide/sandboxes
+- https://www.daytona.io/
+- https://e2b.dev/
+
+the more efficne  and secure your exectiong enivner for coding agetn - the fast delivert! 
 
 
-Glimpses of the Future - Sandboxes
+## Strategy
 
-1x value → 100x agents → 100,000x sandboxes
-
-Every coding agent needs thousands of sandboxes to run code in. That's a massive infrastructure layer being built right now.
-Simply put — a sandbox is a machine where coding agents execute code safely and in isolation.
-
-As coding agents scale from demos to production, sandbox infrastructure becomes the bottleneck. This is going to be a huge market very soon.
-
-Companies building this today:
-
-https://www.together.ai/code-sandbox
-https://modal.com/docs/guide/sandboxes
-https://www.daytona.io/
-https://e2b.dev/
-
-DIY option: k8s
-
-This is the next massive infrastructure opportunity. If you're building in the AI tooling space, pay attention here.
+As any businesss you need to adapt and embrase this shift! my recommendation is to  build stratefy for mthe get go and replay on 3 simple tiers! 
 
 
-### Where to start!
+![3-tier path](images/blog-ecb-tiers-path.png)
 
-12. Where to : post 1 (M), post 2 (T), post 3 (W)
+1. `Tier 1: Prototype + Vision`
 
-If you are non-technical but want to build, where to start? There are 3 tiers!
+Make sure everoyn use AI coding for new works - prototyping, demos, poc, visualizaiton. Instead wriing PRD etc - jsut build demo and show how it owuld look like! 
 
-Tier 1. Prototype & Vision
+- Tools: AI Studio, Lovable, Bolt
+- Goal: communicate product intent quickly
+- Output: clickable prototype + feedback
 
-<>
+Metric to track here: how many ideas you validated! 
 
-Tier 2. More Impact
+2. `Tier 2: More Impact`
 
-<>
+Demo & validations are good - but you need to move ai enginerign to congrbe into core product - stand using tools for your team, make sure tehy have access to good amout of tokens and 
 
-Tier 3. Direct Contributing
+- Tools: Claude Code, Codex, Gemini CLI, Cursos 
+- Requires: terminal, git workflow, deployment basics
+- Output: real features with review pipeline
 
-<> 
+Metric to track here: development productivity! 
 
-[tiers-1.png]
+3. `Tier 3: Direct Contribution`
 
-And remember, everyone can build!
+This one is the most advance one, but give you most benefirst - have a highway of ai generatete code into your applicaiton! 
+
+- Integrations: Slack, web app, task trackers, CI/CD
+- Requires: verification, ownership model, guardrails
+- Output: trusted agentic contribution in production
+
+Metric to track here: custome (time to solve bug, time to recovery, number of contibuteion by non tech team)! 
 
 
-13. Actual blog post! 
+## References
+
+Core talk references:
+- https://alan.com/en/blog/discover-alan/a/everyone-can-build
+- https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/
+- https://www.anthropic.com/engineering/AI-resistant-technical-evaluations
+- 
+- https://linear.app/now/self-driving-saas
+- https://www.youtube.com/watch?v=TqC1qOfiVcQ
+- https://openai.com/codex/
+- https://code.claude.com/docs/en/overview
+- https://modelcontextprotocol.io/docs/getting-started/intro
+
+Suggested reading from your notes:
+- https://builders.ramp.com/post/why-we-built-our-background-agent
+- https://www.benedict.dev/closing-the-software-loop
+- https://www.greptile.com/blog/ai-code-review-bubble
+- https://openai.com/index/unrolling-the-codex-agent-loop/
+- https://zed.dev/blog/on-programming-with-agents
+- https://simonwillison.net/2026/Jan/19/scaling-long-running-autonomous-coding/
+- https://simonwillison.net/2026/Jan/12/claude-cowork/
+- https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+- https://blog.silennai.com/claude-code
+- https://www.oneusefulthing.org/p/claude-code-and-what-comes-next
 
 
-## Reading list: 
+Love this! Not my "wow moment" example, but 2 reads I am going through right now:
 
-https://builders.ramp.com/post/why-we-built-our-background-agent
-https://www.benedict.dev/closing-the-software-loop
-https://www.greptile.com/blog/ai-code-review-bubble
-https://openai.com/index/unrolling-the-codex-agent-loop/
-https://zed.dev/blog/on-programming-with-agents
+Spotify bragging about AI coding:
 
-https://simonwillison.net/2026/Jan/19/scaling-long-running-autonomous-coding/
-https://simonwillison.net/2026/Jan/12/claude-cowork/
-https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
-https://blog.silennai.com/claude-code
-https://www.oneusefulthing.org/p/claude-code-and-what-comes-next
+Spotify shipped a ton of stuff and beat revenue while saying - nobody wrote code by hand since December!
+https://techcrunch.com/2026/02/12/spotify-says-its-best-developers-havent-written-a-line-of-code-since-december-thanks-to-ai/
+
+We should have claud code in our slack! 
+
+Try it with https://huggingface.co/zai-org/GLM-5 - claims it's as good as Claude but open weight.
+
+Wow, just check 
+
+My biggest and most recent wow moment was about orchestrator for subagents: when an agent runs subprocesses, monitors, manages, etc. I was super curious to understand how it works - one company is publishing about it in detail: https://www.kimi.com/blog/kimi-k2-5.html (check 2. Agent Swarm)
