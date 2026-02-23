@@ -110,6 +110,8 @@ Structure product as data platform - your data layer is the base and moat. UI an
 
 Software that runs itself, set up a feedback loop process for your users and most of the contributions would be done automatically.
 
+[Self-Driving SaaS at Linear](https://linear.app/now/self-driving-saas)
+
 ![Self-driving SaaS](images/linear-2.png)
 
 5. Sandboxes as Infrastructure
@@ -170,6 +172,6 @@ This one is the most advanced, but gives you the most benefit - have a highway o
 
 Metric to track here: customer metrics (time to solve bug, time to recovery, number of contributions by non-tech team)!
 
-If you are planning to transform your company with AI-first coding, feel free to contact me to get help and set this up for your specific context!
+If you are planning to transform your company with AI-first coding, feel free to contact me to get help and set this up for your specific context: https://kyrylai.com/
 
 Cheers!
