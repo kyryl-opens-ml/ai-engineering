@@ -14,7 +14,7 @@
 
 Confession: 
 
-March 10, 2025 Dario Amodei of Anthropic said - "there in three to six months, where AI is writing 90% of the code" https://www.cfr.org/event/ceo-speaker-series-dario-amodei-anthropic I was skeptical, now - it's 100% for me and best engineering (and not only engineers). Typing code manually - never again, thanks! With next prediction "we might be 6-12 months away from models doing all of what software engineers do end-to-end" - as evidence shows - might be true as well! 
+March 10, 2025 Dario Amodei of Anthropic said - "there in three to six months, where AI is writing 90% of the code" https://www.cfr.org/event/ceo-speaker-series-dario-amodei-anthropic I was skeptical, now - it's 100% for me and best engineers (and not only engineers). Typing code manually - never again, thanks! With the next prediction "we might be 6-12 months away from models doing all of what software engineers do end-to-end" - as evidence shows - might be true as well! 
 
 
 We have so many actual datapoints about how effective AI-enabled engineering has become, that it's impossible to ignore.
@@ -59,7 +59,7 @@ What Is an Agent (Practical Definition)
 - `Actions`: tools, shell, APIs, MCP, skills
 - `Loop`: iterative execution until goal or stop condition
 
-where if some of your actions are coding and executing code - you can call it a coding agent!
+Where if some of your actions are coding and executing code - you can call it a coding agent!
 
 What Is an Agent (Intuitive Definition)
 
@@ -74,24 +74,24 @@ but if any complications arise - the agent adapts: branching, adding steps, iter
 For each input: the agent would realize exactly one unique instance of a simple business process, but it would be tailored to the specific input and circumstances. AKA from "one size fits all" to "tailor-made"
 
 
-And what are the most successful agents out there? Coding! Because it's way easier to verify code (running or not, tests are passing or not, compiled or not, does software do what you want or not). Now images each agent might have it's own agent adn so on, it's areladt existsinsd [open exape: K2.5 Agent Swarm  https://www.kimi.com/blog/kimi-k2-5.html] [claude example: https://code.claude.com/docs/en/agent-teams] and works really good! 
+And what are the most successful agents out there? Coding! Because it's way easier to verify code (running or not, tests are passing or not, compiled or not, does software do what you want or not). Now imagine each agent might have its own agent and so on, it's already existing [open example: K2.5 Agent Swarm](https://www.kimi.com/blog/kimi-k2-5.html) [claude example](https://code.claude.com/docs/en/agent-teams) and works really well! 
 
 ## Future
 
 So how does the future look and how to prepare yourself! Here are several of my predictions:
 
-1. "agent tech leads"
+1. "Agent Tech Leads"
 
-Everyone becoemase agetn tech lead - aka agent orchestrator.
+Everyone becomes an agent tech lead - aka agent orchestrator.
 
 This is the future of software engineering: see new job description [https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/JobDescription.md]. Product builder job would be to manage and support coding agents. Those who would be able to do it more efficiently would have more success.
 ![Agent tech lead](images/atl-1.png)
 
 2. Make sure other agents are first class citizens of your product
 
-Agent TAM > Humann TAM
+Agent TAM > Human TAM
 
-There is a limited number of potential customers for your business, but there are unlimited numbers of agentic customers for the business. Exploding TAM by focusing on agents. You clearly are not going to build every single one, but you can become their provider for data, service, etc. [This is already haooneing](https://www.databricks.com/blog/databricks-neon). 
+There is a limited number of potential customers for your business, but there are unlimited numbers of agentic customers for the business. Exploding TAM by focusing on agents. You clearly are not going to build every single one, but you can become their provider for data, service, etc. [This is already happening](https://www.databricks.com/blog/databricks-neon). 
 
 
 ![Neon](images/db-1.png)
@@ -108,19 +108,25 @@ https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user
 
 4. Self-Driving SaaS
 
-Software that run itself, setupf feedback loop process for your users and most of the contibutet would be done automaticall.
+Software that runs itself, set up a feedback loop process for your users and most of the contributions would be done automatically.
 
 ![Self-driving SaaS](images/linear-2.png)
 
 5. Sandboxes as Infrastructure
 
-thesis is very simpe 1x value -> 100x coding agents -> 100,000x sandbox executions
+Thesis is very simple: 1x value -> 100x coding agents -> 100,000x sandbox executions
 
-Examples:
-- https://www.together.ai/code-sandbox
-- https://modal.com/docs/guide/sandboxes
-- https://www.daytona.io/
-- https://e2b.dev/
+Services: 
+1. Together AI Code: https://www.together.ai/code-sandbox
+2. Modal Sandboxes: https://modal.com/docs/guide/sandboxes 
+3. Daytona: https://www.daytona.io/
+4. E2B: https://e2b.dev/
+5. Cloudflare Sandbox: https://developers.cloudflare.com/sandbox/
+
+DIY:
+1. K8S (too broad): https://github.com/kubernetes/kubernetes 
+2. Firecracker (just VM): https://github.com/firecracker-microvm/firecracker
+3. Docker: https://docs.docker.com/ai/sandboxes/
 
 The more efficient and secure your execution environment for coding agents - the faster the delivery!
 
