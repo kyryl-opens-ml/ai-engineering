@@ -10,11 +10,11 @@
 - Software engineering has a bright and exciting future.
 - Build AI engineering strategy for your company.
 
-## Shift! 
+## Shift!
 
-Confession: 
+Confession:
 
-March 10, 2025 Dario Amodei of Anthropic said - "there in three to six months, where AI is writing 90% of the code" https://www.cfr.org/event/ceo-speaker-series-dario-amodei-anthropic I was skeptical, now - it's 100% for me and best engineers (and not only engineers). Typing code manually - never again, thanks! With the next prediction "we might be 6-12 months away from models doing all of what software engineers do end-to-end" - as evidence shows - might be true as well! 
+On March 10, 2025, Dario Amodei of Anthropic said, "there in three to six months, where AI is writing 90% of the code" ([source](https://www.cfr.org/event/ceo-speaker-series-dario-amodei-anthropic)). I was skeptical; now it's effectively 100% for me and many top engineers (and not only engineers). Typing code manually: never again, thanks. With the next prediction, "we might be 6-12 months away from models doing all of what software engineers do end-to-end," as evidence shows, this might be true as well.
 
 
 We have so many actual datapoints about how effective AI-enabled engineering has become, that it's impossible to ignore.
@@ -39,7 +39,7 @@ If you have a good and well-defined task description - consider you have a solut
 But nothing speaks better than personal experience - just try it! Install Claude Code, Codex, Cursor - anything and build something!
 
 
-Who Benefits Most
+## Who Benefits Most
 
 - Engineers: less time on repetitive implementation
 - Prototypers/PM/Designers: faster idea-to-proof
@@ -51,7 +51,7 @@ Core skill: ask clearly, instrument outputs, correct early.
 
 Why does it happen? It's very easy to state this, but only few people understand the core of the reasoning: Agents. 
 
-What Is an Agent (Practical Definition)
+### What Is an Agent (Practical Definition)
 
 `Agent = LLM + Actions + Loop`
 
@@ -59,22 +59,22 @@ What Is an Agent (Practical Definition)
 - `Actions`: tools, shell, APIs, MCP, skills
 - `Loop`: iterative execution until goal or stop condition
 
-Where if some of your actions are coding and executing code - you can call it a coding agent!
+If some of your actions involve writing and executing code, you can call it a coding agent.
 
-What Is an Agent (Intuitive Definition)
+### What Is an Agent (Intuitive Definition)
 
-Imagine a simple process to process invoices for example - step 1 - step 2 - step 3 - it's small, it's predictable, and one size fits all solution. An agent solution for this use case can be a generated list of actions: 
+Imagine a simple invoice process: step 1 -> step 2 -> step 3. It's small, predictable, and mostly one-size-fits-all. An agent solution for this use case can be a generated list of actions:
 
 ![Business Process (static)](images/business-process.png)
 
-but if any complications arise - the agent adapts: branching, adding steps, iterating as needed.
+But if any complications arise, the agent adapts: branching, adding steps, and iterating as needed.
 
 ![Agent (dynamic)](images/agent-flow.gif)
 
-For each input: the agent would realize exactly one unique instance of a simple business process, but it would be tailored to the specific input and circumstances. AKA from "one size fits all" to "tailor-made"
+For each input, the agent would realize exactly one unique instance of a simple business process, tailored to the specific input and circumstances. AKA: from "one size fits all" to "tailor-made".
 
 
-And what are the most successful agents out there? Coding! Because it's way easier to verify code (running or not, tests are passing or not, compiled or not, does software do what you want or not). Now imagine each agent might have its own agent and so on, it's already existing [open example: K2.5 Agent Swarm](https://www.kimi.com/blog/kimi-k2-5.html) [claude example](https://code.claude.com/docs/en/agent-teams) and works really well! 
+And what are the most successful agents out there? Coding. It's way easier to verify code (running or not, tests passing or not, compiled or not, and whether software does what you want). Now imagine each agent might have its own agent and so on; this already exists and works really well: [open example: K2.5 Agent Swarm](https://www.kimi.com/blog/kimi-k2-5.html), [Claude example](https://code.claude.com/docs/en/agent-teams).
 
 ## Future
 
@@ -84,7 +84,7 @@ So how does the future look and how to prepare yourself! Here are several of my 
 
 Everyone becomes an agent tech lead - aka agent orchestrator.
 
-This is the future of software engineering: see new job description [https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/JobDescription.md]. Product builder job would be to manage and support coding agents. Those who would be able to do it more efficiently would have more success.
+This is the future of software engineering: see this [new job description](https://github.com/kyryl-opens-ml/ai-engineering/blob/main/blog-posts/agent-tech-lead/JobDescription.md). The product builder's job would be to manage and support coding agents. Those who can do it more efficiently will have more success.
 ![Agent tech lead](images/atl-1.png)
 
 2. Make sure other agents are first class citizens of your product
@@ -101,7 +101,7 @@ There is a limited number of potential customers for your business, but there ar
 
 Structure product as data platform - your data layer is the base and moat. UI and presentation layer are going to be defined and written on demand and on the fly!
 
-https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/
+[Generative UI at Google Research](https://research.google/blog/generative-ui-a-rich-custom-visual-interactive-user-experience-for-any-prompt/)
 
 
 ![Generative UI](images/gui-1.png)
@@ -116,15 +116,17 @@ Software that runs itself, set up a feedback loop process for your users and mos
 
 Thesis is very simple: 1x value -> 100x coding agents -> 100,000x sandbox executions
 
-Services: 
+![Sandboxes as Infrastructure](images/blog-ecb-sandbox.png)
+
+Services:
 1. Together AI Code: https://www.together.ai/code-sandbox
-2. Modal Sandboxes: https://modal.com/docs/guide/sandboxes 
+2. Modal Sandboxes: https://modal.com/docs/guide/sandboxes
 3. Daytona: https://www.daytona.io/
 4. E2B: https://e2b.dev/
 5. Cloudflare Sandbox: https://developers.cloudflare.com/sandbox/
 
 DIY:
-1. K8S (too broad): https://github.com/kubernetes/kubernetes 
+1. K8S (too broad): https://github.com/kubernetes/kubernetes
 2. Firecracker (just VM): https://github.com/firecracker-microvm/firecracker
 3. Docker: https://docs.docker.com/ai/sandboxes/
 
