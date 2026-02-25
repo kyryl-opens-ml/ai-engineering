@@ -126,6 +126,7 @@ Services:
 3. Daytona: https://www.daytona.io/
 4. E2B: https://e2b.dev/
 5. Cloudflare Sandbox: https://developers.cloudflare.com/sandbox/
+6. Cursor Agent Sandboxing: https://cursor.com/blog/agent-sandboxing
 
 DIY:
 1. K8S (too broad): https://github.com/kubernetes/kubernetes
